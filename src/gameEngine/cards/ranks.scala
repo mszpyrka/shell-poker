@@ -1,8 +1,18 @@
 package gameEngine.cards
 
-sealed class Rank (val rank: Int) {
-  def compare(other: Rank): Int = rank - other.rank
+/** Represents card's rank.
+  *
+  * @param strength actual rank's strength as Int value (Two has the lowest strength, Ace has the highest)
+  */
+sealed class Rank(val strength: Int) {
+
+  /** Regular less-than binary operator overload. */
+  def <(other: Rank): Boolean = strength < other.strength
+
+  /** Regular greater-than binary operator overload. */
+  def >(other: Rank): Boolean = strength > other.strength
 }
+
 
 case object Two extends Rank(2)
 case object Three extends Rank(3)

@@ -1,5 +1,8 @@
 package gameEngine.cards
 
-case class Card(rank: Rank, suit: Suit) {
-  def compare(other: Card): Int = rank.compare(other.rank)
-}
+/** Represents paying card entity.
+  *
+  * @param rank card's rank
+  * @param suit card's suit
+  */
+case class Card(rank: Rank, suit: Suit)

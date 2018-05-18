@@ -1,5 +1,6 @@
 package gameEngine.cards
 
+/** Represents card's suit. */
 sealed class Suit
 
 case object Clubs extends Suit
