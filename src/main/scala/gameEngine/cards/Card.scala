@@ -5,4 +5,4 @@ package main.scala.gameEngine.cards
   * @param rank card's rank
   * @param suit card's suit
   */
-case class Card(rank: Rank, suit: Suit)
+case class Card(rank: CardRank, suit: Suit)

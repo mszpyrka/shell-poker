@@ -7,10 +7,21 @@ import main.scala.gameEngine.cards.Card
   */
 trait HandEvaluator {
 
-  /** Creates new PokerHand. */
+  /** The rank of a hand that the evaluator is bounded with. */
+  val handRank: HandRank
+
+  /** Creates new PokerHand.
+    *
+    * Throws InvalidPokerHandException in any of those cases:
+    *  - the cards actually do not make given hand
+    *  - a better hand can be made up of the cards
+    */
   def apply(cards: List[Card]): PokerHand = {
     if (!this.isMadeUpOf(cards))
-      throw new InvalidPokerHandException(this, cards)
+      throw new InvalidPokerHandException("cannot be made up of", this, cards)
+
+    if (PokerHandFactory.evaluators.filter(_.handRank > this.handRank).exists(_.isMadeUpOf(cards)))
+      throw new InvalidPokerHandException("is not the best hand made up of", this, cards)
 
     makeHand(cards)
   }
