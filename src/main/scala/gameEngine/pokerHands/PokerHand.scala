@@ -1,6 +1,7 @@
-package gameEngine.pokerHands
+package main.scala.gameEngine.pokerHands
 
-import gameEngine.cards.Card
+
+import main.scala.gameEngine.cards.Card
 
 /** Represents some particular poker hand.
   *
@@ -8,6 +9,9 @@ import gameEngine.cards.Card
   * @param cards cards of which the hand is made up
   */
 abstract class PokerHand(val rank: HandRank, val cards: List[Card]) {
+
+  /** Simple toString method displaying hand's rank and all cards. */
+  override def toString: String = rank.toString + ": " + cards.toString
 
   /** Tests if this.cards make weaker poker hand than other.cards. */
   def isWeakerThan(other: PokerHand): Boolean = {

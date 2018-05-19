@@ -1,6 +1,6 @@
-package gameEngine.cards
+package main.scala.gameEngine.cards
 
-/** Represents paying card entity.
+/** Represents playing card entity.
   *
   * @param rank card's rank
   * @param suit card's suit

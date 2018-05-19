@@ -1,14 +1,17 @@
-package gameEngine.pokerHands
-import gameEngine.cards.Card
+package main.scala.gameEngine.pokerHands
+import main.scala.gameEngine.cards.Card
 
-/** Used only for testing if given cards make at least high card hand. */
-object HighCard extends PokerHandEvaluator {
+case object HighCard extends HandEvaluator {
 
-  override def isMadeUpOf(cards: List[Card]): Boolean = true
+  /** Creates a new HighCard instance. */
+  override def makeHand(cards: List[Card]) = new HighCard(cards)
+
+  /** Tests if given cards list make a high card hand. */
+  override def isMadeUpOf(cards: List[Card]): Boolean = false
 }
 
-/** Represents high card poker hand. */
-class HighCard(override val cards: List[Card]) extends PokerHand(HighCardRank, cards) {
+/** Represents a high card poker hand. */
+case class HighCard private(override val cards: List[Card]) extends PokerHand(HighCardRank, cards) {
 
   /** Returns true if this.cards make stronger high card than other.cards.
     *
