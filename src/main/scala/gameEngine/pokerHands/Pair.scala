@@ -2,10 +2,7 @@ package main.scala.gameEngine.pokerHands
 
 import main.scala.gameEngine.cards.{Card, CardRank}
 
-case object Pair extends HandEvaluator {
-
-  override val handRank: HandRank = PairRank
-
+case object Pair extends PokerHandFactory(PairRank) {
 
   /** Creates a new Pair instance. */
   override def makeHand(cards: List[Card]) = new Pair(cards)
@@ -13,28 +10,11 @@ case object Pair extends HandEvaluator {
 
   /** Tests if given cards list make a pair hand.
     *
-    * Sorts all cards by their rank and checks if any two consecutive cards in the sorted list have the same rank.
+    * Checks if the list of ranks that appear more than once in the cards list is not empty.
     */
-  override def isMadeUpOf(cards: List[Card]): Boolean = {
-
-    val sortedCards = cards.sortWith(_.rank < _.rank)
-    val zippedCards = sortedCards zip sortedCards.drop(1)
-    zippedCards.exists { case (a, b) => a.rank == b.rank }
-  }
-
-
-  /** Returns the rank of the pair contained in this.cards. */
-  private def getPairRank(cards: List[Card]): CardRank = {
-
-    // Counts all rank appearances in this.cards.
-    val countRank = (r: CardRank) => cards.count(_.rank == r)
-
-    // Gets all ranks that appear more than once in this.cards (there will be always exactly one such value).
-    val pairRanks: List[CardRank] = CardRank.ranks.filter(countRank(_) > 1)
-
-    pairRanks.head
-  }
+  override def isMadeUpOf(cards: List[Card]): Boolean = PokerHandFactory.countAndFilterRanks(cards, _ > 1).nonEmpty
 }
+
 
 /** Represents a pair poker hand. */
 case class Pair private(override val cards: List[Card]) extends PokerHand(PairRank, cards) {
@@ -46,8 +26,8 @@ case class Pair private(override val cards: List[Card]) extends PokerHand(PairRa
     */
   override protected def isStrongerWithinRank(other: PokerHand): Boolean = {
 
-    val thisPairRank: CardRank = Pair.getPairRank(this.cards)
-    val otherPairRank: CardRank = Pair.getPairRank(other.cards)
+    val thisPairRank: CardRank = PokerHandFactory.countAndFilterRanks(this.cards, _ == 2).head
+    val otherPairRank: CardRank = PokerHandFactory.countAndFilterRanks(other.cards, _ == 2).head
 
     if (thisPairRank > otherPairRank)
       return true
@@ -59,7 +39,7 @@ case class Pair private(override val cards: List[Card]) extends PokerHand(PairRa
     val thisKickers: List[Card] = this.cards.filter(_.rank != thisPairRank)
     val otherKickers: List[Card] = other.cards.filter(_.rank != otherPairRank)
 
-    HighCard(thisKickers).isStrongerThan(HighCard(otherKickers))
+    PokerHandFactory.compareKickers(thisKickers, otherKickers) > 0
   }
 }
 
