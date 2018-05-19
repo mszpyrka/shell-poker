@@ -10,9 +10,6 @@ import main.scala.gameEngine.cards.Card
   */
 abstract class PokerHand(val rank: HandRank, val cards: List[Card]) {
 
-  /** Simple toString method displaying hand's rank and all cards. */
-  override def toString: String = rank.toString + ": " + cards.toString
-
   /** Tests if this.cards make weaker poker hand than other.cards. */
   def isWeakerThan(other: PokerHand): Boolean = {
 

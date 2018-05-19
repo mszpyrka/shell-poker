@@ -7,7 +7,7 @@ case object HighCard extends HandEvaluator {
   override def makeHand(cards: List[Card]) = new HighCard(cards)
 
   /** Tests if given cards list make a high card hand. */
-  override def isMadeUpOf(cards: List[Card]): Boolean = false
+  override def isMadeUpOf(cards: List[Card]): Boolean = true
 }
 
 /** Represents a high card poker hand. */
