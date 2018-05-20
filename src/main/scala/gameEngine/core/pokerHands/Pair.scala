@@ -5,14 +5,14 @@ import main.scala.gameEngine.core.cards.{Card, CardRank}
 case object Pair extends PokerHandFactory(PairRank) {
 
   /** Creates a new Pair instance. */
-  override def makeHand(cards: List[Card]) = new Pair(cards)
+  override protected def makeHand(cards: List[Card]) = new Pair(cards)
 
 
   /** Tests if given cards list make a pair hand.
     *
     * Checks if the list of ranks that appear more than once in the cards list is not empty.
     */
-  override def isMadeUpOf(cards: List[Card]): Boolean = PokerHandFactory.countAndFilterRanks(cards, _ > 1).nonEmpty
+  override def isMadeUpOf(cards: List[Card]): Boolean = HandEvaluationHelper.countAndFilterRanks(cards, _ > 1).nonEmpty
 }
 
 
@@ -26,8 +26,8 @@ case class Pair private(override val cards: List[Card]) extends PokerHand(PairRa
     */
   override protected def isStrongerWithinRank(other: PokerHand): Boolean = {
 
-    val thisPairRank: CardRank = PokerHandFactory.countAndFilterRanks(this.cards, _ == 2).head
-    val otherPairRank: CardRank = PokerHandFactory.countAndFilterRanks(other.cards, _ == 2).head
+    val thisPairRank: CardRank = HandEvaluationHelper.countAndFilterRanks(this.cards, _ == 2).head
+    val otherPairRank: CardRank = HandEvaluationHelper.countAndFilterRanks(other.cards, _ == 2).head
 
     if (thisPairRank > otherPairRank)
       return true
@@ -39,7 +39,7 @@ case class Pair private(override val cards: List[Card]) extends PokerHand(PairRa
     val thisKickers: List[Card] = this.cards.filter(_.rank != thisPairRank)
     val otherKickers: List[Card] = other.cards.filter(_.rank != otherPairRank)
 
-    PokerHandFactory.compareKickers(thisKickers, otherKickers) > 0
+    HandEvaluationHelper.compareKickers(thisKickers, otherKickers) > 0
   }
 }
 

@@ -5,14 +5,14 @@ import main.scala.gameEngine.core.cards.{Card, CardRank}
 case object ThreeOfAKind extends PokerHandFactory(ThreeOfAKindRank) {
 
   /** Creates a new ThreeOfAKind instance. */
-  override def makeHand(cards: List[Card]) = new ThreeOfAKind(cards)
+  override protected def makeHand(cards: List[Card]) = new ThreeOfAKind(cards)
 
 
   /** Tests if given cards list make a three of a kind hand.
     *
     * Checks if the list of ranks that appear at least three times in the cards list is not empty.
     */
-  override def isMadeUpOf(cards: List[Card]): Boolean = PokerHandFactory.countAndFilterRanks(cards, _ >= 3).nonEmpty
+  override def isMadeUpOf(cards: List[Card]): Boolean = HandEvaluationHelper.countAndFilterRanks(cards, _ >= 3).nonEmpty
 }
 
 
@@ -26,8 +26,8 @@ case class ThreeOfAKind private(override val cards: List[Card]) extends PokerHan
     */
   override protected def isStrongerWithinRank(other: PokerHand): Boolean = {
 
-    val thisSetRank: CardRank = PokerHandFactory.countAndFilterRanks(this.cards, _ == 3).head
-    val otherSetRank: CardRank = PokerHandFactory.countAndFilterRanks(other.cards, _ == 3).head
+    val thisSetRank: CardRank = HandEvaluationHelper.countAndFilterRanks(this.cards, _ == 3).head
+    val otherSetRank: CardRank = HandEvaluationHelper.countAndFilterRanks(other.cards, _ == 3).head
 
     if (thisSetRank > otherSetRank)
       return true
@@ -39,6 +39,6 @@ case class ThreeOfAKind private(override val cards: List[Card]) extends PokerHan
     val thisKickers: List[Card] = this.cards.filter(_.rank != thisSetRank)
     val otherKickers: List[Card] = other.cards.filter(_.rank != otherSetRank)
 
-    PokerHandFactory.compareKickers(thisKickers, otherKickers) > 0
+    HandEvaluationHelper.compareKickers(thisKickers, otherKickers) > 0
   }
 }

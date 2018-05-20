@@ -5,7 +5,7 @@ import main.scala.gameEngine.core.cards._
 case object Straight extends PokerHandFactory(StraightRank) {
 
   /** Creates a new Straight instance. */
-  override def makeHand(cards: List[Card]) = new Straight(cards)
+  override protected def makeHand(cards: List[Card]) = new Straight(cards)
 
 
   /** Tests if given cards list make a straight hand.
