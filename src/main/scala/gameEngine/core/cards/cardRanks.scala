@@ -26,9 +26,8 @@ object CardRank {
 /** Represents ranks instances.
   *
   * @param strength actual rank's strength as Int value (Two has the lowest strength, Ace has the highest)
-  * @param abbreviation single character String used for shortened String representation
   */
-sealed class CardRank(val strength: Int, val abbreviation: String) {
+sealed class CardRank(val strength: Int) {
 
   /** Regular less-than binary operator overload. */
   def <(other: CardRank): Boolean = strength < other.strength
@@ -38,17 +37,17 @@ sealed class CardRank(val strength: Int, val abbreviation: String) {
 }
 
 
-case object Two extends CardRank(2, "2")
-case object Three extends CardRank(3, "3")
-case object Four extends CardRank(4, "4")
-case object Five extends CardRank(5, "5")
-case object Six extends CardRank(6, "6")
-case object Seven extends CardRank(7, "7")
-case object Eight extends CardRank(8, "8")
-case object Nine extends CardRank(9, "9")
-case object Ten extends CardRank(10, "T")
-case object Jack extends CardRank(11, "J")
-case object Queen extends CardRank(12, "Q")
-case object King extends CardRank(13, "K")
-case object Ace extends CardRank(14, "A")
+case object Two extends CardRank(2)
+case object Three extends CardRank(3)
+case object Four extends CardRank(4)
+case object Five extends CardRank(5)
+case object Six extends CardRank(6)
+case object Seven extends CardRank(7)
+case object Eight extends CardRank(8)
+case object Nine extends CardRank(9)
+case object Ten extends CardRank(10)
+case object Jack extends CardRank(11)
+case object Queen extends CardRank(12)
+case object King extends CardRank(13)
+case object Ace extends CardRank(14)
 

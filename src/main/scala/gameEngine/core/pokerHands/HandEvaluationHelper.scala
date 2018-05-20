@@ -17,7 +17,7 @@ object HandEvaluationHelper {
   def countAndFilterRanks(cards: List[Card], predicate: Int => Boolean): List[CardRank] = {
 
     // Counts all rank appearances in this.cards.
-    val countRank = (r: CardRank) => cards.count(_.rank == r)
+    def countRank(r: CardRank): Int = cards.count(_.rank == r)
 
     // Gets all ranks that appear more than once in this.cards (there will be always exactly one such value).
     CardRank.ranks.filter(rank => predicate(countRank(rank)))

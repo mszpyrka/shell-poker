@@ -30,10 +30,21 @@ case class Straight private(override val cards: List[Card]) extends PokerHand(St
 
   /** Returns true if this.cards make a stronger straight than other.cards.
     *
-    * ???
+    * Firstly checks if this.cards make ace-to-five straight (if so, returns false as there is no lower straight).
+    * Otherwise checks if other.cards make ace-to-five straight, in which case returns true.
+    * Finally compares the top ranked cards in both hands.
     */
   override protected def isStrongerWithinRank(other: PokerHand): Boolean = {
 
-    ???
+    val thisSortedRanks: List[CardRank] = this.cards.map(_.rank).sortWith(_ < _)
+    val otherSortedRanks: List[CardRank] = other.cards.map(_.rank).sortWith(_ < _)
+
+    if (thisSortedRanks == List(Two, Three, Four, Five, Ace))
+      return false
+
+    if (otherSortedRanks == List(Two, Three, Four, Five, Ace))
+      return true
+
+    thisSortedRanks.last > otherSortedRanks.last
   }
 }
