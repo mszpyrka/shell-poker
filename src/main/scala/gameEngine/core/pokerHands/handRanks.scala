@@ -1,4 +1,4 @@
-package main.scala.gameEngine.pokerHands
+package main.scala.gameEngine.core.pokerHands
 
 /** Represents different poker hand ranks.
   *

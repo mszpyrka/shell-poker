@@ -1,4 +1,4 @@
-package main.scala.gameEngine.cards
+package main.scala.gameEngine.core.cards
 
 /** Represents card's suit. */
 sealed class Suit

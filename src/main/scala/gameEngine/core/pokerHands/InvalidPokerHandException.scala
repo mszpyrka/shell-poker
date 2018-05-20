@@ -1,6 +1,6 @@
-package main.scala.gameEngine.pokerHands
+package main.scala.gameEngine.core.pokerHands
 
-import main.scala.gameEngine.cards.Card
+import main.scala.gameEngine.core.cards.Card
 
 /** Thrown when there is an attempt to create a PokerHand instance with cards that do not make that hand or make a better hand. */
 case class InvalidPokerHandException(message: String) extends Exception(message) {

@@ -1,6 +1,6 @@
-package main.scala.gameEngine.pokerHands
+package main.scala.gameEngine.core.pokerHands
 
-import main.scala.gameEngine.cards.{Card, CardRank}
+import main.scala.gameEngine.core.cards.{Card, CardRank}
 
 object PokerHandFactory {
 
@@ -8,7 +8,8 @@ object PokerHandFactory {
     HighCard,
     Pair,
     TwoPair,
-    ThreeOfAKind
+    ThreeOfAKind,
+    Straight
   )
 
 
@@ -50,13 +51,12 @@ object PokerHandFactory {
 
     0
   }
-
 }
 
 /** Used to tests if cards list make some particular poker hands
   * and to create instances of particular poker hands.
   */
-abstract class PokerHandFactory(val handRank: HandRank) {
+protected abstract class PokerHandFactory (val handRank: HandRank) {
 
   /** Creates new PokerHand.
     *

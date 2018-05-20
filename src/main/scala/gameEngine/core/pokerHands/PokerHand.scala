@@ -1,7 +1,6 @@
-package main.scala.gameEngine.pokerHands
+package main.scala.gameEngine.core.pokerHands
 
-
-import main.scala.gameEngine.cards.Card
+import main.scala.gameEngine.core.cards.Card
 
 /** Represents some particular poker hand.
   *

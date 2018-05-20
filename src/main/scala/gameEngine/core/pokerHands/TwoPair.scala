@@ -1,6 +1,6 @@
-package main.scala.gameEngine.pokerHands
+package main.scala.gameEngine.core.pokerHands
 
-import main.scala.gameEngine.cards.{Card, CardRank}
+import main.scala.gameEngine.core.cards.{Card, CardRank}
 
 case object TwoPair extends PokerHandFactory(TwoPairRank) {
 
