@@ -25,7 +25,7 @@ case object Straight extends PokerHandFactory(StraightRank) {
 }
 
 
-/** Represents a pair poker hand. */
+/** Represents a straight poker hand. */
 case class Straight private(override val cards: List[Card]) extends PokerHand(StraightRank, cards) {
 
   /** Returns true if this.cards make a stronger straight than other.cards.

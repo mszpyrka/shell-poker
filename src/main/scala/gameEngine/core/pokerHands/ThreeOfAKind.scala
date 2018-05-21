@@ -12,7 +12,7 @@ case object ThreeOfAKind extends PokerHandFactory(ThreeOfAKindRank) {
     *
     * Checks if the list of ranks that appear at least three times in the cards list is not empty.
     */
-  override def isMadeUpOf(cards: List[Card]): Boolean = HandEvaluationHelper.countAndFilterRanks(cards, _ >= 3).nonEmpty
+  override def isMadeUpOf(cards: List[Card]): Boolean = HandEvaluationHelper.getRanksByCount(cards, _ >= 3).nonEmpty
 }
 
 
@@ -26,8 +26,8 @@ case class ThreeOfAKind private(override val cards: List[Card]) extends PokerHan
     */
   override protected def isStrongerWithinRank(other: PokerHand): Boolean = {
 
-    val thisSetRank: CardRank = HandEvaluationHelper.countAndFilterRanks(this.cards, _ == 3).head
-    val otherSetRank: CardRank = HandEvaluationHelper.countAndFilterRanks(other.cards, _ == 3).head
+    val thisSetRank: CardRank = HandEvaluationHelper.getRanksByCount(this.cards, _ == 3).head
+    val otherSetRank: CardRank = HandEvaluationHelper.getRanksByCount(other.cards, _ == 3).head
 
     if (thisSetRank > otherSetRank)
       return true

@@ -12,7 +12,7 @@ case object Pair extends PokerHandFactory(PairRank) {
     *
     * Checks if the list of ranks that appear more than once in the cards list is not empty.
     */
-  override def isMadeUpOf(cards: List[Card]): Boolean = HandEvaluationHelper.countAndFilterRanks(cards, _ > 1).nonEmpty
+  override def isMadeUpOf(cards: List[Card]): Boolean = HandEvaluationHelper.getRanksByCount(cards, _ > 1).nonEmpty
 }
 
 
@@ -26,8 +26,8 @@ case class Pair private(override val cards: List[Card]) extends PokerHand(PairRa
     */
   override protected def isStrongerWithinRank(other: PokerHand): Boolean = {
 
-    val thisPairRank: CardRank = HandEvaluationHelper.countAndFilterRanks(this.cards, _ == 2).head
-    val otherPairRank: CardRank = HandEvaluationHelper.countAndFilterRanks(other.cards, _ == 2).head
+    val thisPairRank: CardRank = HandEvaluationHelper.getRanksByCount(this.cards, _ == 2).head
+    val otherPairRank: CardRank = HandEvaluationHelper.getRanksByCount(other.cards, _ == 2).head
 
     if (thisPairRank > otherPairRank)
       return true

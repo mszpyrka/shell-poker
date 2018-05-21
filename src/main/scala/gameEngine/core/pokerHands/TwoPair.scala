@@ -12,7 +12,7 @@ case object TwoPair extends PokerHandFactory(TwoPairRank) {
     *
     * Checks if the list of ranks that appear more than once in the cards list has the length of 2.
     */
-  override def isMadeUpOf(cards: List[Card]): Boolean = HandEvaluationHelper.countAndFilterRanks(cards, _ > 1).length == 2
+  override def isMadeUpOf(cards: List[Card]): Boolean = HandEvaluationHelper.getRanksByCount(cards, _ > 1).length == 2
 }
 
 
@@ -26,8 +26,8 @@ case class TwoPair private(override val cards: List[Card]) extends PokerHand(Two
     */
   override protected def isStrongerWithinRank(other: PokerHand): Boolean = {
 
-    val thisPairRanks: List[CardRank] = HandEvaluationHelper.countAndFilterRanks(this.cards, _ == 2).sortWith(_ > _)
-    val otherPairRanks: List[CardRank] = HandEvaluationHelper.countAndFilterRanks(other.cards, _ == 2).sortWith(_ > _)
+    val thisPairRanks: List[CardRank] = HandEvaluationHelper.getRanksByCount(this.cards, _ == 2).sortWith(_ > _)
+    val otherPairRanks: List[CardRank] = HandEvaluationHelper.getRanksByCount(other.cards, _ == 2).sortWith(_ > _)
 
     if (thisPairRanks(0) > otherPairRanks(0) || (thisPairRanks(0) == otherPairRanks(0) && thisPairRanks(1) > otherPairRanks(1)))
       return true
@@ -36,8 +36,8 @@ case class TwoPair private(override val cards: List[Card]) extends PokerHand(Two
       return false
 
     // In case of equally ranked pairs - checks the kickers.
-    val thisKickerRank = HandEvaluationHelper.countAndFilterRanks(this.cards, _ == 1).head
-    val otherKickerRank = HandEvaluationHelper.countAndFilterRanks(other.cards, _ == 1).head
+    val thisKickerRank = HandEvaluationHelper.getRanksByCount(this.cards, _ == 1).head
+    val otherKickerRank = HandEvaluationHelper.getRanksByCount(other.cards, _ == 1).head
 
     thisKickerRank > otherKickerRank
   }

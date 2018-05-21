@@ -14,12 +14,12 @@ object HandEvaluationHelper {
     * For each rank a count is made of how often the rank appears in the cards list.
     * If the count number satisfies the predicate, the rank is added to the result list.
     */
-  def countAndFilterRanks(cards: List[Card], predicate: Int => Boolean): List[CardRank] = {
+  def getRanksByCount(cards: List[Card], predicate: Int => Boolean): List[CardRank] = {
 
     // Counts all rank appearances in this.cards.
     def countRank(r: CardRank): Int = cards.count(_.rank == r)
 
-    // Gets all ranks that appear more than once in this.cards (there will be always exactly one such value).
+    // Gets all ranks of which the number of appearances satisfies the predicate.
     CardRank.ranks.filter(rank => predicate(countRank(rank)))
   }
 
