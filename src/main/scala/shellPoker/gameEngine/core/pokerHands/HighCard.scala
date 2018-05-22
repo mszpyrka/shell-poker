@@ -1,6 +1,7 @@
-package main.scala.gameEngine.core.pokerHands
+package shellPoker.gameEngine.core.pokerHands
 
-import main.scala.gameEngine.core.cards.Card
+import shellPoker.gameEngine.core.cards.Card
+
 
 case object HighCard extends PokerHandFactory(HighCardRank) {
 

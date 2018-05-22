@@ -1,4 +1,4 @@
-package main.scala.gameEngine.core.cards
+package shellPoker.gameEngine.core.cards
 
 /** Represents playing card entity.
   *

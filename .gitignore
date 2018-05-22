@@ -3,3 +3,4 @@ target/
 
 # intellij specific
 .idea/
+*.iml

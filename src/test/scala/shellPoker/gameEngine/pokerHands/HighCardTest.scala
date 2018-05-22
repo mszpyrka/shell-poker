@@ -1,4 +1,4 @@
-package test.scala.gameEngine.pokerHands
+package shellPoker.gameEngine.pokerHands
 
 /** Tests for HighCard class. */
 class HighCardTest {
