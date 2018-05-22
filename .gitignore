@@ -1,0 +1,5 @@
+# sbt specific
+target/
+
+# intellij specific
+.idea/
