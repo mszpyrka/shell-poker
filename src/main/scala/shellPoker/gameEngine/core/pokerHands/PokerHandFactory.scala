@@ -38,7 +38,8 @@ object PokerHandFactory {
     */
   private def makeProperHand(cards: List[Card]): PokerHand = {
 
-    for (hand <- handFactories.sortWith(_.handRank > _.handRank)) if (hand.isMadeUpOf(cards)) return hand(cards)
+    for (hand <- handFactories.sortWith(_.handRank > _.handRank))
+      if (hand.isMadeUpOf(cards)) return hand(cards)
 
     throw InvalidPokerHandException("Could not create any hand from " + cards.mkString(", "))
   }
@@ -66,13 +67,18 @@ protected abstract class PokerHandFactory (val handRank: HandRank) extends HandE
       throw new InvalidPokerHandException("poker hand must consist of exactly five cards")
 
     if (cards.groupBy(identity).values.exists(_.length > 1))
-      throw new InvalidPokerHandException("repetitive cards have been found in hand " + cards.mkString(", "))
+      throw new InvalidPokerHandException(
+        "repetitive cards have been found in hand " + cards.mkString(", "))
 
     if (!this.isMadeUpOf(cards))
-      throw new InvalidPokerHandException("cannot be made up of", this, cards)
+      throw new InvalidPokerHandException(
+        "cannot be made up of", this, cards)
 
-    if (PokerHandFactory.handFactories.filter(_.handRank > this.handRank).exists(_.isMadeUpOf(cards)))
-      throw new InvalidPokerHandException("is not the best hand made up of", this, cards)
+    if (PokerHandFactory.handFactories.
+        filter(_.handRank > this.handRank).
+        exists(_.isMadeUpOf(cards)))
+      throw new InvalidPokerHandException(
+        "is not the best hand made up of", this, cards)
 
     makeHand(cards)
   }

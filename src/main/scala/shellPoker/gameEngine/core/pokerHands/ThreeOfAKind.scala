@@ -12,7 +12,8 @@ case object ThreeOfAKind extends PokerHandFactory(ThreeOfAKindRank) {
     *
     * Checks if the list of ranks that appear at least three times in the cards list is not empty.
     */
-  override def isMadeUpOf(cards: List[Card]): Boolean = HandEvaluationHelper.getRanksByCount(cards, _ >= 3).nonEmpty
+  override def isMadeUpOf(cards: List[Card]): Boolean =
+    HandEvaluationHelper.getRanksByCount(cards, _ >= 3).nonEmpty
 }
 
 

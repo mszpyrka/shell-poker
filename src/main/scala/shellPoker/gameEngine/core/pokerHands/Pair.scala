@@ -13,7 +13,8 @@ case object Pair extends PokerHandFactory(PairRank) {
     *
     * Checks if the list of ranks that appear more than once in the cards list is not empty.
     */
-  override def isMadeUpOf(cards: List[Card]): Boolean = HandEvaluationHelper.getRanksByCount(cards, _ > 1).nonEmpty
+  override def isMadeUpOf(cards: List[Card]): Boolean =
+    HandEvaluationHelper.getRanksByCount(cards, _ > 1).nonEmpty
 }
 
 

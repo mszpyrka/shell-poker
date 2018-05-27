@@ -23,5 +23,6 @@ case class HighCard private(override val cards: List[Card]) extends PokerHand(Hi
     * Sorts both hands' cards lists in descending order and compares their elements one by one
     * until a pair of differently ranked cards is found.
     */
-  override protected def isStrongerWithinRank(other: PokerHand): Boolean = HandEvaluationHelper.compareKickers(this.cards, other.cards) > 0
+  override protected def isStrongerWithinRank(other: PokerHand): Boolean =
+    HandEvaluationHelper.compareKickers(this.cards, other.cards) > 0
 }
