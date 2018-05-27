@@ -27,18 +27,18 @@ case class FourOfAKind private(override val cards: List[Card]) extends PokerHand
     */
   override protected def isStrongerWithinRank(other: PokerHand): Boolean = {
 
-    val thisSetRank: CardRank = HandEvaluationHelper.getRanksByCount(this.cards, _ == 4).head
-    val otherSetRank: CardRank = HandEvaluationHelper.getRanksByCount(other.cards, _ == 4).head
+    val thisQuadRank: CardRank = HandEvaluationHelper.getRanksByCount(this.cards, _ == 4).head
+    val otherQuadRank: CardRank = HandEvaluationHelper.getRanksByCount(other.cards, _ == 4).head
 
-    if (thisSetRank > otherSetRank)
+    if (thisQuadRank > otherQuadRank)
       return true
 
-    if (thisSetRank < otherSetRank)
+    if (thisQuadRank < otherQuadRank)
       return false
 
     // In case of equally ranked pair - checks other cards.
-    val thisKickers: List[Card] = this.cards.filter(_.rank != thisSetRank)
-    val otherKickers: List[Card] = other.cards.filter(_.rank != otherSetRank)
+    val thisKickers: List[Card] = this.cards.filter(_.rank != thisQuadRank)
+    val otherKickers: List[Card] = other.cards.filter(_.rank != otherQuadRank)
 
     HandEvaluationHelper.compareKickers(thisKickers, otherKickers) > 0
   }

@@ -14,14 +14,10 @@ case object RoyalFlush extends PokerHandFactory(RoyalFlushRank) {
     */
   override def isMadeUpOf(cards: List[Card]): Boolean = {
 
-    val suits: List[Suit] = cards.map(_.suit)
-
-    val sameSuits: Boolean = suits.forall(_ == suits.head)
-
     val sortedRanks: List[CardRank] = cards.map(_.rank).sortWith(_ < _)
 
     if (sortedRanks == List(Ten, Jack, Queen, King, Ace))
-      return sameSuits
+      return HandEvaluationHelper.areSingleSuit(cards)
 
     return false
   }

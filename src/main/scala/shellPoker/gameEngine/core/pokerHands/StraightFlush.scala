@@ -14,19 +14,7 @@ case object StraightFlush extends PokerHandFactory(StraightFlushRank) {
     * If not, checks if cards contain five consecutive ranks and are the same suit
     */
   override def isMadeUpOf(cards: List[Card]): Boolean = {
-
-    val sortedRanks: List[CardRank] = cards.map(_.rank).sortWith(_ < _)
-
-    if (sortedRanks == List(Two, Three, Four, Five, Ace))
-      return true
-
-
-    val suits: List[Suit] = cards.map(_.suit)
-
-    val sameSuits: Boolean = suits.forall(_ == suits.head)
-
-
-    (sortedRanks zip sortedRanks.drop(1)).forall { case (a, b) => a.strength + 1 == b.strength } && sameSuits
+    Flush.isMadeUpOf(cards) && Straight.isMadeUpOf(cards)
   }
 }
 

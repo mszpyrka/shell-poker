@@ -43,4 +43,18 @@ object HandEvaluationHelper {
 
     0
   }
+
+  def areSingleSuit(cards: List[Card]): Boolean = {
+    val suits: List[Suit] = cards.map(_.suit)
+    suits.forall(_ == suits.head)
+  }
+
+  def areConsecutive(cards: List[Card]): Boolean = {
+    val sortedRanks: List[CardRank] = cards.map(_.rank).sortWith(_ < _)
+
+    if (sortedRanks == List(Two, Three, Four, Five, Ace))
+      return true
+
+    (sortedRanks zip sortedRanks.drop(1)).forall { case (a, b) => a.strength + 1 == b.strength }
+  }
 }

@@ -4,3 +4,5 @@ target/
 # intellij specific
 .idea/
 *.iml
+
+src/main/scala/MockScala.scala
