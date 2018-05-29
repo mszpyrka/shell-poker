@@ -10,7 +10,12 @@ object PokerHandFactory {
     Pair,
     TwoPair,
     ThreeOfAKind,
-    Straight
+    Straight,
+    Flush,
+    FullHouse,
+    FourOfAKind,
+    StraightFlush,
+    RoyalFlush
   )
 
 
@@ -68,7 +73,7 @@ protected abstract class PokerHandFactory (val handRank: HandRank) extends HandE
 
     if (cards.groupBy(identity).values.exists(_.length > 1))
       throw new InvalidPokerHandException(
-        "repetitive cards have been found in hand " + cards.mkString(", "))
+        "repetitive cards in hand " + cards.mkString(", "))
 
     if (!this.isMadeUpOf(cards))
       throw new InvalidPokerHandException(

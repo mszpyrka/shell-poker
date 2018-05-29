@@ -14,7 +14,8 @@ case object StraightFlush extends PokerHandFactory(StraightFlushRank) {
     * If not, checks if cards contain five consecutive ranks and are the same suit
     */
   override def isMadeUpOf(cards: List[Card]): Boolean = {
-    Flush.isMadeUpOf(cards) && Straight.isMadeUpOf(cards)
+    HandEvaluationHelper.areSingleSuited(cards) &&
+      HandEvaluationHelper.areConsecutive(cards)
   }
 }
 

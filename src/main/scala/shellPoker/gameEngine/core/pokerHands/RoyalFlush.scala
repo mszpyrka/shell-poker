@@ -17,9 +17,9 @@ case object RoyalFlush extends PokerHandFactory(RoyalFlushRank) {
     val sortedRanks: List[CardRank] = cards.map(_.rank).sortWith(_ < _)
 
     if (sortedRanks == List(Ten, Jack, Queen, King, Ace))
-      return HandEvaluationHelper.areSingleSuit(cards)
+      return HandEvaluationHelper.areSingleSuited(cards)
 
-    return false
+    false
   }
 }
 

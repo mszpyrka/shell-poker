@@ -44,7 +44,8 @@ object HandEvaluationHelper {
     0
   }
 
-  def areSingleSuit(cards: List[Card]): Boolean = {
+
+  def areSingleSuited(cards: List[Card]): Boolean = {
     val suits: List[Suit] = cards.map(_.suit)
     suits.forall(_ == suits.head)
   }

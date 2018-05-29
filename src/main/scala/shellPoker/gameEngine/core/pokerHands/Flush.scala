@@ -10,7 +10,7 @@ case object Flush extends PokerHandFactory(FlushRank) {
 
   /** Tests if given cards list make a Flush hand. */
   override def isMadeUpOf(cards: List[Card]): Boolean = {
-    HandEvaluationHelper.areSingleSuit(cards)
+    HandEvaluationHelper.areSingleSuited(cards)
   }
 }
 
