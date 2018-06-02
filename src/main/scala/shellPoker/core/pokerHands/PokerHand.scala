@@ -1,6 +1,4 @@
-package shellPoker.gameEngine.core.pokerHands
-
-import shellPoker.gameEngine.core.cards.Card
+package shellPoker.core.pokerHands
 
 
 /** Represents some particular poker hand.

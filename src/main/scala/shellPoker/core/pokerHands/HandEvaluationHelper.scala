@@ -1,6 +1,6 @@
-package shellPoker.gameEngine.core.pokerHands
+package shellPoker.core.pokerHands
 
-import shellPoker.gameEngine.core.cards._
+import shellPoker.core.cards._
 
 
 object HandEvaluationHelper {

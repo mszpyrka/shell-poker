@@ -1,4 +1,4 @@
-package shellPoker.gameEngine.core.cards
+package shellPoker.core.cards
 
 /** Represents card's rank. */
 object CardRank {

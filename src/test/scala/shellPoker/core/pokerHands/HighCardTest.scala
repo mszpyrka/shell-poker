@@ -1,6 +1,7 @@
-package shellPoker.gameEngine.core.pokerHands
+package shellPoker.core.pokerHands
 
 import org.scalatest.FunSuite
+import shellPoker.core.cards._
 import shellPoker.gameEngine.core.cards._
 
 /** Tests for HighCard class. */

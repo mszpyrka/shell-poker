@@ -1,4 +1,4 @@
-package shellPoker.gameEngine.core.pokerHands
+package shellPoker.core.pokerHands
 
 import shellPoker.gameEngine.core.cards._
 

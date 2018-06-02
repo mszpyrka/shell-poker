@@ -1,5 +1,6 @@
-package shellPoker.gameEngine.core.pokerHands
+package shellPoker.core.pokerHands
 
+import shellPoker.core.cards.CardRank
 import shellPoker.gameEngine.core.cards._
 
 case object FullHouse extends PokerHandFactory(FullHouseRank) {

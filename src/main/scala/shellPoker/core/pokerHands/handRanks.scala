@@ -1,4 +1,4 @@
-package shellPoker.gameEngine.core.pokerHands
+package shellPoker.core.pokerHands
 
 /** Represents different poker hand ranks.
   *
