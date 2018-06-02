@@ -1,6 +1,6 @@
 package shellPoker.core.pokerHands
 
-import shellPoker.gameEngine.core.cards.Card
+import shellPoker.core.cards.Card
 
 object PokerHandFactory {
 

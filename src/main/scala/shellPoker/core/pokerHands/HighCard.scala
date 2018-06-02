@@ -1,5 +1,7 @@
 package shellPoker.core.pokerHands
 
+import shellPoker.core.cards.Card
+
 
 case object HighCard extends PokerHandFactory(HighCardRank) {
 

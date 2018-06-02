@@ -1,6 +1,6 @@
 package shellPoker.core.pokerHands
 
-import shellPoker.gameEngine.core.cards._
+import shellPoker.core.cards._
 
 case object Flush extends PokerHandFactory(FlushRank) {
 

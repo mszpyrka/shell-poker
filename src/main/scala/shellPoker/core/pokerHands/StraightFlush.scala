@@ -1,7 +1,6 @@
 package shellPoker.core.pokerHands
 
 import shellPoker.core.cards._
-import shellPoker.gameEngine.core.cards._
 
 case object StraightFlush extends PokerHandFactory(StraightFlushRank) {
 
