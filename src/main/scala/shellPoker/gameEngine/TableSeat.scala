@@ -1,11 +1,11 @@
 package shellPoker.gameEngine
 
 class TableSeat{
-    var player: Option[Player] = None
+    private var player: Player = _
     
-    def isEmpty: Boolean = if (player == None) true else false
+    def isEmpty: Boolean = player == null
     
-    def addPlayer(player: Player) = this.player = Some(player)
+    def addPlayer(player: Player): Unit = this.player = player
 
-    def removePlayer = this.player = None
+    def removePlayer(): Unit = this.player = null
 }
