@@ -1,6 +1,7 @@
 package shellPoker.core.pokerHands
 
-import shellPoker.core.cards._
+import shellPoker.core.cards.Card
+
 
 /** Represents some particular poker hand.
   *

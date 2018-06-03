@@ -1,6 +1,6 @@
 package shellPoker.core.pokerHands
 
-import shellPoker.core.cards._
+import shellPoker.core.cards.Card
 
 /** Used by classes which evaluate poker hands. */
 trait HandEvaluator {
