@@ -6,6 +6,6 @@ import shellPoker.core.cards.Card
   *Responsible for storing player's game state
   */
 class Player(val initialChipStack: ChipStack) {
-    var holeCards: (Card, Card) = _
-    val currentBet: ChipStack = new ChipStack(0)
+  var holeCards: (Card, Card) = _
+  val currentBet: ChipStack = new ChipStack(0)
 }

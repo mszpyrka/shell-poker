@@ -7,7 +7,7 @@ import shellPoker.core.cards._
 class  PokerHandFactoryTest extends FunSuite {
 
 
-  test("Every attempt to make a PokerHand from cards that can't be in a deck should throw InvalidPokerHandException.") {
+  test("Every attempt to make a PokerHand from cards that can't be form a proper poker hand should throw InvalidPokerHandException.") {
 
     val l1 = List(
       Card(Queen, Diamonds),
