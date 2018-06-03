@@ -6,3 +6,5 @@ target/
 *.iml
 
 src/main/scala/MockScala.scala
+
+.vscode
