@@ -1,10 +1,11 @@
 package shellPoker.core.pokerHands
 
 import shellPoker.core.cards._
+import scala.collection.mutable.LinkedHashMap
 
 object TestHelper{
 
-  val pokerHands = Map("HighCard" ->  List(
+  val pokerHands = LinkedHashMap("HighCard" ->  List(
                                             Card(Queen, Diamonds),
                                             Card(Ten, Spades),
                                             Card(Seven, Clubs),
@@ -76,7 +77,7 @@ object TestHelper{
                                           )
   )
 
-  val betterPokerHands = Map("HighCard" ->  List(
+  val betterPokerHands = LinkedHashMap("HighCard" ->  List(
                                             Card(King, Diamonds),
                                             Card(Ten, Spades),
                                             Card(Seven, Clubs),
@@ -149,7 +150,7 @@ object TestHelper{
 
   )
 
-   val worsePokerHands = Map("HighCard" ->  List(
+   val worsePokerHands = LinkedHashMap("HighCard" ->  List(
                                             Card(Jack, Diamonds),
                                             Card(Ten, Spades),
                                             Card(Seven, Clubs),
