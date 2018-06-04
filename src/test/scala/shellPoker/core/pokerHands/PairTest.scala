@@ -6,123 +6,49 @@ import shellPoker.core.cards._
 /** Tests for Pair class. */
 class PairTest extends FunSuite {
 
-  test("Certain cards should make at least pair hand"){
+  test("Certain cards should make at least a Pair hand") {
 
-    val l1 = List(
-      Card(Queen, Diamonds),
-      Card(Queen, Spades),
-      Card(Ace, Clubs),
-      Card(Two, Diamonds),
-      Card(Three, Spades)
+    val toCheck = List(TestHelper.pokerHands("Pair"),
+                       TestHelper.betterPokerHands("Pair"),
+                       TestHelper.worsePokerHands("Pair"),
+                       TestHelper.pokerHands("ThreeOfAKind"),
+                       TestHelper.pokerHands("FourOfAKind"),
+                       TestHelper.pokerHands("FullHouse")
     )
 
-    assert(Pair.isMadeUpOf(l1))
-
-    val l2 = List(
-      Card(Queen, Diamonds),
-      Card(King, Spades),
-      Card(King, Clubs),
-      Card(Ten, Diamonds),
-      Card(Jack, Spades)
-    )
-
-    assert(Pair.isMadeUpOf(l2))
-
-    val l3 = List(
-      Card(Queen, Diamonds),
-      Card(Queen, Spades),
-      Card(Queen, Clubs),
-      Card(King, Hearts),
-      Card(Three, Spades)
-    )
-
-    assert(Pair.isMadeUpOf(l3))
-
-    val l4 = List(
-      Card(Queen, Diamonds),
-      Card(Queen, Spades),
-      Card(Queen, Clubs),
-      Card(Queen, Hearts),
-      Card(Three, Spades)
-    )
-
-    assert(Pair.isMadeUpOf(l4))
-
-    val l5 = List(
-      Card(Queen, Diamonds),
-      Card(Queen, Spades),
-      Card(Queen, Clubs),
-      Card(King, Hearts),
-      Card(King, Spades)
-    )
-
-    assert(Pair.isMadeUpOf(l5))
+    for(i <- toCheck) assert(Pair.isMadeUpOf(i))
   }
 
-  test("Certain cards should NOT make a pair hand"){
-     val l1 = List(
-      Card(Queen, Diamonds),
-      Card(Jack, Spades),
-      Card(Ace, Clubs),
-      Card(King, Hearts),
-      Card(Three, Spades)
+  test("Certain cards should NOT make a Pair hand") {
+
+    val toCheck = List(TestHelper.pokerHands("HighCard"),
+                       TestHelper.pokerHands("Flush"),
+                       TestHelper.pokerHands("Straight"),
+                       TestHelper.pokerHands("RoyalFlush")
     )
 
-    assert(!Pair.isMadeUpOf(l1))
+    for(i <- toCheck) assert(!Pair.isMadeUpOf(i))
   }
 
-  test("Every attempt to make Pair from cards that make better hand should throw InvalidPokerHandException.") {
+  test("Comparing different Pair hands.") {
 
-    val l1 = List(
-      Card(Queen, Diamonds),
-      Card(King, Spades),
-      Card(King, Clubs),
-      Card(Two, Diamonds),
-      Card(Two, Spades)
-    )
+    val hand = Pair(TestHelper.pokerHands("Pair"))
+    val worseHand = Pair(TestHelper.worsePokerHands("Pair"))
+    val betterHand =  Pair(TestHelper.betterPokerHands("Pair"))
+    val equalHand = Pair(TestHelper.pokerHands("Pair"))
 
-    assertThrows[InvalidPokerHandException](Pair(l1))
-
-
-    val l2 = List(
-      Card(Queen, Diamonds),
-      Card(Queen, Spades),
-      Card(Ace, Clubs),
-      Card(Queen, Diamonds),
-      Card(Jack, Spades)
-    )
-
-    assertThrows[InvalidPokerHandException](Pair(l2))
-
-    val l3 = List(
-      Card(Queen, Diamonds),
-      Card(King, Diamonds),
-      Card(Ace, Diamonds),
-      Card(Two, Diamonds),
-      Card(Three, Diamonds)
-    )
-
-    assertThrows[InvalidPokerHandException](Pair(l3))
-
-    val l4 = List(
-      Card(Queen, Diamonds),
-      Card(Queen, Spades),
-      Card(Queen, Hearts),
-      Card(Queen, Clubs),
-      Card(Three, Diamonds)
-    )
-
-    assertThrows[InvalidPokerHandException](Pair(l4))
-
-    val l5 = List(
-      Card(Seven, Diamonds),
-      Card(Six, Spades),
-      Card(Five, Diamonds),
-      Card(Four, Diamonds),
-      Card(Three, Diamonds)
-    )
-
-    assertThrows[InvalidPokerHandException](Pair(l5))
+    assert(hand.isStrongerThan(worseHand))
+    assert(hand.isWeakerThan(betterHand))
+    assert(hand.isEquallyStrongAs(equalHand))
+    assert(worseHand.isWeakerThan(betterHand))
   }
 
+
+  test("Every attempt to make Pair from cards that make better or worse hand should throw InvalidPokerHandException.") {
+    for ((k, v) <- TestHelper.pokerHands if k != "Pair") {
+      assertThrows[InvalidPokerHandException](Pair(v))
+    }
+  }
+ 
 }
+
