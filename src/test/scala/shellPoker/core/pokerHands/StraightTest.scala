@@ -20,7 +20,7 @@ class StraightTest extends FunSuite {
   test("Certain cards should NOT make a Straight hand") {
 
     val toCheck = List(TestHelper.pokerHands("Pair"),
-                       TestHelper.betterPokerHands("Flush")
+                       TestHelper.pokerHands("Flush")
     )
 
     for(i <- toCheck) assert(!Straight.isMadeUpOf(i))
@@ -28,21 +28,16 @@ class StraightTest extends FunSuite {
 
   test("Comparing different Straight hands.") {
 
-    for {(k1, v1) <- TestHelper.pokerHands
-         (k2, v2) <- TestHelper.betterPokerHands 
-         (k3, v3) <- TestHelper.worsePokerHands 
-         if k1 == "Straight" && k2 == "Straight" && k3 == "Straight"} {
+    val hand = Straight(TestHelper.pokerHands("Straight"))
+    val worseHand = Straight(TestHelper.worsePokerHands("Straight"))
+    val betterHand =  Straight(TestHelper.betterPokerHands("Straight"))
+    val equalHand = Straight(TestHelper.pokerHands("Straight"))
 
-          val hand = Straight(v1)
-          val betterHand = Straight(v2)
-          val worseHand = Straight(v3)
-          val equalHand = Straight(v1)
+    assert(hand.isStrongerThan(worseHand))
+    assert(hand.isWeakerThan(betterHand))
+    assert(hand.isEquallyStrongAs(equalHand))
+    assert(worseHand.isWeakerThan(betterHand))
 
-          assert(hand.isStrongerThan(worseHand))
-          assert(hand.isWeakerThan(betterHand))
-          assert(hand.isEquallyStrongAs(equalHand))
-          assert(worseHand.isWeakerThan(betterHand))
-    }
   }
 
 

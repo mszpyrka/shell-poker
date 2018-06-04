@@ -18,10 +18,11 @@ class FullHouseTest extends FunSuite {
 
   test("Certain cards should NOT make a FullHouse hand") {
 
-    val toCheck = List(TestHelper.pokerHands("HighCard"),
+    val toCheck = List(TestHelper.pokerHands("Pair"),
                        TestHelper.betterPokerHands("Flush"),
                        TestHelper.worsePokerHands("Straight"),
-                       TestHelper.pokerHands("RoyalFlush")
+                       TestHelper.pokerHands("RoyalFlush"),
+                       TestHelper.pokerHands("ThreeOfAKind")
     )
 
     for(i <- toCheck) assert(!FullHouse.isMadeUpOf(i))
@@ -29,21 +30,15 @@ class FullHouseTest extends FunSuite {
 
   test("Comparing different FullHouse hands.") {
 
-    for {(k1, v1) <- TestHelper.pokerHands
-         (k2, v2) <- TestHelper.betterPokerHands 
-         (k3, v3) <- TestHelper.worsePokerHands 
-         if k1 == "FullHouse" && k2 == "FullHouse" && k3 == "FullHouse"} {
+    val hand = FullHouse(TestHelper.pokerHands("FullHouse"))
+    val worseHand = FullHouse(TestHelper.worsePokerHands("FullHouse"))
+    val betterHand =  FullHouse(TestHelper.betterPokerHands("FullHouse"))
+    val equalHand = FullHouse(TestHelper.pokerHands("FullHouse"))
 
-          val hand = FullHouse(v1)
-          val betterHand = FullHouse(v2)
-          val worseHand = FullHouse(v3)
-          val equalHand = FullHouse(v1)
-
-          assert(hand.isStrongerThan(worseHand))
-          assert(hand.isWeakerThan(betterHand))
-          assert(hand.isEquallyStrongAs(equalHand))
-          assert(worseHand.isWeakerThan(betterHand))
-    }
+    assert(hand.isStrongerThan(worseHand))
+    assert(hand.isWeakerThan(betterHand))
+    assert(hand.isEquallyStrongAs(equalHand))
+    assert(worseHand.isWeakerThan(betterHand))
   }
 
 

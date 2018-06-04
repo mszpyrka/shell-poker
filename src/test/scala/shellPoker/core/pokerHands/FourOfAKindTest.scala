@@ -29,21 +29,15 @@ class FourOfAKindTest extends FunSuite {
 
   test("Comparing different FourOfAKind hands.") {
 
-    for {(k1, v1) <- TestHelper.pokerHands
-         (k2, v2) <- TestHelper.betterPokerHands 
-         (k3, v3) <- TestHelper.worsePokerHands 
-         if k1 == "FourOfAKind" && k2 == "FourOfAKind" && k3 == "FourOfAKind"} {
+    val hand = FourOfAKind(TestHelper.pokerHands("FourOfAKind"))
+    val worseHand = FourOfAKind(TestHelper.worsePokerHands("FourOfAKind"))
+    val betterHand =  FourOfAKind(TestHelper.betterPokerHands("FourOfAKind"))
+    val equalHand = FourOfAKind(TestHelper.pokerHands("FourOfAKind"))
 
-          val hand = FourOfAKind(v1)
-          val betterHand = FourOfAKind(v2)
-          val worseHand = FourOfAKind(v3)
-          val equalHand = FourOfAKind(v1)
-
-          assert(hand.isStrongerThan(worseHand))
-          assert(hand.isWeakerThan(betterHand))
-          assert(hand.isEquallyStrongAs(equalHand))
-          assert(worseHand.isWeakerThan(betterHand))
-    }
+    assert(hand.isStrongerThan(worseHand))
+    assert(hand.isWeakerThan(betterHand))
+    assert(hand.isEquallyStrongAs(equalHand))
+    assert(worseHand.isWeakerThan(betterHand))
   }
 
 

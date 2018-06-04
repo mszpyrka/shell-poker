@@ -223,5 +223,15 @@ object TestHelper{
 
   )
 
+  val stringToPokerHand = Map("HighCard" -> HighCard,
+                              "Pair" -> Pair,
+                              "ThreeOfAKind" -> ThreeOfAKind,
+                              "TwoPair" -> TwoPair,
+                              "Straight" -> Straight,
+                              "Flush" -> Flush,
+                              "FullHouse" -> FullHouse,
+                              "FourOfAKind" -> FourOfAKind,
+                              "StraightFlush" -> StraightFlush,
+                              "RoyalFlush" -> RoyalFlush)
 
 }
