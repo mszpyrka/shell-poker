@@ -40,16 +40,13 @@ private object PositionManager {
   /* Slices seats list to get all the seats between border points (left margin inclusive, right margin exclusive). */
   private def getSeatsRange(start: TableSeat, end: TableSeat, seats: List[TableSeat]): List[TableSeat] = {
 
-    if (start == end)
-      return seats
+    val extendedSeats: List[TableSeat] = seats ++ seats
 
-    val startIndex = seats.indexOf(start)
+    val leftTrimmed: List[TableSeat] = extendedSeats.drop(extendedSeats.indexOf(start) + 1)
 
-    val extendedSeats = seats.drop(startIndex) ++ seats
+    val rightTrimmed = leftTrimmed.take(leftTrimmed.indexOf(end))
 
-    val endIndex = extendedSeats.indexOf(end)
-
-    extendedSeats.take(endIndex)
+    start :: rightTrimmed
   }
 }
 
