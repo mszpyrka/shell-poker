@@ -196,17 +196,17 @@ class PositionManagerTest extends FunSuite {
 
     positionManager.movePositions(seats)
 
-    // seats: 1:_(SB)  2:_  3:+(BB)  4:+  5:+(D)
+    // seats: 1:_  2:_(SB)  3:+(BB)  4:+  5:+(D)
 
     assert(positionManager.dealerButton === seat5)
-    assert(positionManager.smallBlind === seat1)
+    assert(positionManager.smallBlind === seat2)
     assert(positionManager.bigBlind === seat3)
 
     positionManager.movePositions(seats)
 
-    // seats: 1:_(D)  2:_  3:+(SB)  4:+(BB)  5:+
+    // seats: 1:_  2:_(D)  3:+(SB)  4:+(BB)  5:+
 
-    assert(positionManager.dealerButton === seat1)
+    assert(positionManager.dealerButton === seat2)
     assert(positionManager.smallBlind === seat3)
     assert(positionManager.bigBlind === seat4)
 
@@ -238,10 +238,35 @@ class PositionManagerTest extends FunSuite {
 
     // seats: 1:_  2:+(D)  3:+(SB)  4:_  5:+(BB)
 
+    assert(positionManager.dealerButton === seat2)
+    assert(positionManager.smallBlind === seat3)
+    assert(positionManager.bigBlind === seat5)
+
+    seat1.addPlayer(playerMock)
+    seat2.removePlayer()
+    seat3.removePlayer()
+
+    // seats: 1:+  2:_(D)  3:_(SB)  4:_  5:+(BB)
+
+    positionManager.movePositions(seats)
+
+    // seats: 1:+(BB)  2:_  3:_  4:_  5:+(SB/D)
+
     assert(positionManager.dealerButton === seat5)
     assert(positionManager.smallBlind === seat5)
+    assert(positionManager.bigBlind === seat1)
+
+    seat3.addPlayer(playerMock)
+
+    // seats: 1:+(BB)  2:_  3:+  4:_  5:+(SB/D)
+
+    positionManager.movePositions(seats)
+
+    // seats: 1:+(SB)  2:_  3:+(BB)  4:_  5:+(D)
+
+    assert(positionManager.dealerButton === seat5)
+    assert(positionManager.smallBlind === seat1)
     assert(positionManager.bigBlind === seat3)
 
-    seat2.addPlayer(playerMock)
   }
 }
