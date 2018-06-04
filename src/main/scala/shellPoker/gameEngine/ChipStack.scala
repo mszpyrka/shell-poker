@@ -1,6 +1,6 @@
 package shellPoker.gameEngine
 
-/** Represents single chip stack.
+/** Represents a single chip stack.
   * Responsible for adding and removing chips from
   * player's chip stack
   */

@@ -3,7 +3,7 @@ package shellPoker.gameEngine
 import shellPoker.core.cards.Card
 
 class GameManager{
-  // val tableSeats = for(_ <- 0 until seatsAmount) yield new TableSeat
+  var tableSeats: List[tableSeat] = _
   val dealer: Dealer = new Dealer
   val communityCards: Option[List[Card]] = None
   val pot: ChipStack = new ChipStack(0)
