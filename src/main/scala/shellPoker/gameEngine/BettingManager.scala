@@ -18,7 +18,7 @@ class BettingManager(
     action match{
       case Bet(amount) => canBet(amount)
       case Call => canCall
-      case Check => canCheck()
+      case Check => canCheck
       case Fold => true
       case AllIn => true
     }
@@ -26,7 +26,7 @@ class BettingManager(
 
   def getNextActionTaker(): TableSeat = ???
 
-  private def canCheck(): Boolean = {
+  private def canCheck: Boolean = {
     if(lastBetSize == 0) return true
 
     if(currentActionTaker == bigBlind && lastBetSize == bigBlindValue) return true
@@ -34,14 +34,14 @@ class BettingManager(
     return false
   }
 
-  private def canBet(amount): Boolean = {
+  private def canBet(amount: Int): Boolean = {
     currentActionTaker.player.chipStack.chipCount + 
       currentActionTaker.player.currentBetSize >= amount &&
       amount >= minBet
 
   }
 
-  private def canCall(): Boolean = {
+  private def canCall: Boolean = {
     currentActionTaker.player.chipStack.chipCount + 
       currentActionTaker.player.currentBetSize >= lastBetSize
   }
