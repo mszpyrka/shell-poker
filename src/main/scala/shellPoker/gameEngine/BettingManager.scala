@@ -4,5 +4,7 @@ class BettingManager{
 
   def method1 = ???
 
-  def method2 = ???
+  def method2 = {
+    println("XDDDDDDDD")
+  }
 }
