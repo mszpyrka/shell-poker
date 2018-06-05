@@ -3,6 +3,7 @@ package shellPoker.gameEngine
 
 object PositionHelper{
 
+  /* Searches for the first seat following some particular seat at the table. */
   def getNextSeat(startSeat: TableSeat, seats: List[TableSeat]): TableSeat = {
 
     val startIndex = seats.indexOf(startSeat)
@@ -30,8 +31,27 @@ object PositionHelper{
     targetSeat.orNull
   }
 
+
+  /* Searches for the first seat that contains active player following some particular seat at the table. */
+  def getNextActiveSeat(startingSeat: TableSeat, seats: List[TableSeat]): TableSeat = {
+
+    val startIndex = seats.indexOf(startingSeat)
+    val potentialSeats = (seats.drop(startIndex + 1) ++ seats.take(startIndex)).filter(!_.isEmpty)
+    val targetSeat = potentialSeats.find(_.player.isActive)
+
+    targetSeat.orNull
+  }
+
+
   /* Counts non-empty seats in given list. */
   def countTakenSeats(seats: List[TableSeat]): Int = seats.count(!_.isEmpty)
+
+
+  /* Counts active players present at the table. */
+  def countActivePlayers(seats: List[TableSeat]): Int = {
+    val takenSeats = seats.filter(!_.isEmpty)
+    takenSeats.count(_.player.isActive)
+  }
 
 
   /* Slices seats list to get all the seats between border points (left margin inclusive, right margin exclusive). */

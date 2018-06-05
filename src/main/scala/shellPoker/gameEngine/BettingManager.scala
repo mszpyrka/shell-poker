@@ -26,17 +26,21 @@ class BettingManager(
   def startNextRound(): Unit = {
 
     currentBettingRound += 1
+    minBet = bigBlindValue
 
     if (currentBettingRound == 1) {
 
-      roundEndingSeat = PositionHelper.getNextTakenSeat(bigBlind, seats)
-      currentActionTaker = PositionHelper.getNextTakenSeat(bigBlind, seats)
+      roundEndingSeat = PositionHelper.getNextActiveSeat(bigBlind, seats)
+      currentActionTaker = PositionHelper.getNextActiveSeat(bigBlind, seats)
       lastBetSize = bigBlindValue
-      minBet = bigBlindValue
     }
 
-    else if (???)
-    ???
+    else {
+
+      roundEndingSeat = PositionHelper.getNextActiveSeat(dealerButton, seats)
+      currentActionTaker = PositionHelper.getNextActiveSeat(dealerButton, seats)
+      lastBetSize = 0
+    }
   }
 
   def validateAction(action: Action): ActionValidation = {
@@ -49,9 +53,17 @@ class BettingManager(
     }
   }
 
-  def getNextActionTaker(): TableSeat = {
-    ???
-    val activeSeats: List[TableSeat] = this.seats.filter(!_.isEmpty && _.player)
+  def getActionTaker: TableSeat = currentActionTaker
+
+  def proceedWithAction(action: Action): Unit = ???
+
+  private def nextActionTaker: TableSeat = {
+
+    val nextActiveSeat = PositionHelper.getNextActiveSeat(currentActionTaker, seats)
+    if (nextActiveSeat == roundEndingSeat)
+      return null
+
+    nextActiveSeat
   }
 
   private def canCheck: ActionValidation = {

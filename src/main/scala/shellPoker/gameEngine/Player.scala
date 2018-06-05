@@ -23,6 +23,9 @@ class Player(val chipStack: ChipStack) {
 
     chipStack.removeChips(amount)
     _currentBetSize += amount
+
+    if (chipStack.chipCount == 0)
+      setStatus(IsAllIn)
   }
 
   /* Sets player's game status. */
