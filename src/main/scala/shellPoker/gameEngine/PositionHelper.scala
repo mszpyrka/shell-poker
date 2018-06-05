@@ -2,6 +2,7 @@ package shellPoker.gameEngine
 
 
 object PositionHelper{
+
   def getNextSeat(startSeat: TableSeat, seats: List[TableSeat]): TableSeat = {
 
     val startIndex = seats.indexOf(startSeat)
@@ -30,7 +31,7 @@ object PositionHelper{
   }
 
   /* Counts non-empty seats in given list. */
-  def countTakenSeats(seats: List[TableSeat]) = seats.count(!_.isEmpty)
+  def countTakenSeats(seats: List[TableSeat]): Int = seats.count(!_.isEmpty)
 
 
   /* Slices seats list to get all the seats between border points (left margin inclusive, right margin exclusive). */
