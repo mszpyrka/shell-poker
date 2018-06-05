@@ -7,7 +7,7 @@ package shellPoker.gameEngine
   * @param dealerButton
   * @param smallBlind
   * @param bigBlind
-  * @param seats
+  * @param table
   */
 class BettingManager(
     smallBlindValue: Int,
@@ -15,7 +15,7 @@ class BettingManager(
     dealerButton: TableSeat,
     smallBlind: TableSeat,
     bigBlind: TableSeat,
-    seats: List[TableSeat]) {
+    table: PokerTable) {
 
   private var currentBettingRound: Int = 0
   private var roundEndingSeat: TableSeat = _
@@ -31,15 +31,15 @@ class BettingManager(
 
     if (currentBettingRound == 1) {
 
-      roundEndingSeat = PositionHelper.getNextActiveSeat(bigBlind, seats)
-      currentActionTaker = PositionHelper.getNextActiveSeat(bigBlind, seats)
+      roundEndingSeat = table.getNextActiveSeat(bigBlind, table)
+      currentActionTaker = table.getNextActiveSeat(bigBlind, table)
       lastBetSize = bigBlindValue
     }
 
     else {
 
-      roundEndingSeat = PositionHelper.getNextActiveSeat(dealerButton, seats)
-      currentActionTaker = PositionHelper.getNextActiveSeat(dealerButton, seats)
+      roundEndingSeat = table.getNextActiveSeat(dealerButton, table)
+      currentActionTaker = table.getNextActiveSeat(dealerButton, table)
       lastBetSize = 0
     }
   }
@@ -72,7 +72,7 @@ class BettingManager(
 
   private def nextActionTaker: TableSeat = {
 
-    val nextActiveSeat = PositionHelper.getNextActiveSeat(currentActionTaker, seats)
+    val nextActiveSeat = table.getNextActiveSeat(currentActionTaker, table)
     if (nextActiveSeat == roundEndingSeat)
       return null
 

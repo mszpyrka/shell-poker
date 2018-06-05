@@ -2,6 +2,8 @@ package shellPoker.gameEngine
 
 import org.scalatest.FunSuite
 
+import shellPoker.gameEngine.Player.{IsAllIn, HasFolded, IsActive}
+
 
 /** Tests for PositionHelper class. */
 class PlayerTest extends FunSuite {
@@ -39,12 +41,11 @@ class PlayerTest extends FunSuite {
 
 
   test("setting status should work"){
-    //YOU SHOULDN'T CHANGE STATUS LIKE THAT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    mockPlayer.setStatus(mockPlayer.IsAllIn)
+    mockPlayer.setStatus(IsAllIn)
     assert(mockPlayer.isAllIn)
-    mockPlayer.setStatus(mockPlayer.IsActive)
+    mockPlayer.setStatus(IsActive)
     assert(mockPlayer.isActive)
-    mockPlayer.setStatus(mockPlayer.HasFolded)
+    mockPlayer.setStatus(HasFolded)
     assert(mockPlayer.hasFolded)
   }
 

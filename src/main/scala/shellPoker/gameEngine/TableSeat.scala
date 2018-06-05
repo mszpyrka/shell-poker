@@ -3,7 +3,7 @@ package shellPoker.gameEngine
 /**Represent a single poker table seat.
   *Responsilbe for managing Player's presence on the seat
   */
-class TableSeat{
+class TableSeat(val seatNumber: Int) {
   private var _player: Player = _
 
   def player: Player = _player

@@ -67,77 +67,67 @@ object TestHelper{
           Card(Ten, Diamonds))
   )
 
-  val betterPokerHands = Map("HighCard" ->  List(
-                                            Card(King, Diamonds),
-                                            Card(Ten, Spades),
-                                            Card(Seven, Clubs),
-                                            Card(Five, Hearts),
-                                            Card(Three, Spades)
-                                           ),
-                        "Pair" ->  List(
-                                        Card(Queen, Diamonds),
-                                        Card(Ace, Spades),
-                                        Card(Ace, Clubs),
-                                        Card(King, Hearts),
-                                        Card(Three, Spades)
-                                      ),
-                        "TwoPair" -> List(
-                                          Card(King, Diamonds),
-                                          Card(King, Spades),
-                                          Card(Ace, Clubs),
-                                          Card(Ace, Hearts),
-                                          Card(Three, Spades)
-                                        ),
-                        "ThreeOfAKind" -> List(
-                                              Card(Queen, Diamonds),
-                                              Card(Ace, Spades),
-                                              Card(Ace, Clubs),
-                                              Card(Ace, Hearts),
-                                              Card(Three, Spades)
-                                            ),
-                        "Straight" -> List(
-                                          Card(Queen, Diamonds),
-                                          Card(Jack, Spades),
-                                          Card(Ace, Clubs),
-                                          Card(King, Hearts),
-                                          Card(Ten, Spades)
-                                        ),
-                        "Flush" -> List(
-                                        Card(Queen, Diamonds),
-                                        Card(Jack, Diamonds),
-                                        Card(Ace, Diamonds),
-                                        Card(King, Diamonds),
-                                        Card(Four, Diamonds)
-                                      ),
-                        "FullHouse" -> List(
-                                            Card(Queen, Diamonds),
-                                            Card(Queen, Spades),
-                                            Card(Queen, Clubs),
-                                            Card(Ace, Hearts),
-                                            Card(Ace, Spades)
-                                          ),
-                        "FourOfAKind" -> List(
-                                              Card(King, Diamonds),
-                                              Card(King, Spades),
-                                              Card(King, Clubs),
-                                              Card(King, Hearts),
-                                              Card(Three, Spades)
-                                            ),
-                        "StraightFlush" -> List(
-                                                Card(Queen, Diamonds),
-                                                Card(Jack, Diamonds),
-                                                Card(Ten, Diamonds),
-                                                Card(King, Diamonds),
-                                                Card(Nine, Diamonds)
-                                              ),
-                        "RoyalFlush" -> List(
-                                            Card(Queen, Diamonds),
-                                            Card(Jack, Diamonds),
-                                            Card(Ace, Diamonds),
-                                            Card(King, Diamonds),
-                                            Card(Ten, Diamonds)
-                                          )
-
+  val betterPokerHands = Map(
+      "HighCard" ->  List(
+          Card(King, Diamonds),
+          Card(Ten, Spades),
+          Card(Seven, Clubs),
+          Card(Five, Hearts),
+          Card(Three, Spades)),
+      "Pair" ->  List(
+          Card(Queen, Diamonds),
+          Card(Ace, Spades),
+          Card(Ace, Clubs),
+          Card(King, Hearts),
+          Card(Three, Spades)),
+      "TwoPair" -> List(
+          Card(King, Diamonds),
+          Card(King, Spades),
+          Card(Ace, Clubs),
+          Card(Ace, Hearts),
+          Card(Three, Spades)),
+      "ThreeOfAKind" -> List(
+          Card(Queen, Diamonds),
+          Card(Ace, Spades),
+          Card(Ace, Clubs),
+          Card(Ace, Hearts),
+          Card(Three, Spades)),
+      "Straight" -> List(
+          Card(Queen, Diamonds),
+          Card(Jack, Spades),
+          Card(Ace, Clubs),
+          Card(King, Hearts),
+          Card(Ten, Spades)),
+      "Flush" -> List(
+          Card(Queen, Diamonds),
+          Card(Jack, Diamonds),
+          Card(Ace, Diamonds),
+          Card(King, Diamonds),
+          Card(Four, Diamonds)),
+      "FullHouse" -> List(
+          Card(Queen, Diamonds),
+          Card(Queen, Spades),
+          Card(Queen, Clubs),
+          Card(Ace, Hearts),
+          Card(Ace, Spades)),
+      "FourOfAKind" -> List(
+          Card(King, Diamonds),
+          Card(King, Spades),
+          Card(King, Clubs),
+          Card(King, Hearts),
+          Card(Three, Spades)),
+      "StraightFlush" -> List(
+          Card(Queen, Diamonds),
+          Card(Jack, Diamonds),
+          Card(Ten, Diamonds),
+          Card(King, Diamonds),
+          Card(Nine, Diamonds)),
+      "RoyalFlush" -> List(
+          Card(Queen, Diamonds),
+          Card(Jack, Diamonds),
+          Card(Ace, Diamonds),
+          Card(King, Diamonds),
+          Card(Ten, Diamonds))
   )
 
   val worsePokerHands = Map(
@@ -203,18 +193,6 @@ object TestHelper{
           Card(Ten, Diamonds))
   )
 
-  val stringToPokerHand = Map(
-      "HighCard" -> HighCard,
-      "Pair" -> Pair,
-      "ThreeOfAKind" -> ThreeOfAKind,
-      "TwoPair" -> TwoPair,
-      "Straight" -> Straight,
-      "Flush" -> Flush,
-      "FullHouse" -> FullHouse,
-      "FourOfAKind" -> FourOfAKind,
-      "StraightFlush" -> StraightFlush,
-      "RoyalFlush" -> RoyalFlush)
-
   val confusingHands = Map(
       "HighCard" -> List(
           Card(Two, Diamonds),
@@ -240,7 +218,7 @@ object TestHelper{
           Card(Ace, Clubs),
           Card(Four, Hearts),
           Card(Three, Spades)),
-      "Straight" -> List(                //DOESNT WORK
+      "Straight" -> List(
           Card(Queen, Spades),
           Card(Jack, Diamonds),
           Card(Ten, Hearts),
@@ -302,11 +280,11 @@ object TestHelper{
           Card(Ten, Spades),
           Card(Ace, Clubs)),
       "Straight" -> List( 
-          Card(Queen, Spades),
+          Card(Queen, Clubs),
           Card(Jack, Diamonds),
           Card(Ten, Hearts),
-          Card(Nine, Clubs),
-          Card(Eight, Clubs)),
+          Card(Nine, Hearts),
+          Card(Eight, Hearts)),
       "Flush" -> List(
           Card(Queen, Diamonds),
           Card(Jack, Diamonds),
@@ -332,4 +310,16 @@ object TestHelper{
           Card(King, Diamonds),
           Card(Ten, Diamonds))
   )
+
+  val stringToPokerHand = Map(
+    "HighCard" -> HighCard,
+    "Pair" -> Pair,
+    "ThreeOfAKind" -> ThreeOfAKind,
+    "TwoPair" -> TwoPair,
+    "Straight" -> Straight,
+    "Flush" -> Flush,
+    "FullHouse" -> FullHouse,
+    "FourOfAKind" -> FourOfAKind,
+    "StraightFlush" -> StraightFlush,
+    "RoyalFlush" -> RoyalFlush)
 }

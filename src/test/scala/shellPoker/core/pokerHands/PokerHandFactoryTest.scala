@@ -124,9 +124,13 @@ class  PokerHandFactoryTest extends FunSuite {
         (k2, v2) <- TestHelper.correctHands
         if k1 == k2} {
       val madeHand = PokerHandFactory.pickBestHand(v1)
-      val sortedMadeHand = madeHand.cards.sortWith(_.rank > _.rank)
-      val sortedCorrectHand = v2.sortWith(_.rank > _.rank)
-      assert(sortedMadeHand.equals(sortedCorrectHand))
+      val correctHand = PokerHandFactory.pickBestHand(v2)
+      val sortedMadeCards = madeHand.cards.sortWith(_.rank > _.rank)
+      val sortedCorrectCards = v2.sortWith(_.rank > _.rank)
+      assert(sortedMadeCards.equals(sortedCorrectCards))
+      assert(madeHand.isEquallyStrongAs(correctHand))
+      
+      // assert(madeHand.isInstanceOf[ TestHelper.stringToPokerHand(k1) ])
     }
   }
 }
