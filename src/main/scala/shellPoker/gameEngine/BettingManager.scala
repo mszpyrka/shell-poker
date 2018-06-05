@@ -10,18 +10,16 @@ package shellPoker.gameEngine
   * @param table
   */
 class BettingManager(
-    smallBlindValue: Int,
     bigBlindValue: Int,
     dealerButton: TableSeat,
-    smallBlind: TableSeat,
     bigBlind: TableSeat,
     table: PokerTable) {
 
   private var currentBettingRound: Int = 0
   private var roundEndingSeat: TableSeat = _
-  private var currentActionTaker: TableSeat = _
+  private var _actionTaker: TableSeat = _
   private var lastBetSize: Int = _
-  private var minBet: Int = _
+  private var minRaise: Int = _
 
 
   def startNextRound(): Unit = {
@@ -31,15 +29,15 @@ class BettingManager(
 
     if (currentBettingRound == 1) {
 
-      roundEndingSeat = table.getNextActiveSeat(bigBlind, table)
-      currentActionTaker = table.getNextActiveSeat(bigBlind, table)
+      roundEndingSeat = table.getNextActiveSeat(bigBlind)
+     _actionTaker = table.getNextActiveSeat(bigBlind)
       lastBetSize = bigBlindValue
     }
 
     else {
 
-      roundEndingSeat = table.getNextActiveSeat(dealerButton, table)
-      currentActionTaker = table.getNextActiveSeat(dealerButton, table)
+      roundEndingSeat = table.getNextActiveSeat(dealerButton)
+     _actionTaker = table.getNextActiveSeat(dealerButton)
       lastBetSize = 0
     }
   }
@@ -54,25 +52,34 @@ class BettingManager(
     }
   }
 
-  def getActionTaker: TableSeat = currentActionTaker
+  def actionTaker: TableSeat = _actionTaker
 
   def proceedWithAction(action: Action): Unit = {
-    ???
-    // action match{
-    //   case Bet(amount) => {
-    //     lastBetSize = amount
-    //     roundEndingSeat = currentActionTaker
-    //     currentActionTaker = nextActionTaker
-    //   }
+    action match {
+      case Bet(amount) => {
+        minBet = amount - lastBetSize
+        lastBetSize = amount
+        roundEndingSeat = _actionTaker
+      }
 
-    //   case Call => ()
-    //   case Fold => ()
-    // }
+      case AllIn(amount) => (
+        if(amount > lastBetSize) {
+          lastBetSize = amount
+          roundEndingSeat = _actionTaker
+        }
+      )
+
+      case Call => ()
+      case Fold => ()
+      case Check => ()
+    }
+
+   _actionTaker = nextActionTaker
   }
 
   private def nextActionTaker: TableSeat = {
 
-    val nextActiveSeat = table.getNextActiveSeat(currentActionTaker, table)
+    val nextActiveSeat = table.getNextActiveSeat(_actionTaker)
     if (nextActiveSeat == roundEndingSeat)
       return null
 
@@ -82,7 +89,7 @@ class BettingManager(
   private def canCheck: ActionValidation = {
 
     if((lastBetSize == 0) ||
-        (currentActionTaker == bigBlind && lastBetSize == bigBlindValue))
+         _actionTaker == bigBlind && lastBetSize == bigBlindValue))
       return Legal
 
     Illegal("Cannot check when a bet has been made.")
@@ -90,8 +97,8 @@ class BettingManager(
 
   private def canBet(amount: Int): ActionValidation = {
 
-    if (currentActionTaker.player.chipStack.chipCount +
-        currentActionTaker.player.currentBetSize < amount)
+    if  _actionTaker.player.chipStack.chipCount +
+       _actionTaker.player.currentBetSize < amount)
       return Illegal("Bet size is bigger than player's stack.")
 
     if (amount >= minBet)
@@ -102,8 +109,8 @@ class BettingManager(
 
   private def canCall: ActionValidation = {
 
-    if(currentActionTaker.player.chipStack.chipCount +
-        currentActionTaker.player.currentBetSize < lastBetSize)
+    if _actionTaker.player.chipStack.chipCount +
+       _actionTaker.player.currentBetSize < lastBetSize)
       return Illegal("Not enough chips to call.")
 
     Legal

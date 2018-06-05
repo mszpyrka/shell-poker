@@ -41,11 +41,12 @@ class PlayerTest extends FunSuite {
 
 
   test("setting status should work"){
-    mockPlayer.setStatus(IsAllIn)
-    assert(mockPlayer.isAllIn)
-    mockPlayer.setStatus(IsActive)
     assert(mockPlayer.isActive)
-    mockPlayer.setStatus(HasFolded)
+    
+    mockPlayer.setAllIn
+    assert(mockPlayer.isAllIn)
+
+    mockPlayer.setFolded
     assert(mockPlayer.hasFolded)
   }
 
