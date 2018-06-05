@@ -23,6 +23,7 @@ class BettingManager(
   private var lastBetSize: Int = _
   private var minBet: Int = _
 
+
   def startNextRound(): Unit = {
 
     currentBettingRound += 1
@@ -55,7 +56,19 @@ class BettingManager(
 
   def getActionTaker: TableSeat = currentActionTaker
 
-  def proceedWithAction(action: Action): Unit = ???
+  def proceedWithAction(action: Action): Unit = {
+    ???
+    // action match{
+    //   case Bet(amount) => {
+    //     lastBetSize = amount
+    //     roundEndingSeat = currentActionTaker
+    //     currentActionTaker = nextActionTaker
+    //   }
+
+    //   case Call => ()
+    //   case Fold => ()
+    // }
+  }
 
   private def nextActionTaker: TableSeat = {
 

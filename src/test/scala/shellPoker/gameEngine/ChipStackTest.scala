@@ -2,7 +2,7 @@ package shellPoker.gameEngine
 
 import org.scalatest.FunSuite
 
-/** Tests for Pair class. */
+/** Tests for ChipStack class. */
 class ChipStackTest extends FunSuite {
 
   test("Removing more chips than present in the stack should throw NegativeChipCountException.") {

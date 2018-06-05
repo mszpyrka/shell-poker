@@ -117,5 +117,17 @@ class  PokerHandFactoryTest extends FunSuite {
     // }
 
   }
+
+  test("picking from 7 cards should result in the best hand possible"){
+    for{
+        (k1, v1) <- TestHelper.confusingHands
+        (k2, v2) <- TestHelper.correctHands
+        if k1 == k2} {
+      val madeHand = PokerHandFactory.pickBestHand(v1)
+      val sortedMadeHand = madeHand.cards.sortWith(_.rank > _.rank)
+      val sortedCorrectHand = v2.sortWith(_.rank > _.rank)
+      assert(sortedMadeHand.equals(sortedCorrectHand))
+    }
+  }
 }
 

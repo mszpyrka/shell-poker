@@ -2,6 +2,11 @@ package shellPoker.gameEngine
 
 import shellPoker.core.cards.Card
 
+
+object Player{
+  
+}
+
 /*Represents a poker player
   *Responsible for storing player's game state
   */
@@ -28,11 +33,14 @@ class Player(val chipStack: ChipStack) {
       setStatus(IsAllIn)
   }
 
+  /* Resets players current bet */
+  def resetCurrentBet(): Unit = _currentBetSize = 0
+
   /* Sets player's game status. */
   def setStatus(status: Status): Unit = this.status = status
 
   /* Private helper class for keeping track of current player's status. */
-  private class Status
+  sealed class Status
   case object IsActive extends Status
   case object HasFolded extends Status
   case object IsAllIn extends Status
