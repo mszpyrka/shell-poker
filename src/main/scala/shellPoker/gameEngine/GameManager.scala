@@ -13,4 +13,5 @@ class GameManager(seatsAmount: Int){
   val dealer: Dealer = new Dealer
   val pot: ChipStack = new ChipStack(0)
   val positionManager: PositionManager = new PositionManager
+  
 }
