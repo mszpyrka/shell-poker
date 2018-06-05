@@ -16,36 +16,32 @@ class PositionManager(val table: PokerTable) {
   /* Randomly chooses the position of dealer button and adjusts blinds accordingly. */
   def pickRandomPositions(seats: List[TableSeat]): Unit = {
 
-    val takenSeatsNumber = PositionHelper.countTakenSeats(seats)
-
-    if (takenSeatsNumber <= 1)
+    if (table.takenSeatsNumber <= 1)
       throw NotEnoughPlayersException()
 
-    _dealerButton = Random.shuffle(seats.filter(!_.isEmpty)).head
+    _dealerButton = Random.shuffle(table.freeSeats).head
 
-    if (takenSeatsNumber == 2)
+    if (table.takenSeatsNumber == 2)
       _smallBlind = _dealerButton
 
     else
-      _smallBlind = PositionHelper.getNextTakenSeat(_dealerButton, seats)
+      _smallBlind = table.getNextTakenSeat(_dealerButton)
 
-    _bigBlind = PositionHelper.getNextTakenSeat(_smallBlind, seats)
+    _bigBlind = table.getNextTakenSeat(_smallBlind)
   }
 
   /* Properly changes all special positions according to 'Dead button' rule. */
-  def movePositions(seats: List[TableSeat]): Unit = {
+  def movePositions(): Unit = {
 
-    val takenSeatsNumber = PositionHelper.countTakenSeats(seats)
-
-    if (takenSeatsNumber <= 1)
+    if (table.takenSeatsNumber <= 1)
       throw NotEnoughPlayersException()
 
     // Always moves BigBlind first.
-    _bigBlind = PositionHelper.getNextTakenSeat(_bigBlind, seats)
+    _bigBlind = table.getNextTakenSeat(_bigBlind)
 
-    if (takenSeatsNumber == 2) {
+    if (table.takenSeatsNumber == 2) {
 
-      _dealerButton = PositionHelper.getNextTakenSeat(_bigBlind, seats)
+      _dealerButton = table.getNextTakenSeat(_bigBlind)
       _smallBlind = _dealerButton
     }
 

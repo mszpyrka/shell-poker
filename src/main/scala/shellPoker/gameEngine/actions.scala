@@ -8,8 +8,9 @@ sealed trait Action
 case object Fold extends Action
 case object Check extends Action
 case object Call extends Action
-case class Bet(betSize: Int) extends Action
-case object AllIn extends Action
+case class Bet(amount: Int) extends Action
+case class AllIn(amount: Int) extends Action
+case class Raise(amount: Int) extends Action
 
 
 /* Represents action's validation status. */
