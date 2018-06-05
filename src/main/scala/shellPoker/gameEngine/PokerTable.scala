@@ -20,7 +20,13 @@ class PokerTable(val seatsAmount: Int){
 
   /* Same as getNextSeat but searches backwards. */
   def getPreviousSeat(startSeat: TableSeat): TableSeat = {
-    ???
+
+    val startIndex = seats.indexOf(startSeat)
+
+    if (startIndex == 0)
+      return seats.last
+
+    seats.drop(startIndex - 1).head
   }
 
 

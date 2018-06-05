@@ -3,7 +3,7 @@ package shellPoker.gameEngine
 import scala.util.Random
 
 /** Responsible for keeping track of all special positions at the poker table during the game. */
-class PositionManager {
+class PositionManager(val table: PokerTable) {
   private var _bigBlind: TableSeat = _
   private var _smallBlind: TableSeat = _
   private var _dealerButton: TableSeat = _

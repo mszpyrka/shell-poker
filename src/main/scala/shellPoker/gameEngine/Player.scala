@@ -20,6 +20,9 @@ class Player(val chipStack: ChipStack) {
   def hasFolded: Boolean = this.status == HasFolded
   def isAllIn: Boolean = this.status == IsAllIn
 
+  def setAllIn(): Unit = setStatus(IsAllIn)
+  def setFolded(): Unit = setStatus(HasFolded)
+
   /* Returns the chip count in current player's bet. */
   def currentBetSize: Int = _currentBetSize
 
@@ -37,12 +40,12 @@ class Player(val chipStack: ChipStack) {
   def resetCurrentBet(): Unit = _currentBetSize = 0
 
   /* Sets player's game status. */
-  def setStatus(status: Status): Unit = this.status = status
+  private def setStatus(status: Status): Unit = this.status = status
 
   /* Private helper class for keeping track of current player's status. */
-  sealed class Status
-  case object IsActive extends Status
-  case object HasFolded extends Status
-  case object IsAllIn extends Status
+  private sealed class Status
+  private case object IsActive extends Status
+  private case object HasFolded extends Status
+  private case object IsAllIn extends Status
 
 }
