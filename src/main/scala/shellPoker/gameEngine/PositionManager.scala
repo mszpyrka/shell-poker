@@ -118,6 +118,4 @@ class PositionManager {
         _dealerButton = newDealer
     }
   }
-
-
 }
