@@ -1,11 +1,11 @@
 package shellPoker.gameEngine
 
-/** Responsible for
+import shellPoker.core.pokerHands.RoyalFlush
+
+/** Responsible for being a part of the program.
   *
-  * @param smallBlindValue
   * @param bigBlindValue
   * @param dealerButton
-  * @param smallBlind
   * @param bigBlind
   * @param table
   */
@@ -19,6 +19,7 @@ class BettingManager(
   private var roundEndingSeat: TableSeat = _
   private var _actionTaker: TableSeat = _
   private var lastBetSize: Int = _
+  private var minBet: Int = _
   private var minRaise: Int = _
 
 
@@ -26,18 +27,19 @@ class BettingManager(
 
     currentBettingRound += 1
     minBet = bigBlindValue
+    minRaise = bigBlindValue
 
     if (currentBettingRound == 1) {
 
       roundEndingSeat = table.getNextActiveSeat(bigBlind)
-     _actionTaker = table.getNextActiveSeat(bigBlind)
+      _actionTaker = table.getNextActiveSeat(bigBlind)
       lastBetSize = bigBlindValue
     }
 
     else {
 
       roundEndingSeat = table.getNextActiveSeat(dealerButton)
-     _actionTaker = table.getNextActiveSeat(dealerButton)
+      _actionTaker = table.getNextActiveSeat(dealerButton)
       lastBetSize = 0
     }
   }
@@ -45,29 +47,51 @@ class BettingManager(
   def validateAction(action: Action): ActionValidation = {
     action match{
       case Bet(amount) => canBet(amount)
+      case Raise(amount) => canRaise(amount)
       case Call => canCall
       case Check => canCheck
       case Fold => canFold
-      case AllIn => canGoAllIn
+      case AllIn(amount) => canGoAllIn(amount)
     }
   }
 
   def actionTaker: TableSeat = _actionTaker
 
   def proceedWithAction(action: Action): Unit = {
+
     action match {
+
       case Bet(amount) => {
-        minBet = amount - lastBetSize
+
+        minRaise = amount - lastBetSize
+        minBet = amount + minRaise
         lastBetSize = amount
         roundEndingSeat = _actionTaker
       }
 
-      case AllIn(amount) => (
-        if(amount > lastBetSize) {
+      case Raise(amount) => {
+
+        minRaise = amount
+        lastBetSize = lastBetSize + amount
+        minBet = lastBetSize + amount
+        roundEndingSeat = _actionTaker
+      }
+
+      case AllIn(amount) => {
+
+        if (amount > lastBetSize) {
+
+          val raised: Int = amount - lastBetSize
           lastBetSize = amount
+
+          if (raised > minRaise)
+            minRaise = raised
+
+          minBet = lastBetSize + minRaise
+
           roundEndingSeat = _actionTaker
         }
-      )
+      }
 
       case Call => ()
       case Fold => ()
@@ -89,7 +113,7 @@ class BettingManager(
   private def canCheck: ActionValidation = {
 
     if((lastBetSize == 0) ||
-         _actionTaker == bigBlind && lastBetSize == bigBlindValue))
+        (_actionTaker == bigBlind && lastBetSize == bigBlindValue))
       return Legal
 
     Illegal("Cannot check when a bet has been made.")
@@ -97,8 +121,8 @@ class BettingManager(
 
   private def canBet(amount: Int): ActionValidation = {
 
-    if  _actionTaker.player.chipStack.chipCount +
-       _actionTaker.player.currentBetSize < amount)
+    if (_actionTaker.player.chipStack.chipCount +
+        _actionTaker.player.currentBetSize < amount)
       return Illegal("Bet size is bigger than player's stack.")
 
     if (amount >= minBet)
@@ -107,10 +131,22 @@ class BettingManager(
     Legal
   }
 
+  private def canRaise(amount: Int): ActionValidation = {
+
+    if (_actionTaker.player.chipStack.chipCount +
+        _actionTaker.player.currentBetSize < lastBetSize + amount)
+      return Illegal("Not enough chips in player's stack.")
+
+    if (amount >= minRaise)
+      return Illegal(s"Raise cannot be smaller than $minRaise.")
+
+    Legal
+  }
+
   private def canCall: ActionValidation = {
 
-    if _actionTaker.player.chipStack.chipCount +
-       _actionTaker.player.currentBetSize < lastBetSize)
+    if (_actionTaker.player.chipStack.chipCount +
+        _actionTaker.player.currentBetSize < lastBetSize)
       return Illegal("Not enough chips to call.")
 
     Legal
@@ -119,5 +155,5 @@ class BettingManager(
 
   private def canFold: ActionValidation = Legal
 
-  private def canGoAllIn: ActionValidation = Legal
+  private def canGoAllIn(amount: Int): ActionValidation = Legal
 }
