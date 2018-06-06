@@ -20,6 +20,7 @@ class Player(val chipStack: ChipStack) {
   def hasFolded: Boolean = this.status == HasFolded
   def isAllIn: Boolean = this.status == IsAllIn
 
+  def setActive(): Unit = setStatus(IsActive)
   def setAllIn(): Unit = setStatus(IsAllIn)
   def setFolded(): Unit = setStatus(HasFolded)
 

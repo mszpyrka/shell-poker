@@ -5,7 +5,7 @@ import org.scalatest.FunSuite
 /** Tests for BettingManager class. */
 class BettingManagerTest extends FunSuite {
 
-
+/*
   val newManager = new BettingManager
 
   newManager.startNextRound
@@ -34,6 +34,6 @@ class BettingManagerTest extends FunSuite {
   }
   
 
-
+*/
 
 }

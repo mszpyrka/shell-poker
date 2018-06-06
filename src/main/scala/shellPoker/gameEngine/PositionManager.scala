@@ -2,11 +2,16 @@ package shellPoker.gameEngine
 
 import scala.util.Random
 
-/** Responsible for keeping track of all special positions at the poker table during the game. */
+/** Responsible for keeping track of all special positions at the poker table during the game.
+  *
+  * @param table Poker table for which all position setting is performed.
+  */
 class PositionManager(val table: PokerTable) {
+
   private var _bigBlind: TableSeat = _
   private var _smallBlind: TableSeat = _
   private var _dealerButton: TableSeat = _
+
 
   def bigBlind: TableSeat = _bigBlind
   def smallBlind: TableSeat = _smallBlind
@@ -14,12 +19,12 @@ class PositionManager(val table: PokerTable) {
 
 
   /* Randomly chooses the position of dealer button and adjusts blinds accordingly. */
-  def pickRandomPositions(seats: List[TableSeat]): Unit = {
+  def pickRandomPositions(): Unit = {
 
     if (table.takenSeatsNumber <= 1)
       throw NotEnoughPlayersException()
 
-    _dealerButton = Random.shuffle(table.freeSeats).head
+    _dealerButton = Random.shuffle(table.getEmptySeats).head
 
     if (table.takenSeatsNumber == 2)
       _smallBlind = _dealerButton
@@ -29,6 +34,7 @@ class PositionManager(val table: PokerTable) {
 
     _bigBlind = table.getNextTakenSeat(_smallBlind)
   }
+
 
   /* Properly changes all special positions according to 'Dead button' rule. */
   def movePositions(): Unit = {
@@ -47,22 +53,20 @@ class PositionManager(val table: PokerTable) {
 
     else {
 
-      ???
-
-      val smallBlindRange = PositionHelper.getSeatsRange(_bigBlind, _smallBlind, seats.reverse)
-      val newSmallBlind = PositionHelper.getNextTakenSeat(_bigBlind, smallBlindRange)
+      val smallBlindRange = table.getSeatsRange(_smallBlind, _bigBlind)
+      val newSmallBlind = smallBlindRange.reverse.find(!_.isEmpty).orNull
 
       if(newSmallBlind == null)
-        _smallBlind = PositionHelper.getPreviousSeat(_bigBlind, seats)
+        _smallBlind = table.getPreviousSeat(_bigBlind)
 
       else
         _smallBlind = newSmallBlind
 
-      val dealerRange = PositionHelper.getSeatsRange(_smallBlind, _dealerButton, seats.reverse)
-      val newDealer = PositionHelper.getNextTakenSeat(_smallBlind, dealerRange)
+      val dealerRange = table.getSeatsRange(_dealerButton, _smallBlind)
+      val newDealer = dealerRange.reverse.find(!_.isEmpty).orNull
 
       if(newDealer == null)
-        _dealerButton = PositionHelper.getPreviousSeat(_smallBlind, seats)
+        _dealerButton = table.getPreviousSeat(_smallBlind)
 
       else
         _dealerButton = newDealer

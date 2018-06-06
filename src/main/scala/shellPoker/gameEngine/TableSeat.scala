@@ -12,8 +12,20 @@ class TableSeat(val seatNumber: Int) {
   def isEmpty: Boolean = _player == null
   
   /*Adds Player instance to the seat*/
-  def addPlayer(player: Player): Unit = this._player = player
+  def addPlayer(player: Player): Unit = {
+
+    if (!this.isEmpty)
+      throw InvalidSeatException("Seat is already taken.")
+
+    this._player = player
+  }
 
   /*Removes Players instance from the seat*/
-  def removePlayer(): Unit = this._player = null
+  def removePlayer(): Unit = {
+
+    if(this.isEmpty)
+      throw InvalidSeatException("Seat is already empty.")
+
+    this._player = null
+  }
 }

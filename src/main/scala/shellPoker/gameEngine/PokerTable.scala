@@ -1,10 +1,18 @@
 package shellPoker.gameEngine
 
-
+/** Represents a poker table with fixed seats number.
+  * Provides some useful methods of finding certain seats relative to another seat.
+  *
+  * @param seatsAmount Amount of seats to be created at the table.
+  */
 class PokerTable(val seatsAmount: Int){
+
   private val seats: List[TableSeat] = (for(number <- 0 until seatsAmount) yield new TableSeat(number)).toList
 
-  def freeSeats: List[TableSeat] = seats.filter(_.isEmpty)
+
+  /* Gets a list of all empty seats at the table. */
+  def getEmptySeats: List[TableSeat] = seats.filter(_.isEmpty)
+
 
   /* Searches for the first seat following some particular seat at the table. */
   def getNextSeat(startSeat: TableSeat): TableSeat = {
@@ -12,9 +20,9 @@ class PokerTable(val seatsAmount: Int){
     val startIndex = seats.indexOf(startSeat)
 
     if (seats.drop(startIndex + 1) == Nil)
-      seats.head
-    else
-      seats.drop(startIndex + 1).head
+      return seats.head
+
+    seats.drop(startIndex + 1).head
   }
 
 
@@ -35,6 +43,19 @@ class PokerTable(val seatsAmount: Int){
 
     val startIndex = seats.indexOf(startingSeat)
     val targetSeat: Option[TableSeat] = (seats.drop(startIndex + 1) ++ seats.take(startIndex)).find(!_.isEmpty)
+
+    targetSeat.orNull
+  }
+
+
+  /* Same as getNextTakenSeat but searches backwards. */
+  def getPreviousTakenSeat(startingSeat: TableSeat): TableSeat = {
+
+    val reversedSeats = seats.reverse
+    val startIndex = reversedSeats.indexOf(startingSeat)
+
+    val targetSeat: Option[TableSeat] = (reversedSeats.drop(startIndex + 1) ++
+      reversedSeats.take(startIndex)).find(!_.isEmpty)
 
     targetSeat.orNull
   }
@@ -62,15 +83,13 @@ class PokerTable(val seatsAmount: Int){
   }
 
 
-  /* Slices seats list to get all the seats between border points (left margin inclusive, right margin exclusive). */
+  /* Slices seats list to get all the seats between border points (both margins exclusive). */
   def getSeatsRange(start: TableSeat, end: TableSeat): List[TableSeat] = {
 
     val extendedSeats: List[TableSeat] = seats ++ seats
 
     val leftTrimmed: List[TableSeat] = extendedSeats.drop(extendedSeats.indexOf(start) + 1)
 
-    val rightTrimmed = leftTrimmed.take(leftTrimmed.indexOf(end))
-
-    start :: rightTrimmed
+    leftTrimmed.take(leftTrimmed.indexOf(end))
   }
 }

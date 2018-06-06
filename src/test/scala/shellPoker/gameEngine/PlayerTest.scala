@@ -2,9 +2,6 @@ package shellPoker.gameEngine
 
 import org.scalatest.FunSuite
 
-import shellPoker.gameEngine.Player.{IsAllIn, HasFolded, IsActive}
-
-
 /** Tests for PositionHelper class. */
 class PlayerTest extends FunSuite {
 
@@ -24,7 +21,7 @@ class PlayerTest extends FunSuite {
   }
 
   test("meseting current bet size should work"){
-    mockPlayer.resetCurrentBet
+    mockPlayer.resetCurrentBet()
     assert(mockPlayer.currentBetSize == 0)
   }
 
@@ -41,12 +38,13 @@ class PlayerTest extends FunSuite {
 
 
   test("setting status should work"){
+    mockPlayer.setActive()
     assert(mockPlayer.isActive)
     
-    mockPlayer.setAllIn
+    mockPlayer.setAllIn()
     assert(mockPlayer.isAllIn)
 
-    mockPlayer.setFolded
+    mockPlayer.setFolded()
     assert(mockPlayer.hasFolded)
   }
 
