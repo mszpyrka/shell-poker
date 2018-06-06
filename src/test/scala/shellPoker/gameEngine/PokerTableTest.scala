@@ -12,7 +12,7 @@ class PokerTableTest extends FunSuite {
 
     assert(tableMock.takenSeatsNumber === 0)
     assert(tableMock.activePlayersNumber === 0)
-    assert(tableMock.getEmptySeats === tableMock.seats)
+    assert(tableMock.emptySeats === tableMock.seats)
   }
 
 
@@ -28,18 +28,18 @@ class PokerTableTest extends FunSuite {
     val seat1 = seats(1)
     val seat2 = seats(2)
 
-    assert(tableMock.getEmptySeats === List(seat0, seat1, seat2))
+    assert(tableMock.emptySeats === List(seat0, seat1, seat2))
 
     seat0.addPlayer(playerMock)
-    assert(tableMock.getEmptySeats === List(seat1, seat2))
+    assert(tableMock.emptySeats === List(seat1, seat2))
 
     seat1.addPlayer(playerMock)
     seat2.addPlayer(playerMock)
-    assert(tableMock.getEmptySeats === Nil)
+    assert(tableMock.emptySeats === Nil)
 
     seat0.removePlayer()
     seat2.removePlayer()
-    assert(tableMock.getEmptySeats === List(seat0, seat2))
+    assert(tableMock.emptySeats === List(seat0, seat2))
   }
 
 

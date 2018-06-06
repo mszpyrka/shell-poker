@@ -11,7 +11,11 @@ class PokerTable(val seatsAmount: Int){
 
 
   /* Gets a list of all empty seats at the table. */
-  def getEmptySeats: List[TableSeat] = seats.filter(_.isEmpty)
+  def emptySeats: List[TableSeat] = seats.filter(_.isEmpty)
+
+
+  /* Gets a list of all taken seats at the table. */
+  def takenSeats: List[TableSeat] = seats.filter(!_.isEmpty)
 
 
   /* Searches for the first seat following some particular seat at the table. */

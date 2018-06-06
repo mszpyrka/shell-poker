@@ -13,7 +13,7 @@ class PositionManagerTest extends FunSuite {
     val stackMock = new ChipStack(0)
     val playerMock = new Player(stackMock)
 
-    val seats: List[TableSeat] = tableMock.getEmptySeats
+    val seats: List[TableSeat] = tableMock.emptySeats
 
     val seat1 = seats(0)
     seat1.addPlayer(playerMock)
@@ -49,7 +49,7 @@ class PositionManagerTest extends FunSuite {
     val stackMock = new ChipStack(0)
     val playerMock = new Player(stackMock)
 
-    val seats: List[TableSeat] = tableMock.getEmptySeats
+    val seats: List[TableSeat] = tableMock.emptySeats
 
     val seat1 = seats(0)
     seat1.addPlayer(playerMock)
@@ -92,7 +92,7 @@ class PositionManagerTest extends FunSuite {
     val stackMock = new ChipStack(0)
     val playerMock = new Player(stackMock)
 
-    val seats: List[TableSeat] = tableMock.getEmptySeats
+    val seats: List[TableSeat] = tableMock.emptySeats
 
     val seat1 = seats(0)
     seat1.addPlayer(playerMock)
@@ -139,7 +139,7 @@ class PositionManagerTest extends FunSuite {
     val stackMock = new ChipStack(0)
     val playerMock = new Player(stackMock)
 
-    val seats: List[TableSeat] = tableMock.getEmptySeats
+    val seats: List[TableSeat] = tableMock.emptySeats
 
     val seat1 = seats(0)
     seat1.addPlayer(playerMock)

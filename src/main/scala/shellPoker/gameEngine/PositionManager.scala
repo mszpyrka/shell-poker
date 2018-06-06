@@ -24,7 +24,7 @@ class PositionManager(val table: PokerTable) {
     if (table.takenSeatsNumber <= 1)
       throw NotEnoughPlayersException()
 
-    _dealerButton = Random.shuffle(table.getEmptySeats).head
+    _dealerButton = Random.shuffle(table.takenSeats).head
 
     if (table.takenSeatsNumber == 2)
       _smallBlind = _dealerButton
