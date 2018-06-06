@@ -20,5 +20,6 @@ class ChipStack(private var _chipCount: Int){
     _chipCount -= amount
   }
 
+  /* Removes all of the player's chips */
   def removeAllChips(): Unit = _chipCount = 0
 }

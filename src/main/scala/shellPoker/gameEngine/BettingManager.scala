@@ -2,12 +2,15 @@ package shellPoker.gameEngine
 
 import shellPoker.core.pokerHands.RoyalFlush
 
-/** Responsible for being a part of the program.
+/** Responsible for managing single hand's betting,
+  * validating player's action and returning a reference
+  * to the current action taker.
+  * All action methods relate to the private _actionTaker field.
   *
-  * @param bigBlindValue
-  * @param dealerButton
-  * @param bigBlind
-  * @param table
+  * @param bigBlindValue Value of the big blind.
+  * @param dealerButton TableSeat of dealer.
+  * @param bigBlind TableSeat of the bigBlind.
+  * @param table Reference to a poker table. 
   */
 class BettingManager(
     bigBlindValue: Int,
@@ -15,14 +18,16 @@ class BettingManager(
     bigBlind: TableSeat,
     table: PokerTable) {
 
-  private var currentBettingRound: Int = 0
-  private var roundEndingSeat: TableSeat = _
-  private var _actionTaker: TableSeat = _
-  private var lastBetSize: Int = _
-  private var minBet: Int = _
-  private var minRaise: Int = _
+
+  private var currentBettingRound: Int = 0    //represents current betting round, 0 -> pre game, 4 -> post river
+  private var roundEndingSeat: TableSeat = _  //represents last aggresive player, if it equals _actionTaker, the round ends
+  private var _actionTaker: TableSeat = _     //represents current action taker, all action methods relate to it
+  private var lastBetSize: Int = _            //represents last bet size
+  private var minBet: Int = _                 //represents a min bet accroding to poker rules
+  private var minRaise: Int = _               //represents a min raise according to poker rules
 
 
+  /* Changes the internal state of the object according to the betting round. */
   def startNextRound(): Unit = {
 
     currentBettingRound += 1
@@ -44,6 +49,8 @@ class BettingManager(
     }
   }
 
+
+  /* Validates if the given action is legal or not. */
   def validateAction(action: Action): ActionValidation = {
     action match{
       case Bet(amount) => canBet(amount)
@@ -55,8 +62,14 @@ class BettingManager(
     }
   }
 
+
+  /* Returns reference to a current action taker. */
   def actionTaker: TableSeat = _actionTaker
 
+
+  /* Changes the internal state of the object accroding to the 
+   * current action taker's action.
+   */
   def proceedWithAction(action: Action): Unit = {
 
     action match {
@@ -98,9 +111,12 @@ class BettingManager(
       case Check => ()
     }
 
-   _actionTaker = nextActionTaker
+    _actionTaker = nextActionTaker
   }
 
+  /* Caluculates next action taker, if it's equal to roundEnding seat 
+   * then it returns null and the round ends.
+   */
   private def nextActionTaker: TableSeat = {
 
     val nextActiveSeat = table.getNextActiveSeat(_actionTaker)
@@ -109,6 +125,7 @@ class BettingManager(
 
     nextActiveSeat
   }
+
 
   private def canCheck: ActionValidation = {
 
