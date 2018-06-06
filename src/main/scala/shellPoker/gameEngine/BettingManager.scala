@@ -31,7 +31,7 @@ class BettingManager(
   def startNextRound(): Unit = {
 
     currentBettingRound += 1
-    minBet = bigBlindValue
+    minBet = 2 * bigBlindValue
     minRaise = bigBlindValue
 
     if (currentBettingRound == 1) {
@@ -142,7 +142,7 @@ class BettingManager(
         _actionTaker.player.currentBetSize < amount)
       return Illegal("Bet size is bigger than player's stack.")
 
-    if (amount >= minBet)
+    if (amount < minBet)
       return Illegal(s"Bet size cannot be smaller than $minBet.")
 
     Legal
@@ -154,7 +154,7 @@ class BettingManager(
         _actionTaker.player.currentBetSize < lastBetSize + amount)
       return Illegal("Not enough chips in player's stack.")
 
-    if (amount >= minRaise)
+    if (amount < minRaise)
       return Illegal(s"Raise cannot be smaller than $minRaise.")
 
     Legal
@@ -165,6 +165,9 @@ class BettingManager(
     if (_actionTaker.player.chipStack.chipCount +
         _actionTaker.player.currentBetSize < lastBetSize)
       return Illegal("Not enough chips to call.")
+
+    if (canCheck == Legal)
+      return Illegal("There is no bet for player to call.")
 
     Legal
 

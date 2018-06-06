@@ -36,4 +36,14 @@ class TableSeatTest extends FunSuite {
     assert(mockTableSeat.isEmpty)
   }
 
+  test("adding a player to non empty seat should throw InvalidSeatException"){
+     mockTableSeat.addPlayer(mockPlayer)
+     assertThrows[InvalidSeatException](mockTableSeat.addPlayer(mockPlayer))
+  }
+
+  test("removing a player from an empty seat should throw InvalidSeatException"){
+     mockTableSeat.removePlayer()
+     assertThrows[InvalidSeatException](mockTableSeat.removePlayer())
+  }
+
 }
