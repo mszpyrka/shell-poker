@@ -6,7 +6,6 @@ import org.scalatest.FunSuite
 class PositionManagerTest extends FunSuite {
 
 
-
   test("PositionManager should throw NotEnoughPlayersException when there are not enough players at the table.") {
 
     val tableMock = new PokerTable(4)
@@ -41,6 +40,56 @@ class PositionManagerTest extends FunSuite {
     assertThrows[NotEnoughPlayersException](positionManager.movePositions())
   }
 
+
+  test("PositionManager should initialize positions with taken seats.") {
+
+    val tableMock = new PokerTable(3)
+    val stackMock = new ChipStack(0)
+    val playerMock = new Player(stackMock)
+
+    val seats: List[TableSeat] = tableMock.seats
+
+    val seat1 = seats(0)
+    seat1.addPlayer(playerMock)
+
+    val seat2 = seats(1)
+    seat2.addPlayer(playerMock)
+
+    val seat3 = seats(2)
+    seat3.addPlayer(playerMock)
+
+
+    val positionManager = new PositionManager(tableMock)
+    positionManager.pickRandomPositions()
+
+    assert(!positionManager.bigBlind.isEmpty)
+    assert(!positionManager.smallBlind.isEmpty)
+    assert(!positionManager.dealerButton.isEmpty)
+  }
+
+
+  test("PositionManager should set dealer and small blind on the same seat when there are only 2 players.") {
+
+    val tableMock = new PokerTable(3)
+    val stackMock = new ChipStack(0)
+    val playerMock = new Player(stackMock)
+
+    val seats: List[TableSeat] = tableMock.seats
+
+    val seat1 = seats(0)
+    seat1.addPlayer(playerMock)
+
+    val seat2 = seats(1)
+    seat2.addPlayer(playerMock)
+
+    val positionManager = new PositionManager(tableMock)
+    positionManager.pickRandomPositions()
+
+    assert(!positionManager.bigBlind.isEmpty)
+    assert(!positionManager.smallBlind.isEmpty)
+    assert(!positionManager.dealerButton.isEmpty)
+    assert(positionManager.dealerButton === positionManager.smallBlind)
+  }
 
 
   test("Dealer and SmallBlind should indicate the same position when there are two players at the table.") {

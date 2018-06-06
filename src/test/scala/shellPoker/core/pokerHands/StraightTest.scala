@@ -8,10 +8,10 @@ class StraightTest extends FunSuite {
 
   test("Certain cards should make at least a Straight hand") {
 
-    val toCheck = List(TestHelper.pokerHands("Straight"),
-                       TestHelper.betterPokerHands("Straight"),
-                       TestHelper.worsePokerHands("Straight"),
-                       TestHelper.pokerHands("StraightFlush")
+    val toCheck = List(PokerHandTestHelper.pokerHands("Straight"),
+                       PokerHandTestHelper.betterPokerHands("Straight"),
+                       PokerHandTestHelper.worsePokerHands("Straight"),
+                       PokerHandTestHelper.pokerHands("StraightFlush")
     )
 
     for(i <- toCheck) assert(Straight.isMadeUpOf(i))
@@ -19,8 +19,8 @@ class StraightTest extends FunSuite {
 
   test("Certain cards should NOT make a Straight hand") {
 
-    val toCheck = List(TestHelper.pokerHands("Pair"),
-                       TestHelper.pokerHands("Flush")
+    val toCheck = List(PokerHandTestHelper.pokerHands("Pair"),
+                       PokerHandTestHelper.pokerHands("Flush")
     )
 
     for(i <- toCheck) assert(!Straight.isMadeUpOf(i))
@@ -28,10 +28,10 @@ class StraightTest extends FunSuite {
 
   test("Comparing different Straight hands.") {
 
-    val hand = Straight(TestHelper.pokerHands("Straight"))
-    val worseHand = Straight(TestHelper.worsePokerHands("Straight"))
-    val betterHand =  Straight(TestHelper.betterPokerHands("Straight"))
-    val equalHand = Straight(TestHelper.pokerHands("Straight"))
+    val hand = Straight(PokerHandTestHelper.pokerHands("Straight"))
+    val worseHand = Straight(PokerHandTestHelper.worsePokerHands("Straight"))
+    val betterHand =  Straight(PokerHandTestHelper.betterPokerHands("Straight"))
+    val equalHand = Straight(PokerHandTestHelper.pokerHands("Straight"))
 
     assert(hand.isStrongerThan(worseHand))
     assert(hand.isWeakerThan(betterHand))
@@ -42,7 +42,7 @@ class StraightTest extends FunSuite {
 
 
   test("Every attempt to make Straight from cards that make better or worse hand should throw InvalidPokerHandException.") {
-    for ((k, v) <- TestHelper.pokerHands if k != "Straight") {
+    for ((k, v) <- PokerHandTestHelper.pokerHands if k != "Straight") {
       assertThrows[InvalidPokerHandException](Straight(v))
     }
   }

@@ -8,10 +8,10 @@ class HighCardTest extends FunSuite {
 
   test("Every 5 cards make at least HighCard hand.") {
 
-    val toCheck = List(TestHelper.pokerHands("HighCard"),
-                       TestHelper.betterPokerHands("HighCard"),
-                       TestHelper.worsePokerHands("HighCard"),
-                       TestHelper.pokerHands("Straight")
+    val toCheck = List(PokerHandTestHelper.pokerHands("HighCard"),
+                       PokerHandTestHelper.betterPokerHands("HighCard"),
+                       PokerHandTestHelper.worsePokerHands("HighCard"),
+                       PokerHandTestHelper.pokerHands("Straight")
     )
 
     for(i <- toCheck) assert(HighCard.isMadeUpOf(i))
@@ -20,10 +20,10 @@ class HighCardTest extends FunSuite {
 
   test("Comparing different HighCard hands.") {
 
-    val hand = HighCard(TestHelper.pokerHands("HighCard"))
-    val worseHand = HighCard(TestHelper.worsePokerHands("HighCard"))
-    val betterHand =  HighCard(TestHelper.betterPokerHands("HighCard"))
-    val equalHand = HighCard(TestHelper.pokerHands("HighCard"))
+    val hand = HighCard(PokerHandTestHelper.pokerHands("HighCard"))
+    val worseHand = HighCard(PokerHandTestHelper.worsePokerHands("HighCard"))
+    val betterHand =  HighCard(PokerHandTestHelper.betterPokerHands("HighCard"))
+    val equalHand = HighCard(PokerHandTestHelper.pokerHands("HighCard"))
 
     assert(hand.isStrongerThan(worseHand))
     assert(hand.isWeakerThan(betterHand))
@@ -35,7 +35,7 @@ class HighCardTest extends FunSuite {
 
   test("Every attempt to make HighCard from cards that make better hand should throw InvalidPokerHandException.") {
 
-    for ((k, v) <- TestHelper.pokerHands if k != "HighCard") {
+    for ((k, v) <- PokerHandTestHelper.pokerHands if k != "HighCard") {
       assertThrows[InvalidPokerHandException](HighCard(v))
 
     }

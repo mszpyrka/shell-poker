@@ -27,14 +27,22 @@ class Player(val chipStack: ChipStack) {
   /* Returns the chip count in current player's bet. */
   def currentBetSize: Int = _currentBetSize
 
-  /* Removes given chips amount from player's stack and adds it to player's bet. */
-  def makeBet(amount: Int): Unit = {
+  /* Removes proper chips amount from player's stack to make their bet match given size. */
+  def setBetSize(amount: Int): Unit = {
 
-    chipStack.removeChips(amount)
-    _currentBetSize += amount
+    chipStack.removeChips(amount - _currentBetSize)
+    _currentBetSize = amount
 
     if (chipStack.chipCount == 0)
       setStatus(IsAllIn)
+  }
+
+  /* Makes all-in bet. */
+  def goAllIn(): Unit = {
+
+    _currentBetSize += chipStack.chipCount
+    chipStack.removeChips(chipStack.chipCount)
+    setAllIn()
   }
 
   /* Resets players current bet */

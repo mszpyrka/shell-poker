@@ -8,9 +8,9 @@ class FourOfAKindTest extends FunSuite {
 
   test("Certain cards should make at least a FourOfAKind hand") {
 
-    val toCheck = List(TestHelper.pokerHands("FourOfAKind"),
-                       TestHelper.betterPokerHands("FourOfAKind"),
-                       TestHelper.worsePokerHands("FourOfAKind")
+    val toCheck = List(PokerHandTestHelper.pokerHands("FourOfAKind"),
+                       PokerHandTestHelper.betterPokerHands("FourOfAKind"),
+                       PokerHandTestHelper.worsePokerHands("FourOfAKind")
     )
 
     for(i <- toCheck) assert(FourOfAKind.isMadeUpOf(i))
@@ -18,10 +18,10 @@ class FourOfAKindTest extends FunSuite {
 
   test("Certain cards should NOT make a FourOfAKind hand") {
 
-    val toCheck = List(TestHelper.pokerHands("HighCard"),
-                       TestHelper.betterPokerHands("Flush"),
-                       TestHelper.worsePokerHands("Straight"),
-                       TestHelper.pokerHands("RoyalFlush")
+    val toCheck = List(PokerHandTestHelper.pokerHands("HighCard"),
+                       PokerHandTestHelper.betterPokerHands("Flush"),
+                       PokerHandTestHelper.worsePokerHands("Straight"),
+                       PokerHandTestHelper.pokerHands("RoyalFlush")
     )
 
     for(i <- toCheck) assert(!FourOfAKind.isMadeUpOf(i))
@@ -29,10 +29,10 @@ class FourOfAKindTest extends FunSuite {
 
   test("Comparing different FourOfAKind hands.") {
 
-    val hand = FourOfAKind(TestHelper.pokerHands("FourOfAKind"))
-    val worseHand = FourOfAKind(TestHelper.worsePokerHands("FourOfAKind"))
-    val betterHand =  FourOfAKind(TestHelper.betterPokerHands("FourOfAKind"))
-    val equalHand = FourOfAKind(TestHelper.pokerHands("FourOfAKind"))
+    val hand = FourOfAKind(PokerHandTestHelper.pokerHands("FourOfAKind"))
+    val worseHand = FourOfAKind(PokerHandTestHelper.worsePokerHands("FourOfAKind"))
+    val betterHand =  FourOfAKind(PokerHandTestHelper.betterPokerHands("FourOfAKind"))
+    val equalHand = FourOfAKind(PokerHandTestHelper.pokerHands("FourOfAKind"))
 
     assert(hand.isStrongerThan(worseHand))
     assert(hand.isWeakerThan(betterHand))
@@ -42,7 +42,7 @@ class FourOfAKindTest extends FunSuite {
 
 
   test("Every attempt to make FourOfAKind from cards that make better or worse hand should throw InvalidPokerHandException.") {
-    for ((k, v) <- TestHelper.pokerHands if k != "FourOfAKind") {
+    for ((k, v) <- PokerHandTestHelper.pokerHands if k != "FourOfAKind") {
       assertThrows[InvalidPokerHandException](FourOfAKind(v))
     }
   }

@@ -2,9 +2,9 @@ package shellPoker.gameEngine
 
 import shellPoker.core.pokerHands.RoyalFlush
 
-/** Responsible for managing single hand's betting,
-  * validating player's action and returning a reference
-  * to the current action taker.
+/** Responsible for managing single hand's betting rounds,
+  * validating player's actions and applying them to change
+  * current state of the hand.
   * All action methods relate to the private _actionTaker field.
   *
   * @param bigBlindValue Value of the big blind.
@@ -12,7 +12,7 @@ import shellPoker.core.pokerHands.RoyalFlush
   * @param bigBlind TableSeat of the bigBlind.
   * @param table Reference to a poker table. 
   */
-class BettingManager(
+class ActionManager(
     bigBlindValue: Int,
     dealerButton: TableSeat,
     bigBlind: TableSeat,
@@ -52,7 +52,8 @@ class BettingManager(
 
   /* Validates if the given action is legal or not. */
   def validateAction(action: Action): ActionValidation = {
-    action match{
+
+    action match {
       case Bet(amount) => canBet(amount)
       case Raise(amount) => canRaise(amount)
       case Call => canCall
@@ -63,14 +64,21 @@ class BettingManager(
   }
 
 
-  /* Returns reference to a current action taker. */
+  /* Returns reference to the current action taker. */
   def actionTaker: TableSeat = _actionTaker
 
 
-  /* Changes the internal state of the object accroding to the 
+  /* Changes the internal state of the object according to the
    * current action taker's action.
+   * Applies necessary changes to player instance related to the taken action.
    */
-  def proceedWithAction(action: Action): Unit = {
+  def applyAction(action: Action): Unit = {
+
+    validateAction(action) match {
+
+      case illegal: Illegal => throw IllegalActionException(illegal)
+      case _ => ()
+    }
 
     action match {
 
@@ -80,6 +88,7 @@ class BettingManager(
         minBet = amount + minRaise
         lastBetSize = amount
         roundEndingSeat = _actionTaker
+        _actionTaker.player.setBetSize(amount)
       }
 
       case Raise(amount) => {
@@ -88,6 +97,7 @@ class BettingManager(
         lastBetSize = lastBetSize + amount
         minBet = lastBetSize + amount
         roundEndingSeat = _actionTaker
+        _actionTaker.player.setBetSize(lastBetSize)
       }
 
       case AllIn(amount) => {
@@ -101,20 +111,23 @@ class BettingManager(
             minRaise = raised
 
           minBet = lastBetSize + minRaise
-
           roundEndingSeat = _actionTaker
         }
+
+        _actionTaker.player.goAllIn()
       }
 
       case Call => ()
-      case Fold => ()
+
+      case Fold => _actionTaker.player.setFolded()
+
       case Check => ()
     }
 
     _actionTaker = nextActionTaker
   }
 
-  /* Caluculates next action taker, if it's equal to roundEnding seat 
+  /* Calculates next action taker, if it's equal to roundEnding seat
    * then it returns null and the round ends.
    */
   private def nextActionTaker: TableSeat = {
