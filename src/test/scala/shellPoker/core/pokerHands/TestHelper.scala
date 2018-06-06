@@ -2,7 +2,7 @@ package shellPoker.core.pokerHands
 
 import shellPoker.core.cards._
 
-object TestHelper{
+object TestHelper {
 
   val pokerHands = Map(
       "HighCard" ->  List(
@@ -202,6 +202,14 @@ object TestHelper{
           Card(Seven, Clubs),
           Card(Five, Hearts),
           Card(Three, Spades)),
+      "HighCard2" -> List(
+          Card(Ace, Diamonds),
+          Card(King, Diamonds),
+          Card(Queen, Diamonds),
+          Card(Jack, Spades),
+          Card(Two, Diamonds),
+          Card(Three, Hearts),
+          Card(Four, Spades)),
       "Pair" -> List(
           Card(Queen, Spades),
           Card(Queen, Diamonds),
@@ -210,6 +218,22 @@ object TestHelper{
           Card(Seven, Clubs),
           Card(Five, Hearts),
           Card(Three, Spades)),
+      "Pair2" -> List(
+          Card(Ace, Spades),
+          Card(King, Diamonds),
+          Card(Queen, Diamonds),
+          Card(Jack, Spades),
+          Card(Two, Clubs),
+          Card(Two, Spades),
+          Card(Three, Spades)),
+      "TwoPair" -> List(
+          Card(Ace, Spades),
+          Card(Queen, Hearts),
+          Card(Queen, Diamonds),
+          Card(Jack, Hearts),
+          Card(Two, Spades),
+          Card(Two, Clubs),
+          Card(Jack, Clubs)),
       "ThreeOfAKind" -> List(
           Card(Queen, Spades),
           Card(Queen, Diamonds),
@@ -218,6 +242,14 @@ object TestHelper{
           Card(Ace, Clubs),
           Card(Four, Hearts),
           Card(Three, Spades)),
+      "ThreeOfAKind2" -> List(
+          Card(Four, Spades),
+          Card(Ace, Diamonds),
+          Card(Five, Hearts),
+          Card(Two, Spades),
+          Card(Seven, Clubs),
+          Card(Five, Clubs),
+          Card(Five, Spades)),
       "Straight" -> List(
           Card(Queen, Spades),
           Card(Jack, Diamonds),
@@ -226,6 +258,14 @@ object TestHelper{
           Card(Nine, Hearts),
           Card(Eight, Hearts),
           Card(Seven, Spades)),
+      "Straight2" -> List(
+          Card(Ace, Spades),
+          Card(King, Diamonds),
+          Card(Two, Hearts),
+          Card(Three, Clubs),
+          Card(Four, Hearts),
+          Card(Five, Hearts),
+          Card(Queen, Spades)),
       "Flush" -> List(                
           Card(Queen, Diamonds),
           Card(Jack, Diamonds),
@@ -234,6 +274,22 @@ object TestHelper{
           Card(Eight, Diamonds),
           Card(Queen, Hearts),
           Card(Queen, Spades)),
+      "Flush2" -> List(
+          Card(Queen, Diamonds),
+          Card(Jack, Diamonds),
+          Card(Ace, Diamonds),
+          Card(Four, Diamonds),
+          Card(Three, Diamonds),
+          Card(King, Diamonds),
+          Card(Two, Diamonds)),
+      "FullHouse" -> List(
+          Card(Ace, Diamonds),
+          Card(King, Diamonds),
+          Card(Queen, Diamonds),
+          Card(King, Clubs),
+          Card(King, Hearts),
+          Card(Queen, Clubs),
+          Card(Two, Diamonds)),
       "FourOfAKind" -> List(
           Card(Queen, Spades),
           Card(Queen, Diamonds),
@@ -257,8 +313,9 @@ object TestHelper{
           Card(King, Diamonds),
           Card(Ten, Diamonds),
           Card(Nine, Diamonds),
-          Card(Eight, Diamonds))
-  )
+          Card(Eight, Diamonds)))
+
+
 
   val correctHands = Map(
       "HighCard" -> List(
@@ -267,30 +324,72 @@ object TestHelper{
           Card(Ten, Spades),
           Card(Seven, Clubs),
           Card(Five, Hearts)),
+      "HighCard2" -> List(
+          Card(Ace, Diamonds),
+          Card(King, Diamonds),
+          Card(Queen, Diamonds),
+          Card(Jack, Spades),
+          Card(Four, Spades)),
       "Pair" -> List(
           Card(Queen, Spades),
           Card(Queen, Diamonds),
           Card(Jack, Diamonds),
           Card(Ten, Spades),
           Card(Seven, Clubs)),
+      "Pair2" -> List(
+          Card(Ace, Spades),
+          Card(King, Diamonds),
+          Card(Queen, Diamonds),
+          Card(Two, Clubs),
+          Card(Two, Spades)),
+      "TwoPair" -> List(
+          Card(Ace, Spades),
+          Card(Queen, Hearts),
+          Card(Queen, Diamonds),
+          Card(Jack, Hearts),
+          Card(Jack, Spades)),
       "ThreeOfAKind" -> List(
           Card(Queen, Spades),
           Card(Queen, Diamonds),
           Card(Queen, Hearts),
           Card(Ten, Spades),
           Card(Ace, Clubs)),
+      "ThreeOfAKind2" -> List(
+          Card(Ace, Diamonds),
+          Card(Five, Hearts),
+          Card(Seven, Clubs),
+          Card(Five, Clubs),
+          Card(Five, Spades)),
       "Straight" -> List( 
           Card(Queen, Clubs),
           Card(Jack, Diamonds),
           Card(Ten, Hearts),
           Card(Nine, Hearts),
           Card(Eight, Hearts)),
+      "Straight2" -> List(
+          Card(Ace, Spades),
+          Card(Two, Hearts),
+          Card(Three, Clubs),
+          Card(Four, Hearts),
+          Card(Five, Hearts)),
       "Flush" -> List(
           Card(Queen, Diamonds),
           Card(Jack, Diamonds),
           Card(Ace, Diamonds),
           Card(Eight, Diamonds),
           Card(Four, Diamonds)),
+      "Flush2" -> List(
+          Card(Queen, Diamonds),
+          Card(Jack, Diamonds),
+          Card(Ace, Diamonds),
+          Card(Four, Diamonds),
+          Card(King, Diamonds)),
+      "FullHouse" -> List(
+          Card(King, Diamonds),
+          Card(Queen, Diamonds),
+          Card(King, Clubs),
+          Card(King, Hearts),
+          Card(Queen, Clubs)),
       "FourOfAKind" -> List(
           Card(Queen, Spades),
           Card(Queen, Diamonds),
@@ -310,6 +409,8 @@ object TestHelper{
           Card(King, Diamonds),
           Card(Ten, Diamonds))
   )
+
+
 
   val stringToPokerHand = Map(
     "HighCard" -> HighCard,

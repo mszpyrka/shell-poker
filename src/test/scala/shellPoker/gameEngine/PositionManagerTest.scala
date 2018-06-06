@@ -132,7 +132,6 @@ class PositionManagerTest extends FunSuite {
   }
 
 
-
   test("BigBling should always move forward, even when players number changes, " +
     "Dealer and SmallBlind should be adjusted according to BigBlind.") {
 

@@ -7,7 +7,7 @@ package shellPoker.gameEngine
   */
 class PokerTable(val seatsAmount: Int){
 
-  private val seats: List[TableSeat] = (for(number <- 0 until seatsAmount) yield new TableSeat(number)).toList
+  val seats: List[TableSeat] = (for(number <- 0 until seatsAmount) yield new TableSeat(number)).toList
 
 
   /* Gets a list of all empty seats at the table. */
@@ -43,19 +43,6 @@ class PokerTable(val seatsAmount: Int){
 
     val startIndex = seats.indexOf(startingSeat)
     val targetSeat: Option[TableSeat] = (seats.drop(startIndex + 1) ++ seats.take(startIndex)).find(!_.isEmpty)
-
-    targetSeat.orNull
-  }
-
-
-  /* Same as getNextTakenSeat but searches backwards. */
-  def getPreviousTakenSeat(startingSeat: TableSeat): TableSeat = {
-
-    val reversedSeats = seats.reverse
-    val startIndex = reversedSeats.indexOf(startingSeat)
-
-    val targetSeat: Option[TableSeat] = (reversedSeats.drop(startIndex + 1) ++
-      reversedSeats.take(startIndex)).find(!_.isEmpty)
 
     targetSeat.orNull
   }

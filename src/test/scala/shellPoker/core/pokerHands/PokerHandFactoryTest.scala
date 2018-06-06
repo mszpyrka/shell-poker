@@ -106,16 +106,6 @@ class  PokerHandFactoryTest extends FunSuite {
 
     for(i <- royalFlushs) assert(i.isInstanceOf[RoyalFlush])
 
-    //DOESNT WORK ???
-    // for((k, v) <- TestHelper.stringToPokerHand){
-    //   val handsToCheck = List(PokerHandFactory.pickBestHand(TestHelper.pokerHands(k)),
-    //                           PokerHandFactory.pickBestHand(TestHelper.worsePokerHands(k)),
-    //                           PokerHandFactory.pickBestHand(TestHelper.betterPokerHands(k)))
-
-    //   for(i <- handsToCheck) assert( i.isInstanceOf[ v ] )
-
-    // }
-
   }
 
   test("picking from 7 cards should result in the best hand possible"){
@@ -123,14 +113,10 @@ class  PokerHandFactoryTest extends FunSuite {
         (k1, v1) <- TestHelper.confusingHands
         (k2, v2) <- TestHelper.correctHands
         if k1 == k2} {
-      val madeHand = PokerHandFactory.pickBestHand(v1)
+      val pickedHand = PokerHandFactory.pickBestHand(v1)
       val correctHand = PokerHandFactory.pickBestHand(v2)
-      val sortedMadeCards = madeHand.cards.sortWith(_.rank > _.rank)
-      val sortedCorrectCards = v2.sortWith(_.rank > _.rank)
-      assert(sortedMadeCards.equals(sortedCorrectCards))
-      assert(madeHand.isEquallyStrongAs(correctHand))
-      
-      // assert(madeHand.isInstanceOf[ TestHelper.stringToPokerHand(k1) ])
+
+      assert(pickedHand.isEquallyStrongAs(correctHand))
     }
   }
 }
