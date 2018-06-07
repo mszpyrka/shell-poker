@@ -9,6 +9,8 @@ class PokerTable(val seatsAmount: Int){
 
   val seats: List[TableSeat] = (for(number <- 0 until seatsAmount) yield new TableSeat(number)).toList
 
+  /* Gets a list of all players currently seating at the table. */
+  def players: List[Player] = seats.filter(!_.isEmpty).map(_.player)
 
   /* Gets a list of all empty seats at the table. */
   def emptySeats: List[TableSeat] = seats.filter(_.isEmpty)
