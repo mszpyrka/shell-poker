@@ -9,10 +9,10 @@ class PokerTable(val seatsAmount: Int){
 
   val seats: List[TableSeat] = (for(number <- 0 until seatsAmount) yield new TableSeat(number)).toList
 
+  val positionManager: PositionManager = new PositionManager(this)
 
   /* Gets a list of all empty seats at the table. */
   def emptySeats: List[TableSeat] = seats.filter(_.isEmpty)
-
 
   /* Gets a list of all taken seats at the table. */
   def takenSeats: List[TableSeat] = seats.filter(!_.isEmpty)

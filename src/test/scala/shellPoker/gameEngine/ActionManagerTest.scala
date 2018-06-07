@@ -5,115 +5,126 @@ import org.scalatest.FunSuite
 /** Tests for BettingManager class. */
 class ActionManagerTest extends FunSuite {
 
-  val seatsAmont: Int = 4
-  val bigBllindValue: Int = 100
-  val initialChipCount: Int = 1000
+  var actionManagerMock: ActionManager = _
 
   
-  val mockPlayers: List[Player] = (for(_ <- 0 until seatsAmont) yield new Player(new ChipStack(initialChipCount))).toList
-  mockPlayers(1).chipStack.removeChips(500)
-  val mockPokerTable: PokerTable = new PokerTable(seatsAmont)
+  //for later
+  // test("startNextRound should work"){
+  //   actionManagerMock = GameEngineTestHelper.prepareActionManager()
 
-  for(i <- 0 until seatsAmont) mockPokerTable.seats(i).addPlayer(mockPlayers(i))
+  //   actionManagerMock.startNextRound()
 
-  val mockPositionManager: PositionManager = new PositionManager(mockPokerTable)
+  //   assert(actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(3))
 
-  mockPositionManager.pickRandomPositions()
+  //   assert(actionManagerMock.actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(3))
+  // }
 
-  while(mockPositionManager.dealerButton != mockPokerTable.seats(0))
-      mockPositionManager.movePositions()
+  test("validateAction should work"){
+    actionManagerMock = GameEngineTestHelper.prepareActionManager()
+    actionManagerMock.startNextRound()
+    
+    assert(actionManagerMock.validateAction(Fold) === Legal)
 
+    assert(actionManagerMock.validateAction(AllIn(actionManagerMock.actionTaker.player.chipStack.chipCount)) === Legal)
 
-  val mockActionManager: ActionManager = new ActionManager(
-        bigBllindValue,
-        mockPositionManager.dealerButton,
-        mockPositionManager.bigBlind,
-        mockPokerTable)
+    assert(actionManagerMock.validateAction(Call) === Legal)
 
+    assert(actionManagerMock.validateAction(Check) === Illegal("Cannot check when a bet has been made."))
 
+    assert(actionManagerMock.validateAction(Bet(200)) === Legal)
+    assert(actionManagerMock.validateAction(Bet(199)) === Illegal("Bet size cannot be smaller than 200."))
+    assert(actionManagerMock.validateAction(Bet(1000)) === Legal)
+    assert(actionManagerMock.validateAction(Bet(1001)) === Illegal("Bet size is bigger than player's stack."))
 
-  test("Game should proceed accordingly to poker betting rules."){
-    mockActionManager.startNextRound()
-
-    assert(mockActionManager.actionTaker === mockPokerTable.seats(3))
-
-    val actionTaker: TableSeat = mockActionManager.actionTaker
-
-    assert(mockActionManager.validateAction(Fold) === Legal)
-
-    assert(mockActionManager.validateAction(AllIn(actionTaker.player.chipStack.chipCount)) === Legal)
-
-    assert(mockActionManager.validateAction(Call) === Legal)
-
-    assert(mockActionManager.validateAction(Check) === Illegal("Cannot check when a bet has been made."))
-
-    assert(mockActionManager.validateAction(Bet(200)) === Legal)
-    assert(mockActionManager.validateAction(Bet(199)) === Illegal("Bet size cannot be smaller than 200."))
-    assert(mockActionManager.validateAction(Bet(1000)) === Legal)
-    assert(mockActionManager.validateAction(Bet(1001)) === Illegal("Bet size is bigger than player's stack."))
-
-    assert(mockActionManager.validateAction(Raise(100)) === Legal)
-    assert(mockActionManager.validateAction(Raise(99)) === Illegal("Raise cannot be smaller than 100."))
-    assert(mockActionManager.validateAction(Raise(900)) === Legal)
-    assert(mockActionManager.validateAction(Raise(901)) === Illegal("Not enough chips in player's stack."))
-
-
-    mockActionManager.applyAction(Call)
-
-
-
-    assert(mockActionManager.actionTaker === mockPokerTable.seats(0))
-
-    mockActionManager.applyAction(Fold)
-
-    assert(mockActionManager.actionTaker === mockPokerTable.seats(1))
-
-    mockActionManager.applyAction(Call)
-
-    assert(mockActionManager.actionTaker === mockPokerTable.seats(2))
-
-    assert(mockActionManager.validateAction(Check) === Legal)
-
-    assert(mockActionManager.validateAction(Call) === Illegal("There is no bet for player to call."))
-
-    mockActionManager.applyAction(Check)
-
-    assert(mockActionManager.actionTaker === null)
-
-    //second round
-    // seat(0) -> dealer(Folded), seat(1) -> smallBlind(active), 
-
-
+    assert(actionManagerMock.validateAction(Raise(100)) === Legal)
+    assert(actionManagerMock.validateAction(Raise(99)) === Illegal("Raise cannot be smaller than 100."))
+    assert(actionManagerMock.validateAction(Raise(900)) === Legal)
+    assert(actionManagerMock.validateAction(Raise(901)) === Illegal("Not enough chips in player's stack."))
   }
-/*
-  val newManager = new BettingManager
 
-  newManager.startNextRound
+  test("applyAction Fold should work"){
+    actionManagerMock = GameEngineTestHelper.prepareActionManager()
+    actionManagerMock.startNextRound()
 
-  val actionTaker: TableSeat = newManager.actionTaker
+    actionManagerMock.applyAction(Fold)
 
-  if(actionTaker == null) 
-    if(newManager.table.activePlayersNumber != 1)
-      dealNextStreet
-      newManager.startNextRound
-    else
-      showdown
+    assert(actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(0))
 
-
-
-  //GET RESPONSE
-  val testAction: Action = Bet(100)
-
-  ? 
-
-  val isLegal: ActionValidation = newManager.validateAction(testAction)
-
-  if(isLegal) {
-
-    newManager.proceedWithAction(testAction)
+    assert(GameEngineTestHelper.pokerTableMock.seats(3).player.hasFolded)
   }
+
+  test("applyAction Call should work"){
+    actionManagerMock = GameEngineTestHelper.prepareActionManager()
+    actionManagerMock.startNextRound()
+
+    actionManagerMock.applyAction(Call)
+
+    assert(actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(0))
+  }
+
+  test("applyAction Bet should work"){
+    actionManagerMock = GameEngineTestHelper.prepareActionManager()
+    actionManagerMock.startNextRound()
+
+    actionManagerMock.applyAction(Bet(200))
+
+    //how to check kurwa round ending player? XD min Bet?
+
+
+    assert(actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(0))
+  }
+
+    // actionManagerMock.applyAction(Call)
+
+    // assert(actionManagerMock.actionTaker === mockPokerTable.seats(0))
+
+    // actionManagerMock.applyAction(Fold)
+
+    // assert(actionManagerMock.actionTaker === mockPokerTable.seats(1))
+
+    // actionManagerMock.applyAction(Call)
+
+    // assert(actionManagerMock.actionTaker === mockPokerTable.seats(2))
+
+    // assert(actionManagerMock.validateAction(Check) === Legal)
+
+    // assert(actionManagerMock.validateAction(Call) === Illegal("There is no bet for player to call."))
+
+    // actionManagerMock.applyAction(Check)
+
+    // assert(actionManagerMock.actionTaker === null)
+  // }
+
+  
+// /*
+//   val newManager = new BettingManager
+
+//   newManager.startNextRound
+
+//   val actionTaker: TableSeat = newManager.actionTaker
+
+//   if(actionTaker == null) 
+//     if(newManager.table.activePlayersNumber != 1)
+//       dealNextStreet
+//       newManager.startNextRound
+//     else
+//       showdown
+
+
+
+//   //GET RESPONSE
+//   val testAction: Action = Bet(100)
+
+//   ? 
+
+//   val isLegal: ActionValidation = newManager.validateAction(testAction)
+
+//   if(isLegal) {
+
+//     newManager.proceedWithAction(testAction)
+//   }
   
 
-*/
+// */
 
 }
