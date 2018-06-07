@@ -2,22 +2,18 @@ package shellPoker.gameEngine
 
 import shellPoker.core.pokerHands.RoyalFlush
 
-/** Responsible for managing single hand's betting rounds,
-  * validating player's actions and applying them to change
-  * current state of the hand.
+/** Responsible for managing single hand's betting rounds, which includes
+  * extracting player that needs to make a decision,
+  * validating player's actions
+  * and applying them to change current state of the hand.
   * All action methods relate to the private _actionTaker field.
   *
   * @param bigBlindValue Value of the big blind.
-  * @param dealerButton TableSeat of dealer.
-  * @param bigBlind TableSeat of the bigBlind.
   * @param table Reference to a poker table. 
   */
 class ActionManager(
     bigBlindValue: Int,
-    dealerButton: TableSeat,
-    bigBlind: TableSeat,
     table: PokerTable) {
-
 
   private var currentBettingRound: Int = 0    //represents current betting round, 0 -> pre game, 4 -> post river
   private var roundEndingSeat: TableSeat = _  //represents last aggresive player, if it equals _actionTaker, the round ends
@@ -36,21 +32,21 @@ class ActionManager(
 
     if (currentBettingRound == 1) {
 
-      roundEndingSeat = table.getNextActiveSeat(bigBlind)
-      _actionTaker = table.getNextActiveSeat(bigBlind)
+      roundEndingSeat = table.getNextActiveSeat(table.positionManager.bigBlind)
+      _actionTaker = table.getNextActiveSeat(table.positionManager.bigBlind)
       lastBetSize = bigBlindValue
     }
 
     else {
 
-      roundEndingSeat = table.getNextActiveSeat(dealerButton)
-      _actionTaker = table.getNextActiveSeat(dealerButton)
+      roundEndingSeat = table.getNextActiveSeat(table.positionManager.dealerButton)
+      _actionTaker = table.getNextActiveSeat(table.positionManager.dealerButton)
       lastBetSize = 0
     }
   }
 
 
-  /* Validates if the given action is legal or not. */
+  /* Validates if the given action of the _actionTaker is legal or not. */
   def validateAction(action: Action): ActionValidation = {
 
     action match {
@@ -128,7 +124,7 @@ class ActionManager(
   }
 
   /* Calculates next action taker, if it's equal to roundEnding seat
-   * then it returns null and the round ends.
+   * then it returns null and the round is at its ending.
    */
   private def nextActionTaker: TableSeat = {
 
@@ -139,11 +135,12 @@ class ActionManager(
     nextActiveSeat
   }
 
+  //Action validating methods below
 
   private def canCheck: ActionValidation = {
 
     if((lastBetSize == 0) ||
-        (_actionTaker == bigBlind && lastBetSize == bigBlindValue))
+        (_actionTaker == table.positionManager.bigBlind && lastBetSize == bigBlindValue))
       return Legal
 
     Illegal("Cannot check when a bet has been made.")
