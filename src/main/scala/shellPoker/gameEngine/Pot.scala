@@ -11,7 +11,13 @@ class Pot(val commitedPlayers: List[Player]) {
   private var _size: Int = 0
 
   def size: Int = _size
-  def addChips(amount: Int): Unit = _size += amount
+  def addChips(amount: Int): Unit = {
+
+    if (amount < 0)
+      throw NegativeChipCountException("Cannot add negative chips amount to the pot.")
+
+    _size += amount
+  }
 
   /* Retrieves all players that are entitled to get the pot in case of winning the hand. */
   def entitledPlayers: List[Player] = commitedPlayers.filter(!_.hasFolded)

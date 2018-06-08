@@ -11,44 +11,27 @@ class PotTest extends FunSuite {
 
   val players = List(player1, player2, player3)
 
+  val pot: Pot = new Pot(players)
 
-  val ru = scala.reflect.runtime.universe
+  test("Pot should throw NegativeChipCountException when trying to add negative chips amount.") {
 
-  val mirror = ru.runtimeMirror(getClass.getClassLoader)
-  val potMirror = mirror.reflect(new Pot(players))
-  val _sizeTerm = ru.typeOf[Pot].decl(ru.TermName("_size")).asTerm.accessed.asTerm
+    assertThrows[NegativeChipCountException](pot.addChips(-1))
+  }
 
-  val _sizeFieldMirror = potMirror.reflectField(_sizeTerm)
+  test("Pot size should increase wen chips are added.") {
 
-  println(_sizeFieldMirror.get)
-/*
-  scala> val fmX = im.reflectField(fieldX)
-  fmX: scala.reflect.runtime.universe.FieldMirror = field mirror for C.x (bound to C@5f0c8ac1)
+    pot.addChips(38)
+    assert(pot.size === 38)
+    pot.addChips(100)
+    assert(pot.size === 138)
+  }
 
-  scala> fmX.get
-  res0: Any = 2
+  test("entitledPlayers should contain only players, that are still in the game.") {
 
-  scala> fmX.set(3)
+    assert(pot.entitledPlayers === players)
+    player3.setFolded()
 
-  val potClass:  = typeTag[Pot]
-
-  val method1 = printerClass.getDeclaredMethod("printCodeName") // no parameters
-  method1.setAccessible(true)
-  method1.invoke(printer)
-
-  val field = printerClass.getDeclaredField("codeName")
-  field.setAccessible(true)
-  field.set(printer, "Rejewski")
-
-  method1.invoke(printer)
-
-  val method2 = printerClass.getDeclaredMethod("printItem", classOf[Object], classOf[Boolean]) // Type T is object
-  method2.setAccessible(true)
-  method2.invoke(printer, text.asInstanceOf[Object], break.asInstanceOf[Object])
-*/
-  //output:
-  //Scherbius
-  //Rejewski
-  //access granted
+    assert(pot.entitledPlayers === List(player1, player2))
+  }
 }
 
