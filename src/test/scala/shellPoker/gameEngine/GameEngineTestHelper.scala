@@ -10,11 +10,15 @@ object GameEngineTestHelper {
 
   var playersMock: List[Player] = _
 
-  var dealerButton: TableSeat = _
-  var bigBlind: TableSeat = _
-  var smallBlind: TableSeat = _
+  // var dealerButton: TableSeat = _
+  // var bigBlind: TableSeat = _
+  // var smallBlind: TableSeat = _
 
-  var firstRoundGameState: GameState = new GameState()
+  def getGameStatePreGame(): GameState = {
+    
+  }
+
+  
 
   //seats: 0(dealer)- 500 chips, 1(smallBlind) - 1000 chips, 2(bigBlind) - 1000 chips, 3 - 1000 chips
   def getFirstRoundGameState() : GameState = {
