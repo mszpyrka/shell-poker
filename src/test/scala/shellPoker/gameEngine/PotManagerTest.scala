@@ -20,7 +20,7 @@ class PotManagerTest extends FunSuite {
   seats(3).addPlayer(player3)
   seats(4).addPlayer(player4)
 
-  val potManager = new PotManager(tableMock)
+  val potManager = tableMock.potManager
 
   test("Collecting bets when no one is all in should reset players' bets " +
       "and not produce single pot.") {

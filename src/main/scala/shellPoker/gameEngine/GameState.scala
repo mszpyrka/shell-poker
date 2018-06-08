@@ -7,8 +7,8 @@ package shellPoker.gameEngine
   * @param smallBlindValue Holds the value of small blind.
   * @param bigBlindValue Holds the value of big blind.
   * @param actionTaker Represents the seat of current action taker.
-  * @param roundEndingSeat Represents the seat of last aggressive-playing player,
-  *                        if it is equal to gameState.actionTaker, the round ends.
+  * @param roundEndingSeat Represents the seat of last aggressive player,
+  *                        if it is equal to gameState.actionTaker, the round should end.
   * @param currentBettingRound Represents current betting round, 0 -> pre-game, 1 -> pre-flop,
   *                            2 -> flop, 3 -> turn, 4 -> river
   * @param minRaise Represents the minimum legal raise amount according to no-limit hold'em rules.

@@ -18,7 +18,7 @@ class ActionManager(private var _gameState: GameState) {
 
 
   /* Changes the internal state of the object according to the betting round. */
-  def startNextRound(): Unit = {
+  def startNextBettingRound(): Unit = {
 
     val table = gameState.table
     val smallBlindValue = gameState.smallBlindValue
