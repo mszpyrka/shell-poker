@@ -5,6 +5,7 @@ class GameState(
     var bigBlindValue: Int
     var currentActionTaker: TableSeat, 
     var roundEndingSeat: TableSeat,
+    var bigBlind: TableSeat,
     var currentBettingRound: Int,
     var minBet: Int, 
     var minRaise: Int, 
