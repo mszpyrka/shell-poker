@@ -10,6 +10,8 @@ object GameEngineTestHelper {
 
   var playersMock: List[Player] = _
 
+  var firstRoundGameState: GameState = new GameState()
+
 
   //seats: 0(dealer)- 500 chips, 1(smallBlind) - 1000 chips, 2(bigBlind) - 1000 chips, 3 - 1000 chips
   def prepareActionManager(): ActionManager = {
@@ -30,6 +32,8 @@ object GameEngineTestHelper {
 
     new ActionManager(bigBllindValue, pokerTableMock)
   }
+
+  
 
 
 

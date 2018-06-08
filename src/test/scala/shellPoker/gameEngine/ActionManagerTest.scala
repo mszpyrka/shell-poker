@@ -70,7 +70,7 @@ class ActionManagerTest extends FunSuite {
 
     //how to check kurwa round ending player? XD min Bet?
 
-
+    
     assert(actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(0))
   }
 
