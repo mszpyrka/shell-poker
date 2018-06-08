@@ -11,7 +11,7 @@ import shellPoker.core.pokerHands.RoyalFlush
   *
   * @param _gameState Initial state of the game.
   */
-class ActionManager(var _gameState: GameState) {
+class ActionManager(private var _gameState: GameState) {
 
 
   def gameState: GameState = _gameState
