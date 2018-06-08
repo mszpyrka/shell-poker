@@ -2,36 +2,57 @@ package shellPoker.gameEngine
 
 import shellPoker.core.pokerHands.RoyalFlush
 
-/** Responsible for managing single hand's betting rounds, which includes
-  * extracting player that needs to make a decision,
-  * validating player's actions
-  * and applying them to change current state of the hand.
-  * All action methods relate to the gameState.actionTaker field
+/** Responsible for managing single hand's betting rounds, which includes:
+  * - extracting player that needs to make a decision;
+  * - validating players' actions;
+  * - applying players' actions to change current state of the game.
   *
-  * @param gameState gameState of the table at the moment of creation of the ActionManager
+  * All action methods relate to the gameState.actionTaker field.
+  *
+  * @param _gameState Initial state of the game.
   */
-class ActionManager(var gameState: gameState) {
+class ActionManager(var _gameState: GameState) {
+
+
+  def gameState: GameState = _gameState
+
 
   /* Changes the internal state of the object according to the betting round. */
   def startNextRound(): Unit = {
 
-    gameState.currentBettingRound += 1
-    gameState.minBet = 2 * gameState.bigBlindValue
-    gameState.minRaise = gameState.bigBlindValue
+    val table = gameState.table
+    val smallBlindValue = gameState.smallBlindValue
+    val bigBlindValue = gameState.bigBlindValue
+    val currentBettingRound = gameState.currentBettingRound + 1
+    val minBet = gameState.minBet
+    val minRaise = gameState.minRaise * 2
 
-    if (gameState.currentBettingRound == 1) {
 
-      gameState.roundEndingSeat = gameState.table.getNextActiveSeat(gameState.table.positionManager.bigBlind)
-      gameState.actionTaker = gameState.table.getNextActiveSeat(gameState.table.positionManager.bigBlind)
-      gameState.lastBetSize = gameState.bigBlindValue
+    val (roundEndingSeat, actionTaker, lastBetSize) = if (currentBettingRound == 1) {
+
+      (table.getNextActiveSeat(table.bigBlind),
+       table.getNextActiveSeat(table.bigBlind),
+       bigBlindValue)
+
+    } else {
+
+      (table.getNextActiveSeat(table.dealerButton),
+       table.getNextActiveSeat(table.dealerButton),
+       0)
+
     }
 
-    else {
-
-      gameState.roundEndingSeat = gameState.table.getNextActiveSeat(gameState.table.positionManager.dealerButton)
-      gameState.actionTaker = gameState.table.getNextActiveSeat(gameState.table.positionManager.dealerButton)
-      gameState.lastBetSize = 0
-    }
+    _gameState = new GameState(
+      table = table,
+      smallBlindValue = smallBlindValue,
+      bigBlindValue = bigBlindValue,
+      currentBettingRound = currentBettingRound,
+      minBet = minBet,
+      minRaise = minRaise,
+      roundEndingSeat = roundEndingSeat,
+      actionTaker = actionTaker,
+      lastBetSize = lastBetSize
+    )
   }
 
 
@@ -53,8 +74,7 @@ class ActionManager(var gameState: gameState) {
   def actionTaker: TableSeat = gameState.actionTaker
 
 
-  /* Changes the internal state of the object according to the
-   * current action taker's action.
+  /* Changes the internal state of the object according to current action taker's action.
    * Applies necessary changes to player instance related to the taken action.
    */
   def applyAction(action: Action): Unit = {
@@ -67,59 +87,108 @@ class ActionManager(var gameState: gameState) {
 
     var newGameState: GameState = _
 
-    action match {
+    val unchanged = (
+      gameState.minBet,
+      gameState.minRaise,
+      gameState.lastBetSize,
+      gameState.roundEndingSeat
+    )
+
+    val (minBet, minRaise, lastBetSize, roundEndingSeat) = action match {
 
       case Bet(amount) => {
 
-        newGameState = new GameState(
-            gameState.bigBlindValue,
-            gameState.table,
-            gameState.actionTaker
-            nextActionTaker,
-            gameState.currentBettingRound,
-            amount - gameState.lastBetSize,
-            2 * amount - gameState.lastBetSize,
-            amount)
+        actionTaker.player.setBetSize(amount)
 
-        newGameState.actionTaker.player.setBetSize(amount)
+        val newMinRaise = amount - gameState.lastBetSize
+        val newMinBet = amount + newMinRaise
+        val newLastBetSize = amount
+        val newRoundEndingSeat = actionTaker
+
+        (
+          newMinBet,
+          newMinRaise,
+          newLastBetSize,
+          newRoundEndingSeat
+        )
       }
 
       case Raise(amount) => {
 
-        //TODO
-        gameState.minRaise = amount
-        gameState.lastBetSize = gameState.lastBetSize + amount
-        gameState.minBet = gameState.lastBetSize + amount
-        gameState.roundEndingSeat = gameState.actionTaker
-        gameState.actionTaker.player.setBetSize(gameState.lastBetSize)
+        actionTaker.player.setBetSize(gameState.lastBetSize + amount)
+
+        val newMinRaise = amount
+        val newLastBetSize = gameState.lastBetSize + amount
+        val newMinBet = newLastBetSize + amount
+        val newRoundEndingSeat = actionTaker
+
+        (
+          newMinBet,
+          newMinRaise,
+          newLastBetSize,
+          newRoundEndingSeat
+        )
       }
 
       case AllIn(amount) => {
 
+        actionTaker.player.goAllIn()
+
         if (amount > gameState.lastBetSize) {
 
           val raised: Int = amount - gameState.lastBetSize
-          gameState.lastBetSize = amount
+          val newLastBetSize = amount
 
-          if (raised > gameState.minRaise)
-            gameState.minRaise = raised
+          val newMinRaise = if (raised > gameState.minRaise) raised else gameState.minRaise
 
-          gameState.minBet = gameState.lastBetSize + gameState.minRaise
-          gameState.roundEndingSeat = gameState.actionTaker
+          val newMinBet = newLastBetSize + newMinRaise
+          val newRoundEndingSeat = actionTaker
+
+          (
+            newMinBet,
+            newMinRaise,
+            newLastBetSize,
+            newRoundEndingSeat
+          )
         }
 
-        gameState.actionTaker.player.goAllIn()
+        else
+          unchanged
       }
 
-      case Call => ()
+      case Call => {
 
-      case Fold => gameState.actionTaker.player.setFolded()
+        actionTaker.player.setBetSize(lastBetSize)
+        unchanged
+      }
 
-      case Check => ()
+      case Fold => {
+
+        actionTaker.player.setFolded()
+        unchanged
+      }
+
+      case Check => {
+
+        unchanged
+      }
     }
 
-    gameState = newGameState
+    _gameState = new GameState(
+      table = gameState.table,
+      smallBlindValue = gameState.smallBlindValue,
+      bigBlindValue = gameState.bigBlindValue,
+      currentBettingRound = gameState.currentBettingRound,
+
+      // Those are the values that may change during single betting round.
+      minBet = minBet,
+      minRaise = minRaise,
+      roundEndingSeat = roundEndingSeat,
+      actionTaker = actionTaker,
+      lastBetSize = lastBetSize
+    )
   }
+
 
   /* Calculates next action taker, if it's equal to roundEnding seat
    * then it returns null and the round is at its ending.
@@ -132,6 +201,8 @@ class ActionManager(var gameState: gameState) {
 
     nextActiveSeat
   }
+
+
 
   //Action validating methods below
 
