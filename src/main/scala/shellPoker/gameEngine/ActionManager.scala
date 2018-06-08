@@ -85,8 +85,6 @@ class ActionManager(private var _gameState: GameState) {
       case _ => ()
     }
 
-    var newGameState: GameState = _
-
     val unchanged = (
       gameState.minBet,
       gameState.minRaise,
@@ -94,7 +92,7 @@ class ActionManager(private var _gameState: GameState) {
       gameState.roundEndingSeat
     )
 
-    val (minBet, minRaise, lastBetSize, roundEndingSeat) = action match {
+    val (minBet: Int, minRaise: Int, lastBetSize: Int, roundEndingSeat: TableSeat) = action match {
 
       case Bet(amount) => {
 
@@ -158,7 +156,7 @@ class ActionManager(private var _gameState: GameState) {
 
       case Call => {
 
-        actionTaker.player.setBetSize(lastBetSize)
+        actionTaker.player.setBetSize(gameState.lastBetSize)
         unchanged
       }
 

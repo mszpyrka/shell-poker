@@ -8,6 +8,8 @@ package shellPoker.gameEngine
   */
 class PotManager(table: PokerTable) {
 
+  def pots: List[Pot] = _pots
+
   // Array of pots - the first element indicates the amount of chips in the main pot, other elements relate to side pots.
   private var _pots: List[Pot] = Nil
 
@@ -20,26 +22,31 @@ class PotManager(table: PokerTable) {
     if (_pots == Nil)
       potsExtend()
 
-    val mainPotBet = activePlayerLowestBet
-    collectCurrentPotBets(mainPotBet)
-
-
-    var sidePotBet = activePlayerLowestBet
+    if (thereAreBetsToCollect) {
+      val mainPotBet = inGamePlayerLowestBet
+      collectCurrentPotBets(mainPotBet)
+    }
 
     // Extends pots list until all players' bets are collected.
-    while(sidePotBet > 0) {
+    while(thereAreBetsToCollect) {
+
+      val sidePotBet = inGamePlayerLowestBet
 
       potsExtend()
       collectCurrentPotBets(sidePotBet)
-      sidePotBet = activePlayerLowestBet
     }
 
   }
 
 
+  /* Checks if there are any bets left to collect. */
+  private def thereAreBetsToCollect: Boolean = table.players.exists(_.currentBetSize > 0)
+
+
   /* Finds the lowest bet made by still active player. */
-  private def activePlayerLowestBet: Int =
-    table.players.filter(_.isActive).map(_.currentBetSize).min
+  private def inGamePlayerLowestBet: Int =
+    table.players.filter(!_.hasFolded).
+      map(_.currentBetSize).filter(_ > 0).min
 
 
   /* Creates new pot and initializes it with the list of players whose bets will go into it. */

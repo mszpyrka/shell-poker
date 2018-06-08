@@ -5,6 +5,8 @@ import org.scalatest.FunSuite
 /** Tests for BettingManager class. */
 class ActionManagerTest extends FunSuite {
 
+  /*
+
   var actionManagerMock: ActionManager = _
 
   
@@ -125,6 +127,6 @@ class ActionManagerTest extends FunSuite {
 //   }
   
 
-// */
+// */*/
 
 }
