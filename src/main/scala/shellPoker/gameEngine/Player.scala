@@ -1,7 +1,5 @@
 package shellPoker.gameEngine
 
-import java.time.temporal.TemporalAmount
-
 import shellPoker.core.cards.Card
 
 
@@ -37,6 +35,18 @@ class Player(val chipStack: ChipStack) {
 
     if (chipStack.chipCount == 0)
       setStatus(IsAllIn)
+  }
+
+  /** Makes player put some amount of chips into their current bet.
+    * Goes all-in if there is not enough chips in player's stack).
+    */
+  def postBlind(amount: Int): Unit = {
+
+    if (amount > currentBetSize)
+      goAllIn()
+
+    else
+      setBetSize(amount)
   }
 
   /* Decreases player's current bet size by given amount. */
