@@ -10,6 +10,10 @@ class PokerTable(val seatsAmount: Int){
   val positionManager: PositionManager = new PositionManager(this)
   val seats: List[TableSeat] = (for(number <- 0 until seatsAmount) yield new TableSeat(number)).toList
 
+  val dealerButton: TableSeat = positionManager.dealerButton
+  def smallBlind: TableSeat = positionManager.smallBlind
+  def bigBlind: TableSeat = positionManager.bigBlind
+
 
   /* Gets a list of all players currently seating at the table. */
   def players: List[Player] = seats.filter(!_.isEmpty).map(_.player)

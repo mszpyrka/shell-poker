@@ -1,13 +1,28 @@
 package shellPoker.gameEngine
 
 
+/** Represents game state at some particular time.
+  *
+  * @param table Holds the reference to a poker table instance.
+  * @param smallBlindValue Holds the value of small blind.
+  * @param bigBlindValue Holds the value of big blind.
+  * @param actionTaker Represents the seat of current action taker.
+  * @param roundEndingSeat Represents the seat of last aggressive-playing player,
+  *                        if it is equal to gameState.actionTaker, the round ends.
+  * @param currentBettingRound Represents current betting round, 0 -> pre-game, 1 -> pre-flop,
+  *                            2 -> flop, 3 -> turn, 4 -> river
+  * @param minRaise Represents the minimum legal raise amount according to no-limit hold'em rules.
+  * @param minBet Represents minimum legal bet value according to no-limit hold'em rules.
+  * @param lastBetSize Represents last bet size.
+  */
 class GameState(
-    val bigBlindValue: Int          //holds value of the big blind.
-    val table: PokerTable)          //holds reference to a poker table
-    val actionTaker: TableSeat,     //represents current action taker
-    val roundEndingSeat: TableSeat, //represents last aggresive player, if it equals gameState.actionTaker, the round ends
-    val currentBettingRound: Int,   //represents current betting round, 0 -> pre game, 4 -> post river
-    val minRaise: Int,              //represents a min raise according to poker rules
-    val minBet: Int,                //represents a min bet accroding to poker rules
-    val lastBetSize: Int,           //represents last bet size
+    val table: PokerTable,
+    val smallBlindValue: Int,
+    val bigBlindValue: Int,
+    val actionTaker: TableSeat,
+    val roundEndingSeat: TableSeat,
+    val currentBettingRound: Int,
+    val minRaise: Int,
+    val minBet: Int,
+    val lastBetSize: Int)
     
