@@ -106,7 +106,7 @@ class ActionManagerTest extends FunSuite {
 
   test("validateAction Bet should only be illegal in 2 scenarios"){
     //first illegal scenario
-    actionManagerMock = new ActionManager(GameEngineTestHelper.illegalBetScenario1)
+    actionManagerMock = new ActionManager(GameEngineTestHelper.illegalBetScenario)
 
     assert(actionManagerMock.validateAction(Bet(199)) === Illegal("Bet size cannot be smaller than 200."))
 
@@ -127,110 +127,31 @@ class ActionManagerTest extends FunSuite {
     assert(actionManagerMock.validateAction(Bet(1000)) === Legal)
   }
 
+  test("validateAction Raise should only be illegal in 2 scenarios"){
+    //first illegal scenario
+    actionManagerMock = new ActionManager(GameEngineTestHelper.illegalBetScenario)
 
+    assert(actionManagerMock.validateAction(Raise(99)) === Illegal("Raise cannot be smaller than 100."))
 
+    //second illegal scnario
+    assert(actionManagerMock.validateAction(Raise(901)) === Illegal("Not enough chips in player's stack."))
 
-  // test("validateAction Fold should always work"){
-  //   //first scenario
-  //   actionManagerMock = new ActionManager(GameEngineTestHelper.preGameState)
-  //   actionManagerMock.startNextBettingRound()
+    //some other legal scnarios
+    assert(actionManagerMock.validateAction(Raise(100)) === Legal)
+    assert(actionManagerMock.validateAction(Raise(101)) === Legal)
+    assert(actionManagerMock.validateAction(Raise(500)) === Legal)
+    assert(actionManagerMock.validateAction(Raise(900)) === Legal)
+
+    actionManagerMock = new ActionManager(GameEngineTestHelper.legalCheckScenario2)
     
-  //   assert(actionManagerMock.validateAction(Fold) === Legal)
+    assert(actionManagerMock.validateAction(Raise(100)) === Legal)
+    assert(actionManagerMock.validateAction(Raise(101)) === Legal)
+    assert(actionManagerMock.validateAction(Raise(500)) === Legal)
+    assert(actionManagerMock.validateAction(Raise(900)) === Legal)
+  }
 
-  //   assert(actionManagerMock.validateAction(AllIn(actionManagerMock.actionTaker.player.chipStack.chipCount)) === Legal)
+ 
 
-  //   assert(actionManagerMock.validateAction(Call) === Legal)
-
-  //   assert(actionManagerMock.validateAction(Check) === Illegal("Cannot check when a bet has been made."))
-
-  //   assert(actionManagerMock.validateAction(Bet(200)) === Legal)
-  //   assert(actionManagerMock.validateAction(Bet(199)) === Illegal("Bet size cannot be smaller than 200."))
-  //   assert(actionManagerMock.validateAction(Bet(1000)) === Legal)
-  //   assert(actionManagerMock.validateAction(Bet(1001)) === Illegal("Bet size is bigger than player's stack."))
-
-  //   assert(actionManagerMock.validateAction(Raise(100)) === Legal)
-  //   assert(actionManagerMock.validateAction(Raise(99)) === Illegal("Raise cannot be smaller than 100."))
-  //   assert(actionManagerMock.validateAction(Raise(900)) === Legal)
-  //   assert(actionManagerMock.validateAction(Raise(901)) === Illegal("Not enough chips in player's stack."))
-
-  //   //another scenario
-  //   actionManagerMock = new ActionManager(GameEngineTestHelper.preRound2State)
-  //   actionManagerMock.startNextBettingRound()
-
-  //   assert(actionManagerMock.validateAction(Fold) === Legal)
-
-  //   assert(actionManagerMock.validateAction(AllIn(actionManagerMock.actionTaker.player.chipStack.chipCount)) === Legal)
-
-  //   assert(actionManagerMock.validateAction(Call) === Illegal("There is no bet for player to call."))
-
-  //   assert(actionManagerMock.validateAction(Check) === Legal)
-
-  //   assert(actionManagerMock.validateAction(Bet(200)) === Legal)
-  //   assert(actionManagerMock.validateAction(Bet(199)) === Illegal("Bet size cannot be smaller than 200."))
-  //   assert(actionManagerMock.validateAction(Bet(900)) === Legal)
-  //   assert(actionManagerMock.validateAction(Bet(901)) === Illegal("Bet size is bigger than player's stack."))
-
-  //   assert(actionManagerMock.validateAction(Raise(100)) === Legal)
-  //   assert(actionManagerMock.validateAction(Raise(99)) === Illegal("Raise cannot be smaller than 100."))
-  //   assert(actionManagerMock.validateAction(Raise(900)) === Legal)
-  //   assert(actionManagerMock.validateAction(Raise(901)) === Illegal("Not enough chips in player's stack."))
-
-
-  // }
-
-  // test("applyAction Fold should work"){
-  //   actionManagerMock = GameEngineTestHelper.prepareActionManager()
-  //   actionManagerMock.startNextRound()
-
-  //   actionManagerMock.applyAction(Fold)
-
-  //   assert(actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(0))
-
-  //   assert(GameEngineTestHelper.pokerTableMock.seats(3).player.hasFolded)
-  // }
-
-  // test("applyAction Call should work"){
-  //   actionManagerMock = GameEngineTestHelper.prepareActionManager()
-  //   actionManagerMock.startNextRound()
-
-  //   actionManagerMock.applyAction(Call)
-
-  //   assert(actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(0))
-  // }
-
-  // test("applyAction Bet should work"){
-  //   actionManagerMock = GameEngineTestHelper.prepareActionManager()
-  //   actionManagerMock.startNextRound()
-
-  //   actionManagerMock.applyAction(Bet(200))
-
-  //   //how to check kurwa round ending player? XD min Bet?
-
-    
-  //   assert(actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(0))
-  // }
-
-    // actionManagerMock.applyAction(Call)
-
-    // assert(actionManagerMock.actionTaker === mockPokerTable.seats(0))
-
-    // actionManagerMock.applyAction(Fold)
-
-    // assert(actionManagerMock.actionTaker === mockPokerTable.seats(1))
-
-    // actionManagerMock.applyAction(Call)
-
-    // assert(actionManagerMock.actionTaker === mockPokerTable.seats(2))
-
-    // assert(actionManagerMock.validateAction(Check) === Legal)
-
-    // assert(actionManagerMock.validateAction(Call) === Illegal("There is no bet for player to call."))
-
-    // actionManagerMock.applyAction(Check)
-
-    // assert(actionManagerMock.actionTaker === null)
-  // }
-
-
+  
 
 }
