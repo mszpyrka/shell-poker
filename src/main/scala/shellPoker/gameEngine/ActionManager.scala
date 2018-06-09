@@ -219,7 +219,7 @@ class ActionManager(private var _gameState: GameState) {
       return Illegal("Bet size is bigger than player's stack.")
 
     if (amount < gameState.minBet)
-      return Illegal(s"Bet size cannot be smaller than $gameState.minBet.")
+      return Illegal("Bet size cannot be smaller than " + gameState.minBet + ".")
 
     Legal
   }
@@ -231,7 +231,7 @@ class ActionManager(private var _gameState: GameState) {
       return Illegal("Not enough chips in player's stack.")
 
     if (amount < gameState.minRaise)
-      return Illegal(s"Raise cannot be smaller than $gameState.minRaise.")
+      return Illegal("Raise cannot be smaller than " + gameState.minRaise + ".")
 
     Legal
   }
