@@ -11,7 +11,7 @@ class PokerTable(val seatsAmount: Int){
   val potManager: PotManager = new PotManager(this)
   val seats: List[TableSeat] = (for(number <- 0 until seatsAmount) yield new TableSeat(number)).toList
 
-  val dealerButton: TableSeat = positionManager.dealerButton
+  def dealerButton: TableSeat = positionManager.dealerButton
   def smallBlind: TableSeat = positionManager.smallBlind
   def bigBlind: TableSeat = positionManager.bigBlind
 

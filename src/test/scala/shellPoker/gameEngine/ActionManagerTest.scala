@@ -5,76 +5,96 @@ import org.scalatest.FunSuite
 /** Tests for BettingManager class. */
 class ActionManagerTest extends FunSuite {
 
-  /*
 
   var actionManagerMock: ActionManager = _
 
-  
-  //for later
-  // test("startNextRound should work"){
+  test("startNextBettingRound should set gameState properly"){
+    actionManagerMock = new ActionManager(GameEngineTestHelper.preGameState)
+
+    actionManagerMock.startNextBettingRound()
+
+    val gameStateRound1 = actionManagerMock.gameState
+
+    assert(gameStateRound1.smallBlindValue === 50)
+    assert(gameStateRound1.bigBlindValue === 100)
+    assert(gameStateRound1.actionTaker === gameStateRound1.table.seats(3))
+    assert(gameStateRound1.roundEndingSeat === gameStateRound1.table.seats(3))
+    assert(gameStateRound1.currentBettingRound === 1)
+    assert(gameStateRound1.minRaise === 100)
+    assert(gameStateRound1.minBet === 200)
+    assert(gameStateRound1.lastBetSize === 100)
+
+    actionManagerMock = new ActionManager(GameEngineTestHelper.preRound2State)
+
+    actionManagerMock.startNextBettingRound()
+
+    val gameStateRound2 = actionManagerMock.gameState
+
+    assert(gameStateRound2.smallBlindValue === 50)
+    assert(gameStateRound2.bigBlindValue === 100)
+    assert(gameStateRound2.actionTaker === gameStateRound2.table.seats(2)) 
+    assert(gameStateRound2.roundEndingSeat === gameStateRound2.table.seats(2))
+    assert(gameStateRound2.currentBettingRound === 2)
+    assert(gameStateRound2.minRaise === 100)
+    assert(gameStateRound2.minBet === 200)
+    assert(gameStateRound2.lastBetSize === 0)
+  }
+
+
+  // test("validateAction should work"){
   //   actionManagerMock = GameEngineTestHelper.prepareActionManager()
-
   //   actionManagerMock.startNextRound()
+    
+  //   assert(actionManagerMock.validateAction(Fold) === Legal)
 
-  //   assert(actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(3))
+  //   assert(actionManagerMock.validateAction(AllIn(actionManagerMock.actionTaker.player.chipStack.chipCount)) === Legal)
 
-  //   assert(actionManagerMock.actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(3))
+  //   assert(actionManagerMock.validateAction(Call) === Legal)
+
+  //   assert(actionManagerMock.validateAction(Check) === Illegal("Cannot check when a bet has been made."))
+
+  //   assert(actionManagerMock.validateAction(Bet(200)) === Legal)
+  //   assert(actionManagerMock.validateAction(Bet(199)) === Illegal("Bet size cannot be smaller than 200."))
+  //   assert(actionManagerMock.validateAction(Bet(1000)) === Legal)
+  //   assert(actionManagerMock.validateAction(Bet(1001)) === Illegal("Bet size is bigger than player's stack."))
+
+  //   assert(actionManagerMock.validateAction(Raise(100)) === Legal)
+  //   assert(actionManagerMock.validateAction(Raise(99)) === Illegal("Raise cannot be smaller than 100."))
+  //   assert(actionManagerMock.validateAction(Raise(900)) === Legal)
+  //   assert(actionManagerMock.validateAction(Raise(901)) === Illegal("Not enough chips in player's stack."))
   // }
 
-  test("validateAction should work"){
-    actionManagerMock = GameEngineTestHelper.prepareActionManager()
-    actionManagerMock.startNextRound()
-    
-    assert(actionManagerMock.validateAction(Fold) === Legal)
+  // test("applyAction Fold should work"){
+  //   actionManagerMock = GameEngineTestHelper.prepareActionManager()
+  //   actionManagerMock.startNextRound()
 
-    assert(actionManagerMock.validateAction(AllIn(actionManagerMock.actionTaker.player.chipStack.chipCount)) === Legal)
+  //   actionManagerMock.applyAction(Fold)
 
-    assert(actionManagerMock.validateAction(Call) === Legal)
+  //   assert(actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(0))
 
-    assert(actionManagerMock.validateAction(Check) === Illegal("Cannot check when a bet has been made."))
+  //   assert(GameEngineTestHelper.pokerTableMock.seats(3).player.hasFolded)
+  // }
 
-    assert(actionManagerMock.validateAction(Bet(200)) === Legal)
-    assert(actionManagerMock.validateAction(Bet(199)) === Illegal("Bet size cannot be smaller than 200."))
-    assert(actionManagerMock.validateAction(Bet(1000)) === Legal)
-    assert(actionManagerMock.validateAction(Bet(1001)) === Illegal("Bet size is bigger than player's stack."))
+  // test("applyAction Call should work"){
+  //   actionManagerMock = GameEngineTestHelper.prepareActionManager()
+  //   actionManagerMock.startNextRound()
 
-    assert(actionManagerMock.validateAction(Raise(100)) === Legal)
-    assert(actionManagerMock.validateAction(Raise(99)) === Illegal("Raise cannot be smaller than 100."))
-    assert(actionManagerMock.validateAction(Raise(900)) === Legal)
-    assert(actionManagerMock.validateAction(Raise(901)) === Illegal("Not enough chips in player's stack."))
-  }
+  //   actionManagerMock.applyAction(Call)
 
-  test("applyAction Fold should work"){
-    actionManagerMock = GameEngineTestHelper.prepareActionManager()
-    actionManagerMock.startNextRound()
+  //   assert(actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(0))
+  // }
 
-    actionManagerMock.applyAction(Fold)
+  // test("applyAction Bet should work"){
+  //   actionManagerMock = GameEngineTestHelper.prepareActionManager()
+  //   actionManagerMock.startNextRound()
 
-    assert(actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(0))
+  //   actionManagerMock.applyAction(Bet(200))
 
-    assert(GameEngineTestHelper.pokerTableMock.seats(3).player.hasFolded)
-  }
-
-  test("applyAction Call should work"){
-    actionManagerMock = GameEngineTestHelper.prepareActionManager()
-    actionManagerMock.startNextRound()
-
-    actionManagerMock.applyAction(Call)
-
-    assert(actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(0))
-  }
-
-  test("applyAction Bet should work"){
-    actionManagerMock = GameEngineTestHelper.prepareActionManager()
-    actionManagerMock.startNextRound()
-
-    actionManagerMock.applyAction(Bet(200))
-
-    //how to check kurwa round ending player? XD min Bet?
+  //   //how to check kurwa round ending player? XD min Bet?
 
     
-    assert(actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(0))
-  }
+  //   assert(actionManagerMock.actionTaker === GameEngineTestHelper.pokerTableMock.seats(0))
+  // }
 
     // actionManagerMock.applyAction(Call)
 
@@ -97,36 +117,6 @@ class ActionManagerTest extends FunSuite {
     // assert(actionManagerMock.actionTaker === null)
   // }
 
-  
-// /*
-//   val newManager = new BettingManager
 
-//   newManager.startNextRound
-
-//   val actionTaker: TableSeat = newManager.actionTaker
-
-//   if(actionTaker == null) 
-//     if(newManager.table.activePlayersNumber != 1)
-//       dealNextStreet
-//       newManager.startNextRound
-//     else
-//       showdown
-
-
-
-//   //GET RESPONSE
-//   val testAction: Action = Bet(100)
-
-//   ? 
-
-//   val isLegal: ActionValidation = newManager.validateAction(testAction)
-
-//   if(isLegal) {
-
-//     newManager.proceedWithAction(testAction)
-//   }
-  
-
-// */*/
 
 }

@@ -14,9 +14,5 @@ class GameMaster(settings: GameSettings) {
   def restart(): Unit = ???
 
 
-  private def initState: GameState = {
-
-    val table = new PokerTable(settings.playersNumber)
-
-  }
+  private def initState: GameState = ???
 }
