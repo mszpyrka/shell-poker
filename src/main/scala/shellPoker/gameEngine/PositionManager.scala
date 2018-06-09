@@ -35,6 +35,12 @@ class PositionManager(val table: PokerTable) {
     _bigBlind = table.getNextTakenSeat(_smallBlind)
   }
 
+  def setDealerButton(goalDealerButton: TableSeat): Unit = {
+    pickRandomPositions()
+    while(goalDealerButton != _dealerButton)
+      movePositions()
+  }
+
 
   /* Properly changes all special positions according to 'Dead button' rule. */
   def movePositions(): Unit = {

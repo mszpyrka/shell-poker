@@ -10,7 +10,7 @@ package shellPoker.gameEngine
   */
 case class GameSettings (
   startingStack: Int,
-  playersNumber: Int,
+  seatsNumber: Int,
   smallBlindValue: Int,
   bigBlindValue: Int,
   decisionTime: Int

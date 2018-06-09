@@ -25,8 +25,7 @@ class ActionManager(private var _gameState: GameState) {
     val bigBlindValue = gameState.bigBlindValue
     val currentBettingRound = gameState.currentBettingRound + 1
     val minBet = gameState.minBet
-    val minRaise = gameState.minRaise * 2
-
+    val minRaise = gameState.bigBlindValue
 
     val (roundEndingSeat, actionTaker, lastBetSize) = if (currentBettingRound == 1) {
 
@@ -161,9 +160,9 @@ class ActionManager(private var _gameState: GameState) {
       }
 
       case Fold => {
-
+        ???
         actionTaker.player.setFolded()
-        unchanged
+        unchanged //TODO
       }
 
       case Check => {
