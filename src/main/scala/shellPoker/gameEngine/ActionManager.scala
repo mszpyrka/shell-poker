@@ -24,20 +24,22 @@ class ActionManager(private var _gameState: GameState) {
     val smallBlindValue = gameState.smallBlindValue
     val bigBlindValue = gameState.bigBlindValue
     val currentBettingRound = gameState.currentBettingRound + 1
-    val minRaise = gameState.bigBlindValue
-    val minBet = gameState.bigBlindValue * 2
 
-    val (roundEndingSeat, actionTaker, lastBetSize) = if (currentBettingRound == 1) {
+    val (roundEndingSeat, actionTaker, lastBetSize, minBet, minRaise) = if (currentBettingRound == 1) {
 
       (table.getNextActiveSeat(table.bigBlind),
        table.getNextActiveSeat(table.bigBlind),
+       bigBlindValue,
+       bigBlindValue * 2,
        bigBlindValue)
 
     } else {
 
       (table.getNextActiveSeat(table.dealerButton),
        table.getNextActiveSeat(table.dealerButton),
-       0)
+       0,
+       bigBlindValue,
+       bigBlindValue)
 
     }
 
@@ -90,6 +92,8 @@ class ActionManager(private var _gameState: GameState) {
       gameState.lastBetSize,
       gameState.roundEndingSeat
     )
+
+    val newActionTaker = nextActionTaker
 
     val (minBet: Int, minRaise: Int, lastBetSize: Int, roundEndingSeat: TableSeat) = action match {
 
@@ -160,9 +164,17 @@ class ActionManager(private var _gameState: GameState) {
       }
 
       case Fold => {
-        ???
+
         actionTaker.player.setFolded()
-        unchanged //TODO
+
+        if (actionTaker == roundEndingSeat) (
+            gameState.minBet,
+            gameState.minRaise,
+            gameState.lastBetSize,
+            newActionTaker
+          )
+        else
+          unchanged
       }
 
       case Check => {
