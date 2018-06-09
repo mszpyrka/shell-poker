@@ -36,7 +36,7 @@ class ActionManagerTest extends FunSuite {
     assert(gameStateRound2.roundEndingSeat === gameStateRound2.table.seats(2))
     assert(gameStateRound2.currentBettingRound === 2)
     assert(gameStateRound2.minRaise === 100)
-    assert(gameStateRound2.minBet === 200)
+    assert(gameStateRound2.minBet === 100)
     assert(gameStateRound2.lastBetSize === 0)
   }
 

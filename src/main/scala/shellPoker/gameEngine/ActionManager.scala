@@ -167,7 +167,7 @@ class ActionManager(private var _gameState: GameState) {
 
         actionTaker.player.setFolded()
 
-        if (actionTaker == roundEndingSeat) (
+        if (actionTaker == gameState.roundEndingSeat) (
             gameState.minBet,
             gameState.minRaise,
             gameState.lastBetSize,
