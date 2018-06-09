@@ -24,8 +24,8 @@ class ActionManager(private var _gameState: GameState) {
     val smallBlindValue = gameState.smallBlindValue
     val bigBlindValue = gameState.bigBlindValue
     val currentBettingRound = gameState.currentBettingRound + 1
-    val minBet = gameState.minBet
     val minRaise = gameState.bigBlindValue
+    val minBet = gameState.bigBlindValue * 2
 
     val (roundEndingSeat, actionTaker, lastBetSize) = if (currentBettingRound == 1) {
 
