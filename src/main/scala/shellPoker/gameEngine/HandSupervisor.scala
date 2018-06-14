@@ -7,47 +7,56 @@ package shellPoker.gameEngine
 class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorActor) {
 
   private val actionManager: ActionManager = new ActionManager(initState)
+  private val showdownManager: ShowdownManager = new ShowdownManager
 
   def playSingleHand(): Unit = {
 
     val table = initState.table
     table.dealAllHoleCards()
 
-    actionManager.startNextBettingRound()
+    while(true){
 
-    bettingRound()
+      actionManager.startNextBettingRound()
 
-    possible showdown (po kazdym betting raundzie)
+      bettingRound()
 
-    table.dealFlop()
+      if(table.activePlayersNumber <= 1) {
+        showdownManager.getShowdownStatuses()
+        break; //ni mo brejka eksplicitee
+      }
 
-    supervisor ! showStatus
+      supervisor ! showStatus
 
-    actionManager.startNextBettingRound()
-
-    bettingRound()
-
-    table.dealTurn()
+      table.dealer.dealNextStreet()
+    }
 
 
   }
 
   private def bettingRound() = {
 
-    dopoki jest gra:
-      nastepna decyzja
-      apply decyzja
-      wyslij decyzje do supervisora
+    while(actionManager.actionTaker != null){
 
+      getPlayersAction(actionManager.actionTaker)
 
+      actionManager.applyAction(Action)
+
+      supervisor ! Action
+    }
   }
 
-  private def getPlayersAction(actionTaker): Action = {
+  private def getPlayersAction(actionTaker: TableSeat, playerActor: PlayerActor): Action = {
 
-    dopoki jest niedobrze:
-      pytaj o decyzje
+    val playerAction: Action = requestAction(actionTaker)
 
-    zwroc decyzje
+    while(actionManager.validateAction(Action) != Legal){
+
+      playerActor ! actionManager.validateAction(Action)
+
+      playerAction = requestAction(actionTaker)
+    }
+
+    playerAction
   }
 
 
