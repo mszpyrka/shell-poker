@@ -12,7 +12,7 @@ object Player{
   */
 class Player(val chipStack: ChipStack) {
 
-  var holeCards: (Card, Card) = _
+  private var _holeCards: (Card, Card) = _
   private var _currentBetSize: Int = 0
   private var status: Status = IsActive
 
@@ -23,6 +23,10 @@ class Player(val chipStack: ChipStack) {
   def setActive(): Unit = setStatus(IsActive)
   def setAllIn(): Unit = setStatus(IsAllIn)
   def setFolded(): Unit = setStatus(HasFolded)
+
+  def holeCards: (Card, Card) = _holeCards
+  def setHoleCards(c1: Card, c2: Card): Unit = _holeCards = (c1, c2)
+  def resetHoleCards(): Unit = _holeCards = null
 
   /* Returns the chip count in current player's bet. */
   def currentBetSize: Int = _currentBetSize

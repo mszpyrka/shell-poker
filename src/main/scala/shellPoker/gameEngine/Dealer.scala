@@ -20,15 +20,15 @@ class Dealer {
   }
 
   /* Deals two cards representing single player's hole cards. */
-  def dealHoleCards: (Card, Card) = (deckIterator.next(), deckIterator.next())
+  def dealHoleCards(): (Card, Card) = (deckIterator.next(), deckIterator.next())
 
   /* Deals three cards representing flop. */
-  def dealFlop: (Card, Card, Card) = (deckIterator.next(), deckIterator.next(), deckIterator.next())
+  def dealFlop(): (Card, Card, Card) = (deckIterator.next(), deckIterator.next(), deckIterator.next())
 
   /* Deals one card representing turn. */
-  def dealTurn: Card = deckIterator.next()
+  def dealTurn(): Card = deckIterator.next()
 
   /* Deals one card representing river. */
-  def dealRiver: Card = deckIterator.next()
+  def dealRiver(): Card = deckIterator.next()
 
 }
