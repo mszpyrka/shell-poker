@@ -1,5 +1,7 @@
 package shellPoker.gameEngine
 
+import shellPoker.core.cards.Card
+
 /** Represents a poker table with fixed seats number.
   * Provides some useful methods of finding certain seats relative to another seat.
   *
@@ -10,10 +12,54 @@ class PokerTable(val seatsAmount: Int){
   val positionManager: PositionManager = new PositionManager(this)
   val potManager: PotManager = new PotManager(this)
   val seats: List[TableSeat] = (for(number <- 0 until seatsAmount) yield new TableSeat(number)).toList
+  private val dealer: Dealer = new Dealer
+  private var _communityCards: List[Card] = _
 
   def dealerButton: TableSeat = positionManager.dealerButton
   def smallBlind: TableSeat = positionManager.smallBlind
   def bigBlind: TableSeat = positionManager.bigBlind
+
+
+  /** Clears all cards from the table and resets dealer's state. */
+  def resetCards(): Unit = {
+
+    for(player <- players)
+      player.resetHoleCards()
+
+    _communityCards = Nil
+    dealer.shuffleDeck()
+  }
+
+
+  /** Gives hole cards to every player at the table. */
+  def dealAllHoleCards(): Unit = {
+
+    for(player <- players) {
+      val (c1, c2) = dealer.dealHoleCards()
+      player.setHoleCards(c1, c2)
+    }
+  }
+
+
+  def communityCards: List[Card] = _communityCards
+
+  def dealFlop(): Unit = {
+
+    val (c1, c2, c3) = dealer.dealFlop()
+    _communityCards = c1 :: c2 :: c3 :: Nil
+  }
+
+
+  def dealTurn(): Unit = {
+
+    _communityCards = _communityCards ++ List(dealer.dealTurn())
+  }
+
+
+  def dealRiver(): Unit = {
+
+    _communityCards = _communityCards ++ List(dealer.dealRiver())
+  }
 
 
   /* Gets a list of all players currently seating at the table. */

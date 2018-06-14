@@ -4,7 +4,7 @@ import scala.util.Random.shuffle
 
 object GameEngineHelper{
 
-  def getStartingGameState(gameSettings: GameSettings, playersNumber: Int) = {
+  def getStartingGameState(gameSettings: GameSettings, playersNumber: Int): GameState = {
     //initializing pokerTable
     val table: PokerTable = new PokerTable(gameSettings.seatsNumber)
 

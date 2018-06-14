@@ -44,6 +44,7 @@ class ActionManager(private var _gameState: GameState) {
     }
 
     _gameState = new GameState(
+      handNumber = gameState.handNumber,
       table = table,
       smallBlindValue = smallBlindValue,
       bigBlindValue = bigBlindValue,
@@ -184,6 +185,7 @@ class ActionManager(private var _gameState: GameState) {
     }
 
     _gameState = new GameState(
+      handNumber = gameState.handNumber,
       table = gameState.table,
       smallBlindValue = gameState.smallBlindValue,
       bigBlindValue = gameState.bigBlindValue,
@@ -203,6 +205,9 @@ class ActionManager(private var _gameState: GameState) {
    * then it returns null and the round is at its ending.
    */
   private def nextActionTaker: TableSeat = {
+
+    if(gameState.table.activePlayersNumber == 1)
+      return null
 
     val nextActiveSeat = gameState.table.getNextActiveSeat(gameState.actionTaker)
     if (nextActiveSeat == gameState.roundEndingSeat)
