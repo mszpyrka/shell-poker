@@ -16,6 +16,7 @@ package shellPoker.gameEngine
   * @param lastBetSize Represents last bet size.
   */
 class GameState(
+    val handNumber: Int = 0,
     val table: PokerTable,
     val smallBlindValue: Int,
     val bigBlindValue: Int,
