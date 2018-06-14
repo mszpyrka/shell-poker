@@ -119,6 +119,17 @@ class PokerTable(val seatsAmount: Int){
   }
 
 
+  /* Searches for the first seat that contains non-folded player following some particular seat at the table. */
+  def getNextInGameSeat(startingSeat: TableSeat): TableSeat = {
+
+    val startIndex = seats.indexOf(startingSeat)
+    val potentialSeats = (seats.drop(startIndex + 1) ++ seats.take(startIndex)).filter(!_.isEmpty)
+    val targetSeat = potentialSeats.find(!_.player.hasFolded)
+
+    targetSeat.orNull
+  }
+
+
   /* Counts non-empty seats in given list. */
   def takenSeatsNumber: Int = seats.count(!_.isEmpty)
 
