@@ -15,13 +15,55 @@ class PokerTable(val seatsAmount: Int){
   val dealer: Dealer = new Dealer(this)
   private var _communityCards: List[Card] = _
 
+
+
+  // ===================================================================================================================
+  // Getters for all non-direct values that should be easily accessible:
+  // ===================================================================================================================
+
   def dealerButton: TableSeat = positionManager.dealerButton
   def smallBlind: TableSeat = positionManager.smallBlind
   def bigBlind: TableSeat = positionManager.bigBlind
-
-
-  /** Getter for community cards. */
   def communityCards: List[Card] = _communityCards
+
+  /* Gets a list of all players currently seating at the table. */
+  def players: List[Player] = seats.filter(!_.isEmpty).map(_.player)
+
+  /* Gets a list of all empty seats at the table. */
+  def emptySeats: List[TableSeat] = seats.filter(_.isEmpty)
+
+  /* Gets a list of all taken seats at the table. */
+  def takenSeats: List[TableSeat] = seats.filter(!_.isEmpty)
+
+  /* Counts non-empty seats in given list. */
+  def takenSeatsNumber: Int = seats.count(!_.isEmpty)
+
+  /* Counts active players present at the table. */
+  def activePlayersNumber: Int = {
+    val takenSeats = seats.filter(!_.isEmpty)
+    takenSeats.count(_.player.isActive)
+  }
+
+
+
+  // ===================================================================================================================
+  // Methods related to cooperation with the dealer:
+  // ===================================================================================================================
+
+  /** Clears all cards at the table (community and hole cards). */
+  def resetCards(): Unit = dealer.clearAllCards()
+
+  /** Proceeds with dealer's action. */
+  def proceedWithDealerAction(): Unit = {
+
+    dealer.status match {
+
+      case PreGame => dealer.dealHoleCards()
+      case PreFlop => dealer.dealFlop()
+      case Flop => dealer.dealTurn()
+      case Turn => dealer.dealRiver()
+    }
+  }
 
   /** Clears all cards from the table. */
   def resetCommunityCards(): Unit = _communityCards = Nil
@@ -36,17 +78,10 @@ class PokerTable(val seatsAmount: Int){
   def addRiver(river: Card): Unit = _communityCards = _communityCards ++ List(river)
 
 
-  /* Gets a list of all players currently seating at the table. */
-  def players: List[Player] = seats.filter(!_.isEmpty).map(_.player)
 
-
-  /* Gets a list of all empty seats at the table. */
-  def emptySeats: List[TableSeat] = seats.filter(_.isEmpty)
-
-
-  /* Gets a list of all taken seats at the table. */
-  def takenSeats: List[TableSeat] = seats.filter(!_.isEmpty)
-
+  // ===================================================================================================================
+  // Helper methods for easy navigation around the table:
+  // ===================================================================================================================
 
   /* Searches for the first seat following some particular seat at the table. */
   def getNextSeat(startSeat: TableSeat): TableSeat = {
@@ -101,17 +136,6 @@ class PokerTable(val seatsAmount: Int){
     val targetSeat = potentialSeats.find(!_.player.hasFolded)
 
     targetSeat.orNull
-  }
-
-
-  /* Counts non-empty seats in given list. */
-  def takenSeatsNumber: Int = seats.count(!_.isEmpty)
-
-
-  /* Counts active players present at the table. */
-  def activePlayersNumber: Int = {
-    val takenSeats = seats.filter(!_.isEmpty)
-    takenSeats.count(_.player.isActive)
   }
 
 

@@ -4,6 +4,7 @@ import shellPoker.core.cards.{Card, CardDeck}
 
 import scala.util.Random
 
+/** Indicators of current dealer's status. */
 sealed trait DealerStatus
 case object PreGame extends DealerStatus
 case object PreFlop extends DealerStatus
@@ -22,11 +23,13 @@ class Dealer(table: PokerTable) {
   private var deckIterator: Iterator[Card] = _
   private var _status: DealerStatus = _
 
+
   /* Gets current dealer status. */
   def status: DealerStatus = _status
 
+
   /* Restores the deck, clears table's community cards and players' hole cards, sets the status to PreGame. */
-  def initializeNextHand(): Unit = {
+  def clearAllCards(): Unit = {
 
     deckIterator = Random.shuffle(CardDeck.deck).iterator
     table.resetCommunityCards()
@@ -34,8 +37,9 @@ class Dealer(table: PokerTable) {
     _status = PreGame
   }
 
+
   /* Deals two cards to every player at the table and changes status to PreFlop. */
-  private def dealHoleCards(): Unit = {
+  def dealHoleCards(): Unit = {
 
     table.players.foreach(_.setHoleCards(deckIterator.next(), deckIterator.next()))
     _status = PreFlop
@@ -49,6 +53,7 @@ class Dealer(table: PokerTable) {
     _status = Flop
   }
 
+
   /* Deals one card to the table representing turn. */
   def dealTurn(): Unit = {
 
@@ -56,11 +61,11 @@ class Dealer(table: PokerTable) {
     _status = Turn
   }
 
+
   /* Deals one card to the table representing river. */
   def dealRiver(): Unit = {
 
     table.addRiver(deckIterator.next())
     _status = River
   }
-
 }
