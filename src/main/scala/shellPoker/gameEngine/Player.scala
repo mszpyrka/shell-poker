@@ -6,7 +6,7 @@ import shellPoker.core.cards.Card
 /** Represents a poker player.
   * Responsible for storing player's game state, hole cards, bet sizes and chip stack.
   */
-class Player(val chipStack: ChipStack) {
+class Player(val chipStack: ChipStack, val playerActor: PlayerActor) {
 
   private var _holeCards: (Card, Card) = _
   private var _currentBetSize: Int = 0
@@ -44,6 +44,7 @@ class Player(val chipStack: ChipStack) {
   def holeCards: (Card, Card) = _holeCards
   def setHoleCards(c1: Card, c2: Card): Unit = _holeCards = (c1, c2)
   def resetHoleCards(): Unit = _holeCards = null
+  def showCards(): Unit = playerActor ! ShowCards ??? // to be implemented xD
 
 
 
