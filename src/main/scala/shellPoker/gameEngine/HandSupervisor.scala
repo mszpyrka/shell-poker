@@ -2,7 +2,7 @@ package shellPoker.gameEngine
 
 /** Supervisor of a single hand.
   *
-  * @param initState Settings of the game.
+  * @param initState Initial state of the hand.
   */
 class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorActor) {
 
@@ -57,7 +57,7 @@ class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorAct
     //get player actor object corresponding to the current seat
     val playerActor: PlayerActor = tableSeatToPlayerActor(actionTaker)
 
-    //get inital player action
+    //get initial player action
     var playerAction: Action = requestAction(playerActor)
 
     //get initial action validation for this action
@@ -79,7 +79,7 @@ class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorAct
     playerAction
   }
 
-  /** Propmts the player actor to return Action object */
+  /** Prompts the player actor to return Action object */
   private def requestAction(playerActor: PlayerActor): Action = ???
 
   /** Maps TableSeat objects to corresponding PlayerActor objects. */
