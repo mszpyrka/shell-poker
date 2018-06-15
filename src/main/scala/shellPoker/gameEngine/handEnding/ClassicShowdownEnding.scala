@@ -11,5 +11,5 @@ class ClassicShowdownEnding(val table: PokerTable) extends HandEndingHelper(tabl
 
   override def proceedWithFinalActions(): Unit = ???
 
-  override def distributePot(): Unit = ???
+  override def calculateHandResults(): CompleteHandResults = ???
 }
