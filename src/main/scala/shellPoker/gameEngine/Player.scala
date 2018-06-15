@@ -3,18 +3,19 @@ package shellPoker.gameEngine
 import shellPoker.core.cards.Card
 
 
-object Player{
-  
-}
-
-/*Represents a poker player
-  *Responsible for storing player's game state
+/** Represents a poker player.
+  * Responsible for storing player's game state, hole cards, bet sizes and chip stack.
   */
 class Player(val chipStack: ChipStack) {
 
   private var _holeCards: (Card, Card) = _
   private var _currentBetSize: Int = 0
   private var status: Status = IsActive
+
+
+  // ===================================================================================================================
+  // Getters for all non-direct values that should be easily accessible:
+  // ===================================================================================================================
 
   def isActive: Boolean = this.status == IsActive
   def hasFolded: Boolean = this.status == HasFolded

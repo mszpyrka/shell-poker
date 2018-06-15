@@ -11,6 +11,7 @@ case object PreFlop extends DealerStatus
 case object Flop extends DealerStatus
 case object Turn extends DealerStatus
 case object River extends DealerStatus
+case object HandComplete extends DealerStatus
 
 /** Represents cards dealer.
   * Responsible for picking random cards from the deck and dealing hole cards,
@@ -35,6 +36,20 @@ class Dealer(table: PokerTable) {
     table.resetCommunityCards()
     table.players.foreach(_.resetHoleCards())
     _status = PreGame
+  }
+
+
+  /** Proceeds with dealer's action. */
+  def proceedWithAction(): Unit = {
+
+    status match {
+
+      case PreGame => dealHoleCards()
+      case PreFlop => dealFlop()
+      case Flop => dealTurn()
+      case Turn => dealRiver()
+      case _ => HandComplete
+    }
   }
 
 

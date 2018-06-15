@@ -4,7 +4,7 @@ import shellPoker.core.cards.Card
 import shellPoker.core.pokerHands.{PokerHand, PokerHandFactory}
 
 sealed trait ShowdownAction
-case object Mock extends ShowdownAction
+case object Muck extends ShowdownAction
 case object Show extends ShowdownAction
 
 class ShowdownStatus(seat: TableSeat, showdownAction: ShowdownAction, chipsWon: Int)
@@ -35,7 +35,7 @@ class ShowdownManager {
       val otherPlayers = showingSeats.map(_.player).filter(_ != player)
       val totalWin: Int = table.potManager.pots.
         map((pot: Pot) => getSinglePotWin(player, pot, otherPlayers, table.communityCards)).sum
-      val status: ShowdownAction = if (showingSeats.contains(seat)) Show else Mock
+      val status: ShowdownAction = if (showingSeats.contains(seat)) Show else Muck
       new ShowdownStatus(seat, status, totalWin)
     }
   }

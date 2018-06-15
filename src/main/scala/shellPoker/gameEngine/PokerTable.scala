@@ -53,18 +53,6 @@ class PokerTable(val seatsAmount: Int){
   /** Clears all cards at the table (community and hole cards). */
   def resetCards(): Unit = dealer.clearAllCards()
 
-  /** Proceeds with dealer's action. */
-  def proceedWithDealerAction(): Unit = {
-
-    dealer.status match {
-
-      case PreGame => dealer.dealHoleCards()
-      case PreFlop => dealer.dealFlop()
-      case Flop => dealer.dealTurn()
-      case Turn => dealer.dealRiver()
-    }
-  }
-
   /** Clears all cards from the table. */
   def resetCommunityCards(): Unit = _communityCards = Nil
 
