@@ -10,7 +10,9 @@ class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorAct
   private val showdownManager: ShowdownManager = new ShowdownManager
 
   /** Plays a single hand, ending when some people win chips */
-  def playSingleHand(): Unit = { ???
+  def playSingleHand(): Unit = {
+
+    ??? // todo: posting blinds
 
     var possibleAction: Boolean = true
 

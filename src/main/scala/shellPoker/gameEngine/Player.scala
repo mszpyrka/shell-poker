@@ -13,9 +13,19 @@ class Player(val chipStack: ChipStack) {
   private var status: Status = IsActive
 
 
+
   // ===================================================================================================================
-  // Getters for all non-direct values that should be easily accessible:
+  // Methods and fields related to player's status in currently played hand:
   // ===================================================================================================================
+
+  /* Private helper class for keeping track of current player's status. */
+  private sealed class Status
+  private case object IsActive extends Status
+  private case object HasFolded extends Status
+  private case object IsAllIn extends Status
+
+  /* Sets player's game status. */
+  private def setStatus(status: Status): Unit = this.status = status
 
   def isActive: Boolean = this.status == IsActive
   def hasFolded: Boolean = this.status == HasFolded
@@ -25,9 +35,21 @@ class Player(val chipStack: ChipStack) {
   def setAllIn(): Unit = setStatus(IsAllIn)
   def setFolded(): Unit = setStatus(HasFolded)
 
+
+
+  // ===================================================================================================================
+  // Methods and fields related to player's cards:
+  // ===================================================================================================================
+
   def holeCards: (Card, Card) = _holeCards
   def setHoleCards(c1: Card, c2: Card): Unit = _holeCards = (c1, c2)
   def resetHoleCards(): Unit = _holeCards = null
+
+
+
+  // ===================================================================================================================
+  // Methods and fields related to player's chip stack and bet size:
+  // ===================================================================================================================
 
   /* Returns the chip count in current player's bet. */
   def currentBetSize: Int = _currentBetSize
@@ -42,8 +64,8 @@ class Player(val chipStack: ChipStack) {
       setStatus(IsAllIn)
   }
 
-  /** Makes player put some amount of chips into their current bet.
-    * Goes all-in if there is not enough chips in player's stack).
+  /** Makes player put given amount of chips into their current bet.
+    * Goes all-in if there is not enough chips in player's stack.
     */
   def postBlind(amount: Int): Unit = {
 
@@ -73,14 +95,5 @@ class Player(val chipStack: ChipStack) {
 
   /* Resets players current bet */
   def resetCurrentBet(): Unit = _currentBetSize = 0
-
-  /* Sets player's game status. */
-  private def setStatus(status: Status): Unit = this.status = status
-
-  /* Private helper class for keeping track of current player's status. */
-  private sealed class Status
-  private case object IsActive extends Status
-  private case object HasFolded extends Status
-  private case object IsAllIn extends Status
 
 }
