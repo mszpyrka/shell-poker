@@ -38,6 +38,9 @@ class PokerTable(val seatsAmount: Int){
   /* Counts non-empty seats in given list. */
   def takenSeatsNumber: Int = seats.count(!_.isEmpty)
 
+  /* Counts players that have not folded yet. */
+  def playersInGameNumber: Int = players.count(!_.hasFolded)
+
   /* Counts active players present at the table. */
   def activePlayersNumber: Int = {
     val takenSeats = seats.filter(!_.isEmpty)
