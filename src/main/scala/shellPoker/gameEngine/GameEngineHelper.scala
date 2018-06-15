@@ -32,4 +32,28 @@ object GameEngineHelper{
       lastBetSize = -1
     )
   }
+
+  def stringToAction(userInput: String) = {
+    val splittedInput = userInput.toLowerCase().split(" ").filterNot(_ == "").toList
+    
+    splittedInput.head match {
+      case "fold" => Fold
+      case "check" => Check
+      case "call" => Call
+      case "bet" => {
+        if splittedInput(1).matches("^[0-9]*$") Bet(splittedInput(1).toInt)
+        else throw InvalidInputException
+      }
+      case "raise" => {
+        if splittedInput(1).matches("^[0-9]*$") Raise(splittedInput(1).toInt)
+        else throw InvalidInputException
+      }
+      case "all-in" => {
+        ???
+      }
+      case _ => throw InvalidInputException
+    }
+  }
+
+  
 }
