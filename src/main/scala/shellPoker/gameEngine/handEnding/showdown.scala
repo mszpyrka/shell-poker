@@ -1,7 +1,8 @@
-package shellPoker.gameEngine
+package shellPoker.gameEngine.handEnding
 
 import shellPoker.core.cards.Card
 import shellPoker.core.pokerHands.{PokerHand, PokerHandFactory}
+import shellPoker.gameEngine._
 
 sealed trait ShowdownAction
 case object Muck extends ShowdownAction
