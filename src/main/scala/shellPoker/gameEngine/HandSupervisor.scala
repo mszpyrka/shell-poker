@@ -1,6 +1,6 @@
 package shellPoker.gameEngine
 
-import shellPoker.gameEngine.handEnding.{ShowdownManager, ShowdownStatus}
+import shellPoker.gameEngine.handEnding._
 
 /** Supervisor of a single hand.
   *
@@ -30,7 +30,6 @@ class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorAct
 
 
     var possibleAction: Boolean = true
-    var showdownStatuses: List[ShowdownStatus] = null
 
     while (possibleAction && table.dealer.status != Showdown) {
 
@@ -42,20 +41,30 @@ class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorAct
       // Sending update info about current game state
       supervisor ! update
 
-      if (table.activePlayersNumber <= 1)
+      if (table.activePlayersNumber <= 1 && table.dealer.status != River)
         possibleAction = false
 
-      table.dealer.proceedWithAction()
+      if (possibleAction)
+        table.dealer.proceedWithAction()
     }
 
-    if (table.dealer.status == Showdown)
-      ??? // klasyczny showdown
 
-    else {
-      ??? // alternatywne zakonczenie
+    val handEndingType = {
+      if (table.dealer.status == Showdown)
+        ClassicShowdown
+
+      else if (table.playersInGameNumber <= 1)
+        AllFoldedToBet
+
+      else
+        PlayersAllIn
     }
 
-    ??? // distribute won chips
+    val endingHelper: HandEndingHelper = HandEndingHelper.getHelper(table, handEndingType)
+
+    // Final actions needed to be ta
+    endingHelper.proceedWithFinalActions()
+    endingHelper.calculateHandResults()
 
     supervisor ! finalStatus  //??? could be like that
   }
