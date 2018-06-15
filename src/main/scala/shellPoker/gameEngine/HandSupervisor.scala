@@ -11,37 +11,40 @@ class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorAct
 
   def playSingleHand(): Unit = {
 
-    val table = initState.table
-    table.dealAllHoleCards()
+    val hasEnded: Boolean = false
 
-    while(true){
+    val table = initState.table
+    // table.dealAllHoleCards()
+
+    var showDownStatuses: List[ShowdownStatus] = _
+
+    while (hasEnded) {
+      table.dealer.dealNextStreet() //now it should include dealing hole cards, maybe dealer.nextDealerAction ?
 
       actionManager.startNextBettingRound()
 
       bettingRound()
 
-      if(table.activePlayersNumber <= 1) {
-        showdownManager.getShowdownStatuses()
-        break; //ni mo brejka eksplicitee
+      supervisor ! showStatus // not sure if nessecary
+
+      if (table.activePlayersNumber <= 1 || table.dealer.status == River){
+        showDownStatuses = showdownManager.getShowdownStatuses(table, actionManager.roundEndingSeat)
+        hasEnded = true
       }
-
-      supervisor ! showStatus
-
-      table.dealer.dealNextStreet()
     }
 
-
+    supervisor ! showDownStatuses  //??? could be like that 
   }
 
   private def bettingRound() = {
 
     while(actionManager.actionTaker != null){
 
-      getPlayersAction(actionManager.actionTaker)
+      val currentAction: Action = getPlayersAction(actionManager.actionTaker)
 
-      actionManager.applyAction(Action)
+      actionManager.applyAction(currentAction)
 
-      supervisor ! Action
+      supervisor ! currentAction
     }
   }
 
