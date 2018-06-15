@@ -10,31 +10,43 @@ class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorAct
   private val showdownManager: ShowdownManager = new ShowdownManager
 
   /** Plays a single hand, ending when some people win chips */
-  def playSingleHand(): Unit = {
+  def playSingleHand(): Unit = { ???
 
-    val hasEnded: Boolean = false
+    var possibleAction: Boolean = true
 
     val table = initState.table
     // table.dealAllHoleCards()
+    table.dealer.clearAllCards()
 
-    var showDownStatuses: List[ShowdownStatus] = _
+    var showdownStatuses: List[ShowdownStatus] = null
 
-    while (!hasEnded) {
-      table.dealer.dealNextStreet() //now it should include dealing hole cards, maybe table.nextDealerAction ?
+    while (possibleAction) {
+      table.dealer.proceedWithAction() //now it should include dealing hole cards, maybe table.nextDealerAction ?
 
       actionManager.startNextBettingRound()
 
       runBettingRound(supervisor)
 
-      supervisor ! showStatus // not sure if nessecary
+      table.potManager.collectBets()
+
+      supervisor ! update // not sure if necessary
 
       if (table.activePlayersNumber <= 1 || table.dealer.status == River){
-        showDownStatuses = showdownManager.getShowdownStatuses(table, actionManager.roundEndingSeat)
-        hasEnded = true
+        //showdownStatuses = showdownManager.getShowdownStatuses(table, actionManager.gameState.roundEndingSeat)
+        possibleAction = false
       }
     }
 
-    supervisor ! showDownStatuses  //??? could be like that 
+    if (table.dealer.status == River)
+      ??? // klasyczny showdown
+
+    else {
+      ??? // alternatywne zakonczenie
+    }
+
+    ??? // distribute won chips
+
+    supervisor ! finalStatus  //??? could be like that
   }
 
   private def runBettingRound(supervisor: RoomSupervisorActor) = {

@@ -11,7 +11,7 @@ case object PreFlop extends DealerStatus
 case object Flop extends DealerStatus
 case object Turn extends DealerStatus
 case object River extends DealerStatus
-case object HandComplete extends DealerStatus
+case object Showdown extends DealerStatus ???
 
 /** Represents cards dealer.
   * Responsible for picking random cards from the deck and dealing hole cards,
@@ -48,13 +48,13 @@ class Dealer(table: PokerTable) {
       case PreFlop => dealFlop()
       case Flop => dealTurn()
       case Turn => dealRiver()
-      case _ => HandComplete
+      case River => finishHand()
     }
   }
 
 
   /* Deals two cards to every player at the table and changes status to PreFlop. */
-  def dealHoleCards(): Unit = {
+  private def dealHoleCards(): Unit = {
 
     table.players.foreach(_.setHoleCards(deckIterator.next(), deckIterator.next()))
     _status = PreFlop
@@ -62,7 +62,7 @@ class Dealer(table: PokerTable) {
 
 
   /* Deals three cards to the table representing flop. */
-  def dealFlop(): Unit = {
+  private def dealFlop(): Unit = {
 
     table.addFlop(deckIterator.next(), deckIterator.next(), deckIterator.next())
     _status = Flop
@@ -70,7 +70,7 @@ class Dealer(table: PokerTable) {
 
 
   /* Deals one card to the table representing turn. */
-  def dealTurn(): Unit = {
+  private def dealTurn(): Unit = {
 
     table.addTurn(deckIterator.next())
     _status = Turn
@@ -78,9 +78,13 @@ class Dealer(table: PokerTable) {
 
 
   /* Deals one card to the table representing river. */
-  def dealRiver(): Unit = {
+  private def dealRiver(): Unit = {
 
     table.addRiver(deckIterator.next())
     _status = River
   }
+
+
+  /* Sets status to showdown. */
+  private def finishHand(): Unit = _status = Showdown
 }
