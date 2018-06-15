@@ -12,7 +12,7 @@ class PokerTable(val seatsAmount: Int){
   val positionManager: PositionManager = new PositionManager(this)
   val potManager: PotManager = new PotManager(this)
   val seats: List[TableSeat] = (for(number <- 0 until seatsAmount) yield new TableSeat(number)).toList
-  private val dealer: Dealer = new Dealer
+  val dealer: Dealer = new Dealer(this)
   private var _communityCards: List[Card] = _
 
   def dealerButton: TableSeat = positionManager.dealerButton
@@ -20,46 +20,20 @@ class PokerTable(val seatsAmount: Int){
   def bigBlind: TableSeat = positionManager.bigBlind
 
 
-  /** Clears all cards from the table and resets dealer's state. */
-  def resetCards(): Unit = {
-
-    for(player <- players)
-      player.resetHoleCards()
-
-    _communityCards = Nil
-    dealer.shuffleDeck()
-  }
-
-
-  /** Gives hole cards to every player at the table. */
-  def dealAllHoleCards(): Unit = {
-
-    for(player <- players) {
-      val (c1, c2) = dealer.dealHoleCards()
-      player.setHoleCards(c1, c2)
-    }
-  }
-
-
+  /** Getter for community cards. */
   def communityCards: List[Card] = _communityCards
 
-  def dealFlop(): Unit = {
+  /** Clears all cards from the table. */
+  def resetCommunityCards(): Unit = _communityCards = Nil
 
-    val (c1, c2, c3) = dealer.dealFlop()
-    _communityCards = c1 :: c2 :: c3 :: Nil
-  }
+  /** Adds the first three cards to community cards. */
+  def addFlop(c1: Card, c2: Card, c3: Card): Unit = _communityCards = List(c1, c2, c3)
 
+  /** Adds the fourth card to community cards. */
+  def addTurn(turn: Card): Unit = _communityCards = _communityCards ++ List(turn)
 
-  def dealTurn(): Unit = {
-
-    _communityCards = _communityCards ++ List(dealer.dealTurn())
-  }
-
-
-  def dealRiver(): Unit = {
-
-    _communityCards = _communityCards ++ List(dealer.dealRiver())
-  }
+  /** Adds the fifth card to community cards. */
+  def addRiver(river: Card): Unit = _communityCards = _communityCards ++ List(river)
 
 
   /* Gets a list of all players currently seating at the table. */
