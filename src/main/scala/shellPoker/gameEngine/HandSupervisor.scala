@@ -1,5 +1,7 @@
 package shellPoker.gameEngine
 
+import shellPoker.gameEngine.handEnding.{ShowdownManager, ShowdownStatus}
+
 /** Supervisor of a single hand.
   *
   * @param initState Initial state of the hand.
