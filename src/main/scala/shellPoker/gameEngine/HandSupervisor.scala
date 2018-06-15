@@ -9,6 +9,7 @@ class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorAct
   private val actionManager: ActionManager = new ActionManager(initState)
   private val showdownManager: ShowdownManager = new ShowdownManager
 
+  /** Plays a single hand, ending when some people win chips */
   def playSingleHand(): Unit = {
 
     val hasEnded: Boolean = false
@@ -18,12 +19,12 @@ class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorAct
 
     var showDownStatuses: List[ShowdownStatus] = _
 
-    while (hasEnded) {
-      table.dealer.dealNextStreet() //now it should include dealing hole cards, maybe dealer.nextDealerAction ?
+    while (!hasEnded) {
+      table.dealer.dealNextStreet() //now it should include dealing hole cards, maybe table.nextDealerAction ?
 
       actionManager.startNextBettingRound()
 
-      bettingRound()
+      runBettingRound(supervisor)
 
       supervisor ! showStatus // not sure if nessecary
 
@@ -36,31 +37,53 @@ class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorAct
     supervisor ! showDownStatuses  //??? could be like that 
   }
 
-  private def bettingRound() = {
+  private def runBettingRound(supervisor: RoomSupervisorActor) = {
 
+    //if current action taker == null that means that the round has ended
     while(actionManager.actionTaker != null){
+      //getting action from current action taker
+      val currentAction: Action = getPlayerAction(actionManager.actionTaker)
 
-      val currentAction: Action = getPlayersAction(actionManager.actionTaker)
-
+      //apply that action to the state fo the action manager
       actionManager.applyAction(currentAction)
 
+      //send the supervisor info about current action
       supervisor ! currentAction
     }
   }
 
-  private def getPlayersAction(actionTaker: TableSeat, playerActor: PlayerActor): Action = {
+  private def getPlayerAction(actionTaker: TableSeat): Action = {
 
-    val playerAction: Action = requestAction(actionTaker)
+    //get player actor object corresponding to the current seat
+    val playerActor: PlayerActor = tableSeatToPlayerActor(actionTaker)
 
-    while(actionManager.validateAction(Action) != Legal){
+    //get inital player action
+    var playerAction: Action = requestAction(playerActor)
 
-      playerActor ! actionManager.validateAction(Action)
+    //get initial action validation for this action
+    var actionLegalness: ActionValidation = actionManager.validateAction(playerAction)
 
-      playerAction = requestAction(actionTaker)
+    //keep requesting for legal action
+    while(actionLegalness != Legal){
+
+      //sending illegal message info to the player actor
+      playerActor ! actionLegalness
+
+      //getting the action again
+      playerAction = requestAction(playerActor)
+
+      //get the action validation
+      actionLegalness = actionManager.validateAction(playerAction)
     }
 
     playerAction
   }
+
+  /** Propmts the player actor to return Action object */
+  private def requestAction(playerActor: PlayerActor): Action = ???
+
+  /** Maps TableSeat objects to corresponding PlayerActor objects. */
+  private def tableSeatToPlayerActor(tableSeat: TableSeat): PlayerActor = ???
 
 
 
