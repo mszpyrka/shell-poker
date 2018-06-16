@@ -7,8 +7,13 @@ import shellPoker.gameEngine.playerAction._
 object Parser {
     def stringToAction(userInput: String): Action = {
     val splittedInput = userInput.toLowerCase().split(" ").filterNot(_ == "").toList
+
+      if (splittedInput.isEmpty)
+        throw InvalidInputException("Invalid input, try again...")
     
     splittedInput.head match {
+      case "crash" => throw new Exception("elo mordo")
+
       case "fold" => Fold
 
       case "check" => Check

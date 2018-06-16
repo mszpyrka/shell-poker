@@ -9,17 +9,10 @@ import shellPoker.gameEngine.table.{River, Showdown}
   *
   * @param initState Initial state of the hand.
   */
-abstract class HandSupervisor(initState: GameState) {
+abstract class HandSupervisor(initState: GameState) extends SupervisorCommunicator {
 
   private val actionManager: ActionManager = new ActionManager(initState)
   def gameState: GameState = actionManager.gameState
-
-  // Abstract API:
-  def updateHandStatus(): Unit
-  def requestAction(player: Player): Action
-  def logAction(player: Player, action: Action)
-  def logActionValidation(player: Player, validation: ActionValidation)
-  // end
 
   /** Plays a single hand, ending when some people win chips */
   def playSingleHand(): Unit = {
@@ -39,25 +32,25 @@ abstract class HandSupervisor(initState: GameState) {
     table.dealer.proceedWithAction()
 
 
+    logHandStatus(gameState)
+
     var possibleAction: Boolean = true
 
     while (possibleAction && table.dealer.status != Showdown) {
-
-
 
       // Standard betting round elements
       actionManager.startNextBettingRound()
       runBettingRound()
       table.potManager.collectBets()
 
-      // After betting round
-      updateHandStatus()
-
       if (table.activePlayersNumber <= 1 && table.dealer.status != River) // todo
         possibleAction = false
 
       if (possibleAction)
         table.dealer.proceedWithAction()
+
+      // After betting round
+      logHandStatus(gameState)
     }
 
 
@@ -80,7 +73,7 @@ abstract class HandSupervisor(initState: GameState) {
 
     applyHandResults(handResults)
 
-    updateHandStatus()
+    logHandStatus(gameState)
   }
 
   private def runBettingRound(): Unit = {
@@ -91,10 +84,10 @@ abstract class HandSupervisor(initState: GameState) {
       //getting action from current action taker
       val currentAction: Action = getPlayerAction(actionManager.actionTaker)
 
+      logAction(actionManager.actionTaker, currentAction)
+
       //apply that action to the state fo the action manager
       actionManager.applyAction(currentAction)
-
-      logAction(actionManager.actionTaker, currentAction)
     }
   }
 
