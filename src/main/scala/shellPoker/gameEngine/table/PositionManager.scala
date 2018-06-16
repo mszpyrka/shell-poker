@@ -1,4 +1,4 @@
-package shellPoker.gameEngine
+package shellPoker.gameEngine.table
 
 import scala.util.Random
 
@@ -35,14 +35,15 @@ class PositionManager(val table: PokerTable) {
     _bigBlind = table.getNextTakenSeat(_smallBlind)
   }
 
+
+  /* Sets dealer button at given player's seat, adjusts blinds accordingly. */
   def setDealerButton(goalDealerButton: TableSeat): Unit = {
-    pickRandomPositions()
-    while(goalDealerButton != _dealerButton)
-      movePositions()
+
+    ???
   }
 
 
-  /* Properly changes all special positions according to 'Dead button' rule. */
+  /* Properly changes all special positions according to the 'dead button' rule. */
   def movePositions(): Unit = {
 
     if (table.takenSeatsNumber <= 1)

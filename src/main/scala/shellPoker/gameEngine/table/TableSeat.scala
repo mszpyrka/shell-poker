@@ -1,4 +1,6 @@
-package shellPoker.gameEngine
+package shellPoker.gameEngine.table
+
+import shellPoker.gameEngine.player.Player
 
 /** Represent a single poker table seat.
   * Responsible for managing Player's presence on the seat

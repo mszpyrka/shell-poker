@@ -1,4 +1,6 @@
-package shellPoker.gameEngine
+package shellPoker.gameEngine.table
+
+import shellPoker.gameEngine.player.{NegativeChipCountException, Player}
 
 /** Represents the pot (chips that players are trying to win).
   * Responsible for storing chips amount present in the pot
@@ -11,6 +13,8 @@ class Pot(val committedPlayers: List[Player]) {
   private var _size: Int = 0
 
   def size: Int = _size
+
+  /* Adds given amount of chips to the pot. */
   def addChips(amount: Int): Unit = {
 
     if (amount < 0)

@@ -1,6 +1,7 @@
-package shellPoker.gameEngine
+package shellPoker.gameEngine.table
 
 import shellPoker.core.cards.Card
+import shellPoker.gameEngine.player.Player
 
 /** Represents a poker table with fixed seats number.
   * Provides some useful methods of finding certain seats relative to another seat.

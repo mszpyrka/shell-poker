@@ -1,4 +1,4 @@
-package shellPoker.gameEngine
+package shellPoker.gameEngine.table
 
 /** Responsible for collecting bets from all players at the table after each finished betting round,
   * as well as managing main pot and potential side pots (also stores information about which pot
@@ -10,11 +10,12 @@ class PotManager(table: PokerTable) {
 
   def pots: List[Pot] = _pots
 
-  // Array of pots - the first element indicates the amount of chips in the main pot, other elements relate to side pots.
+  /* Array of pots - extended every time new side pot needs to be created. */
   private var _pots: List[Pot] = Nil
 
   /* Points to the pot that the chips should go into. */
   private var currentPot: Pot = _
+
 
   /* Collects all players' bets and places them in proper pots. */
   def collectBets(): Unit = {
