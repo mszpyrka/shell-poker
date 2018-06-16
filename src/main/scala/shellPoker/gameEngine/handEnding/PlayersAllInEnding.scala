@@ -9,7 +9,7 @@ import shellPoker.gameEngine.{PokerTable, Showdown}
   */
 class PlayersAllInEnding(val table: PokerTable) extends HandEndingHelper(table, PlayersAllIn) {
 
-  /* Makes every player at the table show their cards and deals missing streets. */
+  /* Makes every player at the table show their cards and deals missing cards. */
   override def proceedWithFinalActions(): Unit = {
 
     table.playersInHand.foreach(_.showCards())
@@ -24,8 +24,11 @@ class PlayersAllInEnding(val table: PokerTable) extends HandEndingHelper(table, 
 
     for (pot <- table.potManager.pots) {
 
-      val potentialWinners
+      val partialResults = PotDistributionHelper.getSinglePotResults(pot, table.communityCards)
+      for (singleResult: SinglePlayerHandResults <- partialResults)
+        results.addChipsToPlayer(singleResult.player, singleResult.chipsWon)
     }
 
+    results
   }
 }
