@@ -84,10 +84,10 @@ class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorAct
     }
   }
 
-  private def getPlayerAction(actionTaker: TableSeat): Action = {
+  private def getPlayerAction(actionTaker: Player): Action = {
 
     //get player actor object corresponding to the current seat
-    val playerActor: PlayerActor = tableSeatToPlayerActor(actionTaker)
+    val playerActor: PlayerActor = ???
 
     //get initial player action
     var playerAction: Action = requestAction(playerActor)
@@ -113,10 +113,4 @@ class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorAct
 
   /** Prompts the player actor to return Action object */
   private def requestAction(playerActor: PlayerActor): Action = ???
-
-  /** Maps TableSeat objects to corresponding PlayerActor objects. */
-  private def tableSeatToPlayerActor(tableSeat: TableSeat): PlayerActor = ???
-
-
-
 }

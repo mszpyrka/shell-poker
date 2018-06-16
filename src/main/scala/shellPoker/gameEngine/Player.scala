@@ -7,7 +7,7 @@ import shellPoker.core.cards.Card
 /** Represents a poker player.
   * Responsible for storing player's game state, hole cards, bet sizes and chip stack.
   */
-class Player(val seat: TableSeat, val chipStack: ChipStack, val playerActor: ActorRef) {
+class Player(val seat: TableSeat, val chipStack: ChipStack) {
 
   private var _holeCards: (Card, Card) = _
   private var _currentBetSize: Int = 0
