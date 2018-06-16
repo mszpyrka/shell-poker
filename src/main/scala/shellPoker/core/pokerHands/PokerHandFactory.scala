@@ -19,6 +19,10 @@ object PokerHandFactory {
   )
 
 
+  /** Gets the best of tho poker hands. */
+  def getBetterHand(hand1: PokerHand, hand2: PokerHand): PokerHand = if (hand1.isStrongerThan(hand2)) hand1 else hand2
+
+
   /** Picks the best 5 cards out of cards list and returns proper poker hand.
     *
     * @param cards List[Card] to choose from
@@ -26,7 +30,6 @@ object PokerHandFactory {
     */
   def pickBestHand(cards: List[Card]): PokerHand = {
 
-    def getBetterHand(hand1: PokerHand, hand2: PokerHand): PokerHand = if (hand1.isStrongerThan(hand2)) hand1 else hand2
     cards.combinations(5).map(makeProperHand).reduce(getBetterHand)
   }
 

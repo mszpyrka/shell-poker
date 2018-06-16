@@ -24,8 +24,8 @@ class PlayersAllInEnding(val table: PokerTable) extends HandEndingHelper(table, 
 
     for (pot <- table.potManager.pots) {
 
-      val partialResults = PotDistributionHelper.getSinglePotResults(pot, table.communityCards)
-      for (singleResult: SinglePlayerHandResults <- partialResults)
+      val partialResults: CompleteHandResults = PotDistributionHelper.getSinglePotResults(pot, table.communityCards)
+      for (singleResult <- partialResults.results)
         results.addChipsToPlayer(singleResult.player, singleResult.chipsWon)
     }
 
