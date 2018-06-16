@@ -1,6 +1,7 @@
 package shellPoker.gameEngine.playerAction
 
 import shellPoker.gameEngine._
+import shellPoker.gameEngine.gameplay.GameState
 import shellPoker.gameEngine.player.Player
 
 /** Responsible for changing game state according to actions taken by players.

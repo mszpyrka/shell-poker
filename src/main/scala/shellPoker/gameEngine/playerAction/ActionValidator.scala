@@ -1,6 +1,6 @@
 package shellPoker.gameEngine.playerAction
 
-import shellPoker.gameEngine.GameState
+import shellPoker.gameEngine.gameplay.GameState
 
 /** Responsible for validating players' actions. */
 class ActionValidator {

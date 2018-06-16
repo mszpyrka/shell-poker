@@ -1,4 +1,4 @@
-package shellPoker.gameEngine
+package shellPoker.gameEngine.gameplay
 
 import shellPoker.gameEngine.player.Player
 import shellPoker.gameEngine.table.PokerTable

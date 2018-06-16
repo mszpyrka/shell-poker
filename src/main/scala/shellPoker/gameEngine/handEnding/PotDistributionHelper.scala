@@ -28,7 +28,7 @@ private[handEnding] object PotDistributionHelper {
 
       val winner: Player = pot.entitledPlayers.head
       val results: CompleteHandResults = new CompleteHandResults(List(winner))
-      results.addChipsToPlayer(winner, pot.size)
+      results.addChipsToPlayerResults(winner, pot.size)
       return results
     }
 
@@ -39,7 +39,7 @@ private[handEnding] object PotDistributionHelper {
     val win = pot.size / winners.length
     val results: CompleteHandResults = new CompleteHandResults(pot.entitledPlayers)
     for (winner <- winners)
-      results.addChipsToPlayer(winner, win)
+      results.addChipsToPlayerResults(winner, win)
 
     results
   }

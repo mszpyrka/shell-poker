@@ -1,6 +1,6 @@
 package shellPoker.gameEngine.handEnding
 
-import shellPoker.gameEngine.GameState
+import shellPoker.gameEngine.gameplay.GameState
 import shellPoker.gameEngine.table.PokerTable
 
 object HandEndingHelper {
@@ -37,7 +37,7 @@ abstract class HandEndingHelper(gameState: GameState, endingType: HandEndingType
 
       val partialResults: CompleteHandResults = PotDistributionHelper.getSinglePotResults(pot, table.communityCards)
       for (singleResult <- partialResults.results)
-        results.addChipsToPlayer(singleResult.player, singleResult.chipsWon)
+        results.addChipsToPlayerResults(singleResult.player, singleResult.chipsWon)
     }
 
     results
