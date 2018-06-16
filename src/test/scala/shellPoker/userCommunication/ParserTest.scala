@@ -14,9 +14,9 @@ class ParserTest extends FunSuite {
 
         assert(Parser.stringToAction("call") == Call)
 
-        assert(Parser.stringToAction("all-in") == AllIn(0))
-        assert(Parser.stringToAction("allin") == AllIn(0))
-        assert(Parser.stringToAction("all in") == AllIn(0))
+        assert(Parser.stringToAction("all-in") == AllIn)
+        assert(Parser.stringToAction("allin") == AllIn)
+        assert(Parser.stringToAction("all in") == AllIn)
 
         assert(Parser.stringToAction("bet 100") == Bet(100))
 
