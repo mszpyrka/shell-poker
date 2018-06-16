@@ -5,6 +5,6 @@ target/
 .idea/
 *.iml
 
-src/main/scala/MockScala.scala
+src/main/scala/Hello.scala
 
 .vscode

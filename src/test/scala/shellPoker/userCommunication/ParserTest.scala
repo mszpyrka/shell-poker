@@ -12,12 +12,19 @@ class ParserTest extends FunSuite {
 
     test("Parser should parse correctly from string to Action") {
 
-        assert(Parser.stringToAction("fold") == Fold)
+        assert(Parser.stringToAction("fold") === Fold)
 
+        assert(Parser.stringToAction("call") == Call)
 
-        // assert(tableMock.takenSeatsNumber === 0)
-        // assert(tableMock.activePlayersNumber === 0)
-        // assert(tableMock.emptySeats === tableMock.seats)
+        assert(Parser.stringToAction("all-in") == AllIn(0))
+        assert(Parser.stringToAction("allin") == AllIn(0))
+        assert(Parser.stringToAction("all in") == AllIn(0))
+
+        assert(Parser.stringToAction("bet 100") == Bet(100))
+
+        assert(Parser.stringToAction("raise 1") == Raise(1))
+
+        assert(Parser.stringToAction("check") == Check)
   }
 
 }
