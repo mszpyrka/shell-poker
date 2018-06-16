@@ -9,7 +9,7 @@ class PotManagerTest extends FunSuite {
   val tableMock: PokerTable = new PokerTable(5)
   val player0 = new Player(null, null, new ChipStack(500))
   val player1 = new Player(null, null, new ChipStack(500))
-  val player2 = new Player(null, null, new ChipStack(500))
+  val player2 = new Player(null, null, new ChipStack(300))
   val player3 = new Player(null, null, new ChipStack(500))
   val player4 = new Player(null, null, new ChipStack(500))
 

@@ -13,7 +13,7 @@ class ClassicShowdownEnding(val gameState: GameState) extends HandEndingHelper(g
   override def proceedWithFinalActions(): Unit = {
 
     val showdownOrderPlayers = PotDistributionHelper.getShowdownOrder(gameState.table, gameState.roundEndingPlayer)
-    var showingPlayers = Nil
+    var showingPlayers: List[Player] = Nil
 
     for (player <- showdownOrderPlayers) {
 
