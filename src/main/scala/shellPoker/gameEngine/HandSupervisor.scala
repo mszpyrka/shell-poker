@@ -1,119 +1,119 @@
-// package shellPoker.gameEngine
+package shellPoker.gameEngine
 
-// import shellPoker.gameEngine.handEnding._
-// import shellPoker.gameEngine.player.Player
-// import shellPoker.gameEngine.playerAction.{Action, ActionManager, ActionValidation, Legal}
-// import shellPoker.gameEngine.table.{River, Showdown}
+import shellPoker.gameEngine.handEnding._
+import shellPoker.gameEngine.player.Player
+import shellPoker.gameEngine.playerAction.{Action, ActionManager, ActionValidation, Legal}
+import shellPoker.gameEngine.table.{River, Showdown}
 
-// /** Supervisor of a single hand.
-//   *
-//   * @param initState Initial state of the hand.
-//   */
-// class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorActor) {
+/** Supervisor of a single hand.
+  *
+  * @param initState Initial state of the hand.
+  */
+class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorActor) {
 
-//   private val actionManager: ActionManager = new ActionManager(initState)
-//   private val showdownManager: ShowdownManager = new ShowdownManager
+  private val actionManager: ActionManager = new ActionManager(initState)
+  private val showdownManager: ShowdownManager = new ShowdownManager
 
-//   /** Plays a single hand, ending when some people win chips */
-//   def playSingleHand(): Unit = {
+  /** Plays a single hand, ending when some people win chips */
+  def playSingleHand(): Unit = {
 
-//     val table = initState.table
+    val table = initState.table
 
-//     // Posting blinds
-//     if(!table.smallBlind.isEmpty)
-//       table.smallBlind.player.postBlind(initState.smallBlindValue)
+    // Posting blinds
+    if(!table.smallBlind.isEmpty)
+      table.smallBlind.player.postBlind(initState.smallBlindValue)
 
-//     if(!table.bigBlind.isEmpty)
-//       table.bigBlind.player.postBlind(initState.bigBlindValue)
-
-
-//     // Shuffling the deck and dealing hole cards
-//     table.dealer.clearAllCards()
-//     table.dealer.proceedWithAction()
+    if(!table.bigBlind.isEmpty)
+      table.bigBlind.player.postBlind(initState.bigBlindValue)
 
 
-//     var possibleAction: Boolean = true
-
-//     while (possibleAction && table.dealer.status != Showdown) {
-
-//       // Standard betting round elements
-//       actionManager.startNextBettingRound()
-//       runBettingRound(supervisor)
-//       table.potManager.collectBets()
-
-//       // Sending update info about current game state
-//       supervisor ! update
-
-//       if (table.activePlayersNumber <= 1 && table.dealer.status != River)
-//         possibleAction = false
-
-//       if (possibleAction)
-//         table.dealer.proceedWithAction()
-//     }
+    // Shuffling the deck and dealing hole cards
+    table.dealer.clearAllCards()
+    table.dealer.proceedWithAction()
 
 
-//     val handEndingType = {
-//       if (table.dealer.status == Showdown)
-//         ClassicShowdown
+    var possibleAction: Boolean = true
 
-//       else if (table.playersInGameNumber <= 1)
-//         AllFoldedToBet
+    while (possibleAction && table.dealer.status != Showdown) {
 
-//       else
-//         PlayersAllIn
-//     }
+      // Standard betting round elements
+      actionManager.startNextBettingRound()
+      runBettingRound(supervisor)
+      table.potManager.collectBets()
 
-//     val endingHelper: HandEndingHelper = HandEndingHelper.getHelper(table, handEndingType)
+      // Sending update info about current game state
+      supervisor ! update
 
-//     // Final actions needed to be ta
-//     endingHelper.proceedWithFinalActions()
-//     endingHelper.calculateHandResults()
+      if (table.activePlayersNumber <= 1 && table.dealer.status != River)
+        possibleAction = false
 
-//     supervisor ! finalStatus  //??? could be like that
-//   }
+      if (possibleAction)
+        table.dealer.proceedWithAction()
+    }
 
-//   private def runBettingRound(supervisor: RoomSupervisorActor) = {
 
-//     //if current action taker == null that means that the round has ended
-//     while(actionManager.actionTaker != null){
-//       //getting action from current action taker
-//       val currentAction: Action = getPlayerAction(actionManager.actionTaker)
+    val handEndingType = {
+      if (table.dealer.status == Showdown)
+        ClassicShowdown
 
-//       //apply that action to the state fo the action manager
-//       actionManager.applyAction(currentAction)
+      else if (table.playersInGameNumber <= 1)
+        AllFoldedToBet
 
-//       //send the supervisor info about current action
-//       supervisor ! currentAction
-//     }
-//   }
+      else
+        PlayersAllIn
+    }
 
-//   private def getPlayerAction(actionTaker: Player): Action = {
+    val endingHelper: HandEndingHelper = HandEndingHelper.getHelper(table, handEndingType)
 
-//     //get player actor object corresponding to the current seat
-//     val playerActor: PlayerActor = ???
+    // Final actions needed to be ta
+    endingHelper.proceedWithFinalActions()
+    endingHelper.calculateHandResults()
 
-//     //get initial player action
-//     var playerAction: Action = requestAction(playerActor)
+    supervisor ! finalStatus  //??? could be like that
+  }
 
-//     //get initial action validation for this action
-//     var actionLegalness: ActionValidation = actionManager.validateAction(playerAction)
+  private def runBettingRound(supervisor: RoomSupervisorActor) = {
 
-//     //keep requesting for legal action
-//     while(actionLegalness != Legal){
+    //if current action taker == null that means that the round has ended
+    while(actionManager.actionTaker != null){
+      //getting action from current action taker
+      val currentAction: Action = getPlayerAction(actionManager.actionTaker)
 
-//       //sending illegal message info to the player actor
-//       playerActor ! actionLegalness
+      //apply that action to the state fo the action manager
+      actionManager.applyAction(currentAction)
 
-//       //getting the action again
-//       playerAction = requestAction(playerActor)
+      //send the supervisor info about current action
+      supervisor ! currentAction
+    }
+  }
 
-//       //get the action validation
-//       actionLegalness = actionManager.validateAction(playerAction)
-//     }
+  private def getPlayerAction(actionTaker: Player): Action = {
 
-//     playerAction
-//   }
+    //get player actor object corresponding to the current seat
+    val playerActor: PlayerActor = ???
 
-//   /** Prompts the player actor to return Action object */
-//   private def requestAction(playerActor: PlayerActor): Action = ???
-// }
+    //get initial player action
+    var playerAction: Action = requestAction(playerActor)
+
+    //get initial action validation for this action
+    var actionLegalness: ActionValidation = actionManager.validateAction(playerAction)
+
+    //keep requesting for legal action
+    while(actionLegalness != Legal){
+
+      //sending illegal message info to the player actor
+      playerActor ! actionLegalness
+
+      //getting the action again
+      playerAction = requestAction(playerActor)
+
+      //get the action validation
+      actionLegalness = actionManager.validateAction(playerAction)
+    }
+
+    playerAction
+  }
+
+  /** Prompts the player actor to return Action object */
+  private def requestAction(playerActor: PlayerActor): Action = ???
+}
