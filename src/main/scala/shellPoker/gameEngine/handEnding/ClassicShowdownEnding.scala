@@ -1,22 +1,41 @@
 package shellPoker.gameEngine.handEnding
 
+import shellPoker.gameEngine.GameState
 import shellPoker.gameEngine.player.Player
-import shellPoker.gameEngine.table.PokerTable
 
 /** Represents the type of ending when at least two players did not fold on the river.
   * Final actions in this case contain determining which players show / muck their cards.
   *
-  * @param table Table at which the game is played.
+  * @param gameState The state of the game when there is no further action possibility.
   */
-class ClassicShowdownEnding(val table: PokerTable) extends HandEndingHelper(table, ClassicShowdown) {
+class ClassicShowdownEnding(val gameState: GameState) extends HandEndingHelper(gameState, ClassicShowdown) {
 
-  override def proceedWithFinalActions(): Unit = ???
+  override def proceedWithFinalActions(): Unit = {
 
-  override def calculateHandResults(): CompleteHandResults = ???
+    val showdownOrderPlayers = PotDistributionHelper.getShowdownOrder(gameState.table, gameState.roundEndingPlayer)
+    var showingPlayers = Nil
+
+    for (player <- showdownOrderPlayers) {
+
+      if(shouldShowCards(player, showingPlayers)) {
+
+        player.showCards()
+        showingPlayers ++= List(player)
+      }
+
+      else
+        player.muckCards()
+    }
+  }
+
+  //override def calculateHandResults(): CompleteHandResults = ???
+
 
   /* Checks if given player has any chance of winning any chips from the pot by showing his cards
      after some other players have already revealed theirs. */
   private def shouldShowCards(player: Player, showingPlayers: List[Player]): Boolean = {
+
+    val table = gameState.table
 
     for (pot <- table.potManager.pots if pot.entitledPlayers.contains(player)) {
 
