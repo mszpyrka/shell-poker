@@ -1,5 +1,9 @@
 package shellPoker.gameEngine
 
+import shellPoker.gameEngine.player.{ChipStack, Player}
+import shellPoker.gameEngine.playerAction.ActionManager
+import shellPoker.gameEngine.table.{PokerTable, TableSeat}
+
 object GameEngineTestHelper {
 
   //some testing game settings

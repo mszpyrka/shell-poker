@@ -1,6 +1,6 @@
 package shellPoker.gameEngine.handEnding
 
-import shellPoker.gameEngine.{PokerTable, Showdown}
+import shellPoker.gameEngine.table.{PokerTable, Showdown}
 
 /** Represents the type of ending when all players in game went all-in before the river.
   * Final actions in this case include showing all in-game players' cards and dealing missing streets.

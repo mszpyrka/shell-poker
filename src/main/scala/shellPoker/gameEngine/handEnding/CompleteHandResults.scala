@@ -1,6 +1,6 @@
 package shellPoker.gameEngine.handEnding
 
-import shellPoker.gameEngine.Player
+import shellPoker.gameEngine.player.Player
 
 /** Represents the results of all players at the table after completed hand.
   *

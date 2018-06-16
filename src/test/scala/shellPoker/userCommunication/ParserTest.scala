@@ -1,10 +1,8 @@
 package shellPoker.userCommunication
 
 import shellPoker.gameEngine._
-
-
-
 import org.scalatest.FunSuite
+import shellPoker.gameEngine.playerAction._
 
 /** Tests for Parser object. */
 class ParserTest extends FunSuite {

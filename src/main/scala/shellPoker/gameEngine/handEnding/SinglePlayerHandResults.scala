@@ -1,6 +1,6 @@
 package shellPoker.gameEngine.handEnding
 
-import shellPoker.gameEngine.Player
+import shellPoker.gameEngine.player.Player
 
 /** Represents single player's results after one hand (amount of chips won by the player).
   *

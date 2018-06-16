@@ -1,6 +1,6 @@
 package shellPoker.gameEngine.handEnding
 
-import shellPoker.gameEngine.PokerTable
+import shellPoker.gameEngine.table.PokerTable
 
 object HandEndingHelper {
 

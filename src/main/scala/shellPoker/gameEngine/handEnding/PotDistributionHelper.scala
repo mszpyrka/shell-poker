@@ -2,12 +2,13 @@ package shellPoker.gameEngine.handEnding
 
 import shellPoker.core.cards.Card
 import shellPoker.core.pokerHands.{PokerHand, PokerHandFactory}
-import shellPoker.gameEngine.{Player, PokerTable, Pot, TableSeat}
+import shellPoker.gameEngine.player.Player
+import shellPoker.gameEngine.table.{PokerTable, Pot}
 
 /** Defines some helper methods for determining the winners of the hand
   * and the amount of chips that they should be given.
   */
-object PotDistributionHelper {
+private[handEnding] object PotDistributionHelper {
 
 
   /* Gets all players from given list that are included in pot's entitled players,

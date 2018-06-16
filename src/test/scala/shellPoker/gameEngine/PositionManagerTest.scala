@@ -1,6 +1,8 @@
 package shellPoker.gameEngine
 
 import org.scalatest.FunSuite
+import shellPoker.gameEngine.player.{ChipStack, Player}
+import shellPoker.gameEngine.table.{NotEnoughPlayersException, PokerTable, PositionManager, TableSeat}
 
 /** Tests for HighCard class. */
 class PositionManagerTest extends FunSuite {

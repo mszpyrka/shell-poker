@@ -1,6 +1,6 @@
 package shellPoker.gameEngine.handEnding
 
-import shellPoker.gameEngine.{PokerTable, Pot}
+import shellPoker.gameEngine.table.{PokerTable, Pot}
 
 /** Represents the type of ending when one player makes a bet and every other player folds.
   * The player that made the last bet mucks his cards, as no other player is in game.
