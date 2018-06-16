@@ -20,8 +20,6 @@ class PokerTableTest extends FunSuite {
   test("getEmptySeats method should return all empty seats at the table.") {
 
     val tableMock: PokerTable = new PokerTable(3)
-    val stackMock: ChipStack = new ChipStack(0)
-    val playerMock: Player = new Player(stackMock)
 
     val seats: List[TableSeat] = tableMock.seats
 
@@ -31,11 +29,11 @@ class PokerTableTest extends FunSuite {
 
     assert(tableMock.emptySeats === List(seat0, seat1, seat2))
 
-    seat0.addPlayer(playerMock)
+    seat0.createAndAddPlayer(null, null)
     assert(tableMock.emptySeats === List(seat1, seat2))
 
-    seat1.addPlayer(playerMock)
-    seat2.addPlayer(playerMock)
+    seat1.createAndAddPlayer(null, null)
+    seat2.createAndAddPlayer(null, null)
     assert(tableMock.emptySeats === Nil)
 
     seat0.removePlayer()
@@ -77,8 +75,6 @@ class PokerTableTest extends FunSuite {
   test("getNextTakenSeat method should find next taken seat.") {
 
     val tableMock: PokerTable = new PokerTable(5)
-    val stackMock: ChipStack = new ChipStack(0)
-    val playerMock: Player = new Player(stackMock)
 
     val seats: List[TableSeat] = tableMock.seats
     val seat0 = seats(0)
@@ -87,12 +83,12 @@ class PokerTableTest extends FunSuite {
     val seat3 = seats(3)
     val seat4 = seats(4)
 
-    seat3.addPlayer(playerMock)
+    seat3.createAndAddPlayer(null, null)
 
     assert(tableMock.getNextTakenSeat(seat0) === seat3)
     assert(tableMock.getNextTakenSeat(seat2) === seat3)
 
-    seat0.addPlayer(playerMock)
+    seat0.createAndAddPlayer(null, null)
 
     assert(tableMock.getNextTakenSeat(seat0) === seat3)
     assert(tableMock.getNextTakenSeat(seat3) === seat0)
@@ -103,8 +99,6 @@ class PokerTableTest extends FunSuite {
   test("getNextTakenSeat method should return null if there is no other taken seat.") {
 
     val tableMock: PokerTable = new PokerTable(5)
-    val stackMock: ChipStack = new ChipStack(0)
-    val playerMock: Player = new Player(stackMock)
 
     val seats: List[TableSeat] = tableMock.seats
     val seat0 = seats(0)
@@ -116,7 +110,7 @@ class PokerTableTest extends FunSuite {
     assert(tableMock.getNextTakenSeat(seat0) === null)
     assert(tableMock.getNextTakenSeat(seat4) === null)
 
-    seat3.addPlayer(playerMock)
+    seat3.createAndAddPlayer(null, null)
 
     assert(tableMock.getNextTakenSeat(seat3) === null)
   }
@@ -125,14 +119,6 @@ class PokerTableTest extends FunSuite {
   test("getNextActiveSeat method should find next seat containing active player.") {
 
     val tableMock: PokerTable = new PokerTable(5)
-    val stackMock: ChipStack = new ChipStack(0)
-    val playerMock1: Player = new Player(stackMock)
-    val playerMock2: Player = new Player(stackMock)
-    val playerMock3: Player = new Player(stackMock)
-
-    playerMock1.setActive()
-    playerMock2.setActive()
-    playerMock3.setFolded()
 
     val seats: List[TableSeat] = tableMock.seats
     val seat0 = seats(0)
@@ -141,13 +127,16 @@ class PokerTableTest extends FunSuite {
     val seat3 = seats(3)
     val seat4 = seats(4)
 
-    seat3.addPlayer(playerMock1)
+    seat3.createAndAddPlayer(null, null)
+    seat3.player.setActive()
 
     assert(tableMock.getNextActiveSeat(seat0) === seat3)
     assert(tableMock.getNextActiveSeat(seat2) === seat3)
 
-    seat0.addPlayer(playerMock2)
-    seat2.addPlayer(playerMock3)
+    seat0.createAndAddPlayer(null, null)
+    seat0.player.setActive()
+    seat2.createAndAddPlayer(null, null)
+    seat2.player.setFolded()
 
     assert(tableMock.getNextActiveSeat(seat0) === seat3)
     assert(tableMock.getNextActiveSeat(seat3) === seat0)
@@ -158,14 +147,6 @@ class PokerTableTest extends FunSuite {
   test("getNextActiveSeat method should return null if there is no other active player at the table.") {
 
     val tableMock: PokerTable = new PokerTable(5)
-    val stackMock: ChipStack = new ChipStack(0)
-
-    val playerMock1: Player = new Player(stackMock)
-    val playerMock2: Player = new Player(stackMock)
-
-    playerMock1.setActive()
-    playerMock2.setFolded()
-
 
     val seats: List[TableSeat] = tableMock.seats
     val seat0 = seats(0)
@@ -176,11 +157,13 @@ class PokerTableTest extends FunSuite {
 
     assert(tableMock.getNextActiveSeat(seat0) === null)
 
-    seat3.addPlayer(playerMock1)
+    seat3.createAndAddPlayer(null, null)
+    seat3.player.setActive()
 
     assert(tableMock.getNextActiveSeat(seat3) === null)
 
-    seat4.addPlayer(playerMock2)
+    seat4.createAndAddPlayer(null, null)
+    seat4.player.setFolded()
 
     assert(tableMock.getNextActiveSeat(seat3) === null)
   }
@@ -189,9 +172,6 @@ class PokerTableTest extends FunSuite {
   test("takenSeatsNumber method should return the number of taken seats.") {
 
     val tableMock: PokerTable = new PokerTable(3)
-    val stackMock: ChipStack = new ChipStack(0)
-
-    val playerMock: Player = new Player(stackMock)
 
     val seats: List[TableSeat] = tableMock.seats
     val seat0 = seats(0)
@@ -200,12 +180,12 @@ class PokerTableTest extends FunSuite {
 
     assert(tableMock.takenSeatsNumber === 0)
 
-    seat2.addPlayer(playerMock)
+    seat2.createAndAddPlayer(null, null)
 
     assert(tableMock.takenSeatsNumber === 1)
 
-    seat0.addPlayer(playerMock)
-    seat1.addPlayer(playerMock)
+    seat0.createAndAddPlayer(null, null)
+    seat1.createAndAddPlayer(null, null)
 
     assert(tableMock.takenSeatsNumber === 3)
   }
@@ -214,14 +194,6 @@ class PokerTableTest extends FunSuite {
   test("activePlayersNumber method should return the number of seats taken by active players.") {
 
     val tableMock: PokerTable = new PokerTable(5)
-    val stackMock: ChipStack = new ChipStack(0)
-    val playerMock1: Player = new Player(stackMock)
-    val playerMock2: Player = new Player(stackMock)
-    val playerMock3: Player = new Player(stackMock)
-
-    playerMock1.setActive()
-    playerMock2.setActive()
-    playerMock3.setFolded()
 
     val seats: List[TableSeat] = tableMock.seats
     val seat0 = seats(0)
@@ -230,17 +202,20 @@ class PokerTableTest extends FunSuite {
     val seat3 = seats(3)
     val seat4 = seats(4)
 
-    seat1.addPlayer(playerMock1)
+    seat1.createAndAddPlayer(null, null)
+    seat1.player.setActive()
 
     assert(tableMock.activePlayersNumber === 1)
 
-    seat0.addPlayer(playerMock2)
-    seat2.addPlayer(playerMock3)
+    seat0.createAndAddPlayer(null, null)
+    seat0.player.setActive()
+    seat2.createAndAddPlayer(null, null)
+    seat2.player.setFolded()
 
     assert(tableMock.activePlayersNumber === 2)
 
-    playerMock1.setFolded()
-    playerMock2.setFolded()
+    seat0.player.setFolded()
+    seat1.player.setFolded()
 
     assert(tableMock.activePlayersNumber === 0)
   }

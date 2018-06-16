@@ -6,12 +6,11 @@ import shellPoker.gameEngine.player.{ChipStack, Player}
 /** Tests for HighCard class. */
 class PositionManagerTest extends FunSuite {
 
+  val playerMock = new Player(null, null, null)
 
   test("PositionManager should throw NotEnoughPlayersException when there are not enough players at the table.") {
 
     val tableMock = new PokerTable(4)
-    val stackMock = new ChipStack(0)
-    val playerMock = new Player(stackMock)
 
     val seats: List[TableSeat] = tableMock.emptySeats
 
@@ -45,8 +44,6 @@ class PositionManagerTest extends FunSuite {
   test("PositionManager should initialize positions with taken seats.") {
 
     val tableMock = new PokerTable(3)
-    val stackMock = new ChipStack(0)
-    val playerMock = new Player(stackMock)
 
     val seats: List[TableSeat] = tableMock.seats
 
@@ -72,8 +69,6 @@ class PositionManagerTest extends FunSuite {
   test("PositionManager should set dealer and small blind on the same seat when there are only 2 players.") {
 
     val tableMock = new PokerTable(3)
-    val stackMock = new ChipStack(0)
-    val playerMock = new Player(stackMock)
 
     val seats: List[TableSeat] = tableMock.seats
 
@@ -96,8 +91,6 @@ class PositionManagerTest extends FunSuite {
   test("Dealer and SmallBlind should indicate the same position when there are two players at the table.") {
 
     val tableMock = new PokerTable(4)
-    val stackMock = new ChipStack(0)
-    val playerMock = new Player(stackMock)
 
     val seats: List[TableSeat] = tableMock.emptySeats
 
@@ -139,9 +132,6 @@ class PositionManagerTest extends FunSuite {
   test("Dealer -> SmallBlind -> BigBlind order should be maintained during standard game.") {
 
     val tableMock = new PokerTable(5)
-    val stackMock = new ChipStack(0)
-    val playerMock = new Player(stackMock)
-
     val seats: List[TableSeat] = tableMock.emptySeats
 
     val seat1 = seats(0)
@@ -187,7 +177,6 @@ class PositionManagerTest extends FunSuite {
 
     val tableMock = new PokerTable(5)
     val stackMock = new ChipStack(0)
-    val playerMock = new Player(stackMock)
 
     val seats: List[TableSeat] = tableMock.emptySeats
 

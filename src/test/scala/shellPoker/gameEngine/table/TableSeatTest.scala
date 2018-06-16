@@ -9,7 +9,7 @@ class TableSeatTest extends FunSuite {
 
   val mockTableSeat: TableSeat = new TableSeat(0)
   val mockChipStack: ChipStack = new ChipStack(100)
-  val mockPlayer: Player = new Player(mockChipStack)
+  val mockPlayer: Player = new Player(null, null, mockChipStack)
 
   test("Seat should be initally empty"){
     assert(mockTableSeat.player == null)
@@ -29,7 +29,7 @@ class TableSeatTest extends FunSuite {
   }
 
   test("testing removePlayer"){
-    mockTableSeat.removePlayer
+    mockTableSeat.removePlayer()
     assert(mockTableSeat.player == null)
   }
 
