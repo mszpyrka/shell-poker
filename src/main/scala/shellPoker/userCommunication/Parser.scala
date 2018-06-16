@@ -1,6 +1,7 @@
 package shellPoker.userCommunication
 
 import shellPoker.gameEngine._
+import shellPoker.core.cards._
 import shellPoker.gameEngine.playerAction._
 
 object Parser {
