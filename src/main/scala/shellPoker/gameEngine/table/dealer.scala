@@ -1,4 +1,4 @@
-package shellPoker.gameEngine
+package shellPoker.gameEngine.table
 
 import shellPoker.core.cards.{Card, CardDeck}
 
@@ -51,6 +51,12 @@ class Dealer(table: PokerTable) {
       case River => finishHand()
     }
   }
+
+
+
+  // ===================================================================================================================
+  // Actual dealer actions taken during the game:
+  // ===================================================================================================================
 
 
   /* Deals two cards to every player at the table and changes status to PreFlop. */
