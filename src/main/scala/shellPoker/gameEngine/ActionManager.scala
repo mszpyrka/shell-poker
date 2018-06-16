@@ -67,7 +67,7 @@ class ActionManager(private var _gameState: GameState) {
       case Call => canCall
       case Check => canCheck
       case Fold => canFold
-      case AllIn(amount) => canGoAllIn(amount)
+      case AllIn => canGoAllIn
     }
   }
 
@@ -132,9 +132,11 @@ class ActionManager(private var _gameState: GameState) {
         )
       }
 
-      case AllIn(amount) => {
+      case AllIn => {
 
         actionTaker.goAllIn()
+
+        val amount = actionTaker.currentBetSize
 
         if (amount > gameState.lastBetSize) {
 
@@ -195,7 +197,7 @@ class ActionManager(private var _gameState: GameState) {
       minBet = minBet,
       minRaise = minRaise,
       roundEndingPlayer = roundEndingPlayer,
-      actionTaker = actionTaker,
+      actionTaker = newActionTaker,
       lastBetSize = lastBetSize
     )
   }
@@ -269,5 +271,5 @@ class ActionManager(private var _gameState: GameState) {
 
   private def canFold: ActionValidation = Legal
 
-  private def canGoAllIn(amount: Int): ActionValidation = Legal
+  private def canGoAllIn: ActionValidation = Legal
 }

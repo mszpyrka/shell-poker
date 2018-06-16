@@ -4,7 +4,9 @@ package shellPoker.gameEngine
   * Responsible for adding and removing chips from
   * player's chip stack.
   */
-class ChipStack(private var _chipCount: Int){
+class ChipStack(initialChipCount: Int){
+
+  private var _chipCount = initialChipCount
 
   /* Returns current chip count. */
   def chipCount: Int = _chipCount

@@ -72,7 +72,7 @@ class Player(val seat: TableSeat, val chipStack: ChipStack) {
     */
   def postBlind(amount: Int): Unit = {
 
-    if (amount > currentBetSize)
+    if (amount > chipStack.chipCount)
       goAllIn()
 
     else
