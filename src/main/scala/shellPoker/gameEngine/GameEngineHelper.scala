@@ -7,6 +7,8 @@ object GameEngineHelper{
   def getStartingGameState(gameSettings: GameSettings): GameState = {
     //initializing pokerTable
     val table: PokerTable = new PokerTable(gameSettings.seatsNumber)
+
+
 /*
     //initializing players(full table )
     val players: List[Player] = (for(_ <- 0 until playersNumber)

@@ -3,7 +3,9 @@ package shellPoker.userCommunication
 import shellPoker.gameEngine._
 
 object Parser {
-    def stringToAction(userInput: String): Action = {
+
+  def stringToAction(userInput: String): Action = {
+
     val splittedInput = userInput.toLowerCase().split(" ").filterNot(_ == "").toList
     
     splittedInput.head match {
@@ -13,11 +15,11 @@ object Parser {
 
       case "call" => Call
 
-      case "all-in" => AllIn(0) //for now it's 0
-      case "allin" => AllIn(0) //for now it's 0
+      case "all-in" => AllIn
+      case "allin" => AllIn
       case "all" => {
           if (splittedInput.size < 2) throw InvalidInputException("Invalid input, try again...")
-          else if(splittedInput(1) == "in") AllIn(0) //for now it's 0
+          else if(splittedInput(1) == "in") AllIn //for now it's 0
           else throw InvalidInputException("Invalid input, try again...")
       }
 
