@@ -1,4 +1,4 @@
-package shellPoker.gameEngine
+package shellPoker.gameEngine.player
 
 /** Represents a single chip stack.
   * Responsible for adding and removing chips from
