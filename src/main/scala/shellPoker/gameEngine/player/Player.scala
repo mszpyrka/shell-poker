@@ -7,7 +7,7 @@ import shellPoker.gameEngine.table.TableSeat
 /** Represents a poker player.
   * Responsible for storing player's game state, hole cards, bet sizes and chip stack.
   */
-class Player(val seat: TableSeat, val chipStack: ChipStack) {
+class Player(val name: String, val seat: TableSeat, val chipStack: ChipStack) {
 
   private var _holeCards: (Card, Card) = _
   private var _currentBetSize: Int = 0
