@@ -14,6 +14,15 @@ class Player(val name: String, val seat: TableSeat, val chipStack: ChipStack) {
   private var status: Status = IsActive
 
 
+  // ===================================================================================================================
+  // Abstract API:
+  // ===================================================================================================================
+
+  def showCards(): Unit = println(name + " shows " + holeCards)
+  def muckCards(): Unit = println(name + " mucks")
+
+  ???
+
 
   // ===================================================================================================================
   // Methods and fields related to player's status in currently played hand:
@@ -45,8 +54,6 @@ class Player(val name: String, val seat: TableSeat, val chipStack: ChipStack) {
   def holeCards: (Card, Card) = _holeCards
   def setHoleCards(c1: Card, c2: Card): Unit = _holeCards = (c1, c2)
   def resetHoleCards(): Unit = _holeCards = null
-  def showCards(): Unit = ??? //playerActor ! ShowCards // to be implemented xD
-  def muckCards(): Unit = ??? //playerActor ! MuckCards  // this one as well LOL
 
 
 
