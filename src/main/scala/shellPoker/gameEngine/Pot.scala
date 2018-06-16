@@ -4,9 +4,9 @@ package shellPoker.gameEngine
   * Responsible for storing chips amount present in the pot
   * as well as all players that are playing the pot.
   *
-  * @param commitedPlayers Players that have committed to the pot (may contain players that have folded).
+  * @param committedPlayers Players that have committed to the pot (may contain players that have folded).
   */
-class Pot(val commitedPlayers: List[Player]) {
+class Pot(val committedPlayers: List[Player]) {
 
   private var _size: Int = 0
 
@@ -20,5 +20,5 @@ class Pot(val commitedPlayers: List[Player]) {
   }
 
   /* Retrieves all players that are entitled to get the pot in case of winning the hand. */
-  def entitledPlayers: List[Player] = commitedPlayers.filter(!_.hasFolded)
+  def entitledPlayers: List[Player] = committedPlayers.filter(!_.hasFolded)
 }
