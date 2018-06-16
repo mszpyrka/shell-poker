@@ -3,6 +3,21 @@ package shellPoker.gameEngine
 import shellPoker.gameEngine.player.Player
 import shellPoker.gameEngine.table.PokerTable
 
+object GameState {
+  def getInitGameState(gameSettings: GameSettings): GameState = 
+    new GameState(
+      table = new PokerTable(gameSettings.seatsNumber),
+      smallBlindValue = gameSettings.smallBlindValue,
+      bigBlindValue = gameSettings.bigBlindValue,
+      actionTaker = null,
+      roundEndingPlayer = null,
+      currentBettingRound = 0,
+      minRaise = -1,
+      minBet = -1,
+      lastBetSize = -1
+    )
+}
+
 
 /** Represents game state at some particular time.
   *

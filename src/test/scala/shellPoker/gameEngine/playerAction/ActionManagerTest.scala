@@ -6,15 +6,13 @@ import shellPoker.gameEngine.GameEngineTestHelper
 /** Tests for BettingManager class. */
 class ActionManagerTest extends FunSuite {
 
-
-  var actionManagerMock: ActionManager = _
-
   test("startNextBettingRound should set gameState properly"){
-    actionManagerMock = new ActionManager(GameEngineTestHelper.preGameState)
+    var actionManager: ActionManager = new ActionManager(GameEngineTestHelper.preRound1State)
 
-    actionManagerMock.startNextBettingRound()
+    //first round starting state checks
+    actionManager.startNextBettingRound()
 
-    val gameStateRound1 = actionManagerMock.gameState
+    val gameStateRound1 = actionManager.gameState
 
     assert(gameStateRound1.smallBlindValue === 50)
     assert(gameStateRound1.bigBlindValue === 100)
@@ -25,19 +23,23 @@ class ActionManagerTest extends FunSuite {
     assert(gameStateRound1.minBet === 200)
     assert(gameStateRound1.lastBetSize === 100)
 
-    actionManagerMock = new ActionManager(GameEngineTestHelper.preRound2State)
 
-    actionManagerMock.startNextBettingRound()
+    //second round starting state checks
+    actionManager = new ActionManager(GameEngineTestHelper.preRound2State)
 
-    val gameStateRound2 = actionManagerMock.gameState
+    actionManager.startNextBettingRound()
+
+    val gameStateRound2 = actionManager.gameState
 
     assert(gameStateRound2.smallBlindValue === 50)
     assert(gameStateRound2.bigBlindValue === 100)
-    assert(gameStateRound2.actionTaker === gameStateRound2.table.seats(2).player) 
-    assert(gameStateRound2.roundEndingPlayer === gameStateRound2.table.seats(2).player)
+    assert(gameStateRound2.actionTaker === gameStateRound2.table.seats(1).player) 
+    assert(gameStateRound2.roundEndingPlayer === gameStateRound2.table.seats(1).player)
     assert(gameStateRound2.currentBettingRound === 2)
     assert(gameStateRound2.minRaise === 100)
     assert(gameStateRound2.minBet === 100)
     assert(gameStateRound2.lastBetSize === 0)
   }
+
+  //validateAction and applyAction have their own dedicated tests
 }

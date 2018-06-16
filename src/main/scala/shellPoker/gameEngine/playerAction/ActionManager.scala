@@ -20,7 +20,7 @@ class ActionManager(initialGameState: GameState) {
 
     val table = gameState.table
 
-    if (gameState.currentBettingRound == 1)
+    if (gameState.currentBettingRound == 0)
       _gameState = gameState.getModified(
         currentBettingRound = gameState.currentBettingRound + 1,
         roundEndingPlayer = table.getNextActiveSeat(table.bigBlind).player,
