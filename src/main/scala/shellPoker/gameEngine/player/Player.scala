@@ -1,7 +1,7 @@
-package shellPoker.gameEngine
+package shellPoker.gameEngine.player
 
-import akka.actor.ActorRef
 import shellPoker.core.cards.Card
+import shellPoker.gameEngine.table.TableSeat
 
 
 /** Represents a poker player.
@@ -98,5 +98,4 @@ class Player(val seat: TableSeat, val chipStack: ChipStack) {
 
   /* Resets players current bet */
   def resetCurrentBet(): Unit = _currentBetSize = 0
-
 }
