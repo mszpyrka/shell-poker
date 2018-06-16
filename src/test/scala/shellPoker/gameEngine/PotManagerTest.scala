@@ -1,6 +1,8 @@
 package shellPoker.gameEngine
 
 import org.scalatest.{FunSuite, PrivateMethodTester}
+import shellPoker.gameEngine.player.{ChipStack, Player}
+import shellPoker.gameEngine.table.PokerTable
 
 /** Tests for ChipStack class. */
 class PotManagerTest extends FunSuite {

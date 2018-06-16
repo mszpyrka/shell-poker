@@ -1,6 +1,7 @@
 package shellPoker.gameEngine
 
 import org.scalatest.FunSuite
+import shellPoker.gameEngine.playerAction._
 
 /** Tests for BettingManager class. */
 class ActionManagerTest extends FunSuite {
