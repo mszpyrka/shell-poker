@@ -6,9 +6,9 @@ import shellPoker.gameEngine.player.{ChipStack, NegativeChipCountException, Play
 /** Tests for ChipStack class. */
 class PotTest extends FunSuite {
 
-  val player1 = new Player(new ChipStack(100))
-  val player2 = new Player(new ChipStack(100))
-  val player3 = new Player(new ChipStack(100))
+  val player1 = new Player(null, null, new ChipStack(500))
+  val player2 = new Player(null, null, new ChipStack(500))
+  val player3 = new Player(null, null, new ChipStack(500))
 
   val players = List(player1, player2, player3)
 
