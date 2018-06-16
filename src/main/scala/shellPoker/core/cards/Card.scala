@@ -27,10 +27,10 @@ case class Card(rank: CardRank, suit: Suit) {
     }
 
     this match {
-      case Card(_, Spades) => result += "\u2660"
-      case Card(_, Hearts) => result += "\u2665"
-      case Card(_, Diamonds) => result += "\u2666"
-      case Card(_, Clubs) => result += "\u2663"
+      case Card(_, Spades) => result += s"${Console.WHITE}\u2660"
+      case Card(_, Hearts) => result += s"${Console.RED}\u2665${Console.RESET}"
+      case Card(_, Diamonds) => result += s"${Console.RED}\u2666${Console.RESET}"
+      case Card(_, Clubs) => result += s"${Console.WHITE}\u2663"
       case _ => result += ""
     }
 
