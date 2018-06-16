@@ -24,6 +24,14 @@ private[handEnding] object PotDistributionHelper {
   /* Gets hand results for a single pot. */
   def getSinglePotResults(pot: Pot, communityCards: List[Card]): CompleteHandResults = {
 
+    if (pot.entitledPlayers.length == 1) {
+
+      val winner: Player = pot.entitledPlayers.head
+      val results: CompleteHandResults = new CompleteHandResults(List(winner))
+      results.addChipsToPlayer(winner, pot.size)
+      return results
+    }
+
     val bestHand: PokerHand = getBestHand(pot.entitledPlayers, communityCards)
     val winners = pot.entitledPlayers.filter(
       (player: Player) => getPlayerHand(player, communityCards).isEquallyStrongAs(bestHand))
