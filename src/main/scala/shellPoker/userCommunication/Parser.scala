@@ -14,11 +14,11 @@ object Parser {
 
       case "call" => Call
 
-      case "all-in" => AllIn //for now it's 0
-      case "allin" => AllIn //for now it's 0
+      case "all-in" => AllIn
+      case "allin" => AllIn
       case "all" => {
           if (splittedInput.size < 2) throw InvalidInputException("Invalid input, try again...")
-          else if(splittedInput(1) == "in") AllIn //for now it's 0
+          else if(splittedInput(1) == "in") AllIn
           else throw InvalidInputException("Invalid input, try again...")
       }
 
