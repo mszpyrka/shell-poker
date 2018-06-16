@@ -1,6 +1,4 @@
-package shellPoker.gameEngine
-
-import com.sun.xml.internal.ws.api.message.Message
+package shellPoker.gameEngine.playerAction
 
 /* Represents any action that may be taken during the game. */
 sealed trait Action
