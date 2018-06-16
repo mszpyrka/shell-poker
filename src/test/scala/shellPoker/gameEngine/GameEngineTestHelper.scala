@@ -6,7 +6,6 @@ import shellPoker.gameEngine.table.{PokerTable, TableSeat}
 
 object GameEngineTestHelper {
 
-  //some testing game settings
   var testGameSettings: GameSettings = new GameSettings(
       startingStack = 1000,
       seatsNumber = 4,
@@ -15,33 +14,22 @@ object GameEngineTestHelper {
       decisionTime = 30
   )
 
-  // //variables needed to create GameState
-  // var pokerTableMock: PokerTable = _
-  // var actionTaker: TableSeat = _
-  // var roundEndingSeat: TableSeat = _
-  // var currentBettingRound: Int = _
-  // var minRaise: Int = _
-  // var minBet: Int = _
-  // var lastBetSize: Int = _
-
-  // //Needed to properly initialize PokerTable
-  // var playersMock: List[Player] = _
-
-
+  //Helper method to set dealer button at given TableSeat
   def setDealerButton(table: PokerTable, seat: TableSeat): Unit = {
     table.positionManager.pickRandomPositions()
-    while(table.dealer != seat)
+    while(table.dealerButton != seat)
       table.positionManager.pickRandomPositions()
   }
 
 
+  // ===================================================================================================================
+  // GameStates for testing ActionManager
+  // ===================================================================================================================
 
+  def preRound1State: GameState = {
+    val initGameState: GameState = GameState.getInitGameState(testGameSettings)
 
-  //seats: 0(dealer)- 1000 chips, 1(smallBlind) - 1000 chips, 2(bigBlind) - 1000 chips, 3 - 1000 chips
-  def preGameState: GameState = {
-    val initGameState: GameState = GameEngineHelper.getStartingGameState(testGameSettings)
-
-    for(i <- testGameSetting.seatsNumber) initGameState.table.seats(i).createAndAddPlayer("test", testGameSetting.startingStack)
+    for(i <- 0 until testGameSettings.seatsNumber) initGameState.table.seats(i).createAndAddPlayer("test", testGameSettings.startingStack)
 
     setDealerButton(initGameState.table, initGameState.table.seats(0))
     
@@ -49,98 +37,112 @@ object GameEngineTestHelper {
   }
 
 
-  //also a check scenario
-  //seats: 0(dealer) - active 900, 1000, 1(smallBlind) - folded 950 , 2(bigBlind) -  active 900, 3 - active 900
   def preRound2State: GameState = {
-    val initGameState: GameState = preGameState
+    val initGameState: GameState = preRound1State
 
-    initGameState.table.seats(1).player.chipStack.removeChips(50)
-    initGameState.table.seats(2).player.chipStack.removeChips(100)
-    initGameState.table.seats(3).player.chipStack.removeChips(100)
+    initGameState.getModified(currentBettingRound = 1)
+  }
 
-    setDealerButton(pokerTableMock.seats(0))
 
-    pokerTableMock.seats(1).player.setFolded()
+  // ===================================================================================================================
+  // GameStates for testing ActionValidator
+  // ===================================================================================================================
 
-    initGameState.getModified(
-      currentBettingRound = 1,
-      minRaise = 100,
-      minBet = 200
+  //seats: 
+    // 0(dealer)                                      - currentBet: 0, status: Active, chips: 1000, 
+    // 1(smallBlind                                   - currentBet: 50, status: Active, chips: 950, 
+    // 2(bigBlind)                                    - currentBet: 100, status: Active, chips: 900,
+    // 3(actionTaker, roundEndingPlayer)              - currentBet: 0, status: Active, chips: 1000
+  def getRound1StartingState: GameState = {
+    val actionManager = new ActionManager(preRound1State)
+    actionManager.startNextBettingRound()
+
+    val gameState = actionManager.gameState
+
+    gameState.table.smallBlind.player.postBlind(testGameSettings.smallBlindValue)
+    gameState.table.bigBlind.player.postBlind(testGameSettings.bigBlindValue)
+
+    gameState
+  }
+
+
+  //seats: 
+    // 0(dealer)                                      - currentBet: 0, status: Active, chips: 1000, 
+    // 1(smallBlind, actionTaker, roundEndingPlayer)  - currentBet: 0, status: Active, chips: 1000, 
+    // 2(bigBlind)                                    - currentBet: 0, status: Active, chips: 1000,
+    // 3                                              - currentBet: 0, status: Active, chips: 1000
+  def getRound2StartingState: GameState = {
+    val actionManager = new ActionManager(preRound2State)
+    actionManager.startNextBettingRound()
+    
+    actionManager.gameState
+  }
+
+
+  //seats: 
+    // 0(dealer)                                      - currentBet: 0, status: Active, chips: 1000, 
+    // 1(smallBlind, actionTaker, roundEndingPlayer)  - currentBet: 0, status: Active, chips: 1000, 
+    // 2(bigBlind)                                    - currentBet: 0, status: Active, chips: 1000,
+    // 3                                              - currentBet: 0, status: Active, chips: 1000
+  def legalCheckState1: GameState = getRound2StartingState
+
+
+  //seats: 
+    // 0(dealer)                                      - currentBet: 0, status: Active, chips: 1000, 
+    // 1(smallBlind                                   - currentBet: 50, status: Active, chips: 950, 
+    // 2(bigBlind, actionTaker)                       - currentBet: 100, status: Active, chips: 900,
+    // 3(roundEndingPlayer)                           - currentBet: 0, status: Active, chips: 1000
+  def legalCheckState2: GameState = {
+    val gameState = getRound1StartingState
+
+    gameState.getModified(
+      actionTaker = gameState.table.seats(2).player,
+      roundEndingPlayer = gameState.table.seats(3).player
     )
   }
 
 
-  //validation scenarios
+    //seats: 
+    // 0(dealer)                                      - currentBet: 0, status: Active, chips: 1000, 
+    // 1(smallBlind, roundEndingPlayer)               - currentBet: 1100, status: Active, chips: 100, 
+    // 2(bigBlind, actionTaker)                       - currentBet: 0, status: Active, chips: 1000,
+    // 3                                              - currentBet: 0, status: Active, chips: 1000
+  def illegalCallState1: GameState = {
+    val gameState:GameState = getRound2StartingState
 
-  def legalCheckScenario1: GameState = {
-    val tmpActionManager = new ActionManager(preRound2State)
-    tmpActionManager.startNextBettingRound()
-    val tmpGameState = tmpActionManager.gameState
-    tmpGameState
-  }
+    gameState.table.seats(1).player.chipStack.addChips(200)
+    gameState.table.seats(1).player.chipStack.removeChips(1100)
 
-  def legalCheckScenario2: GameState = {
-    pokerTableMock = new PokerTable(testGameSettings.seatsNumber)
-
-    //initializing players
-    playersMock = (for(_ <- 0 until testGameSettings.seatsNumber) 
-      yield new Player(new ChipStack(testGameSettings.startingStack))).toList
-
-    //adding them to pokerTable
-    for(i <- 0 until testGameSettings.seatsNumber) pokerTableMock.seats(i).addPlayer(playersMock(i))
-
-    pokerTableMock.positionManager.setDealerButton(pokerTableMock.seats(0))
-
-    new GameState(
-      table = pokerTableMock,
-      smallBlindValue = testGameSettings.smallBlindValue,
-      bigBlindValue = testGameSettings.bigBlindValue,
-      actionTaker = pokerTableMock.seats(2),
-      roundEndingPlayer = pokerTableMock.seats(3),
-      currentBettingRound = 1,
-      minRaise = 100,
-      minBet = 200,
-      lastBetSize = testGameSettings.bigBlindValue
-    )
-  }
-
-
-  def illegalCallScenario1: GameState = {
-    pokerTableMock = new PokerTable(testGameSettings.seatsNumber)
-
-    //initializing players
-    playersMock = (for(_ <- 0 until testGameSettings.seatsNumber) 
-      yield new Player(new ChipStack(testGameSettings.startingStack))).toList
-
-    //adding them to pokerTable
-    for(i <- 0 until testGameSettings.seatsNumber) pokerTableMock.seats(i).addPlayer(playersMock(i))
-
-    pokerTableMock.positionManager.setDealerButton(pokerTableMock.seats(0))
-
-    new GameState(
-      table = pokerTableMock,
-      smallBlindValue = testGameSettings.smallBlindValue,
-      bigBlindValue = testGameSettings.bigBlindValue,
-      actionTaker = pokerTableMock.seats(2),
-      roundEndingPlayer = pokerTableMock.seats(3),
-      currentBettingRound = 1,
-      minRaise = 100,
-      minBet = 200,
+    gameState.getModified(
+      actionTaker = gameState.table.seats(2).player,
       lastBetSize = 1100
     )
   }
 
-  def illegalCallScenario2: GameState = legalCheckScenario2
+  //seats: 
+    // 0(dealer)                                      - currentBet: 0, status: Active, chips: 1000, 
+    // 1(smallBlind, actionTaker, roundEndingPlayer)  - currentBet: 0, status: Active, chips: 1000, 
+    // 2(bigBlind)                                    - currentBet: 0, status: Active, chips: 1000,
+    // 3                                              - currentBet: 0, status: Active, chips: 1000
+  def illegalCallState2: GameState = legalCheckState1
 
 
-  def illegalBetScenario: GameState = {
-    val tmpActionManager = new ActionManager(preGameState)
-    tmpActionManager.startNextBettingRound()
-    val tmpGameState = tmpActionManager.gameState
+  //seats: 
+    // 0(dealer)                                      - currentBet: 0, status: Active, chips: 1000, 
+    // 1(smallBlind                                   - currentBet: 50, status: Active, chips: 950, 
+    // 2(bigBlind, actionTaker)                       - currentBet: 100, status: Active, chips: 900,
+    // 3(roundEndingPlayer)                           - currentBet: 0, status: Active, chips: 1000
+  def illegalCallState3: GameState = legalCheckState2
 
-    tmpGameState.actionTaker.player.setBetSize(50)
 
-    tmpGameState
-  }
+  // def illegalBetScenario: GameState = {
+  //   val tmpActionManager = new ActionManager(preGameState)
+  //   tmpActionManager.startNextBettingRound()
+  //   val tmpGameState = tmpActionManager.gameState
+
+  //   tmpGameState.actionTaker.player.setBetSize(50)
+
+  //   tmpGameState
+  // }
 
 }
