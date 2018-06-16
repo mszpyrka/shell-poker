@@ -1,5 +1,8 @@
 package shellPoker.gameEngine
 
+import shellPoker.gameEngine.player.Player
+import shellPoker.gameEngine.table.PokerTable
+
 
 /** Represents game state at some particular time.
   *
@@ -25,5 +28,35 @@ class GameState(
     val currentBettingRound: Int,
     val minRaise: Int,
     val minBet: Int,
-    val lastBetSize: Int)
+    val lastBetSize: Int) {
+
+
+  /** Creates new GameState instance.
+    * Useful for applying partial modifications to certain state.
+    */
+  def getModified(
+      handNumber: Int = this.handNumber,
+      table: PokerTable = this.table,
+      smallBlindValue: Int = this.smallBlindValue,
+      bigBlindValue: Int = this.bigBlindValue,
+      actionTaker: Player = this.actionTaker,
+      roundEndingPlayer: Player = this.roundEndingPlayer,
+      currentBettingRound: Int = this.currentBettingRound,
+      minRaise: Int = this.minRaise,
+      minBet: Int = this.minBet,
+      lastBetSize: Int = this.lastBetSize): GameState = {
+
+    new GameState(
+      handNumber = handNumber,
+      table = table,
+      smallBlindValue = smallBlindValue,
+      bigBlindValue = bigBlindValue,
+      actionTaker = actionTaker,
+      roundEndingPlayer = roundEndingPlayer,
+      currentBettingRound = currentBettingRound,
+      minRaise = minRaise,
+      minBet = minBet,
+      lastBetSize = lastBetSize)
+  }
+}
     
