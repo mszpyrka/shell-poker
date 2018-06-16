@@ -1,7 +1,6 @@
-package shellPoker.gameEngine
+package shellPoker.gameEngine.player
 
 import org.scalatest.FunSuite
-import shellPoker.gameEngine.player.{ChipStack, NegativeChipCountException, Player}
 
 /** Tests for PositionHelper class. */
 class PlayerTest extends FunSuite {
