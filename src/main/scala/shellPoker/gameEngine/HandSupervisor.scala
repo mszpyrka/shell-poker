@@ -1,6 +1,9 @@
 package shellPoker.gameEngine
 
 import shellPoker.gameEngine.handEnding._
+import shellPoker.gameEngine.player.Player
+import shellPoker.gameEngine.playerAction.{Action, ActionManager, ActionValidation, Legal}
+import shellPoker.gameEngine.table.{River, Showdown}
 
 /** Supervisor of a single hand.
   *
