@@ -1,4 +1,4 @@
-package shellPoker.gameEngine
+package shellPoker.gameEngine.gameplay
 
 /** Represents some settings used to initialize and manage poker game.
   *

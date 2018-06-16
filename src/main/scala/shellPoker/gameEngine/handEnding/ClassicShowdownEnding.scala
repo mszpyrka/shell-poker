@@ -1,6 +1,6 @@
 package shellPoker.gameEngine.handEnding
 
-import shellPoker.gameEngine.GameState
+import shellPoker.gameEngine.gameplay.GameState
 import shellPoker.gameEngine.player.Player
 
 /** Represents the type of ending when at least two players did not fold on the river.

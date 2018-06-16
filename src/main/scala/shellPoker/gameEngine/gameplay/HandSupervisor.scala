@@ -1,4 +1,4 @@
-package shellPoker.gameEngine
+package shellPoker.gameEngine.gameplay
 
 import shellPoker.gameEngine.handEnding._
 import shellPoker.gameEngine.player.Player
@@ -9,22 +9,29 @@ import shellPoker.gameEngine.table.{River, Showdown}
   *
   * @param initState Initial state of the hand.
   */
-class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorActor) {
+abstract class HandSupervisor(initState: GameState) {
 
   private val actionManager: ActionManager = new ActionManager(initState)
-  private val showdownManager: ShowdownManager = new ShowdownManager
+  def gameState: GameState = actionManager.gameState
+
+  // Abstract API:
+  def updateHandStatus(): Unit
+  def requestAction(player: Player): Action
+  def logAction(player: Player, action: Action)
+  def logActionValidation(player: Player, validation: ActionValidation)
+  // end
 
   /** Plays a single hand, ending when some people win chips */
   def playSingleHand(): Unit = {
 
-    val table = initState.table
+    val table = gameState.table
 
     // Posting blinds
     if(!table.smallBlind.isEmpty)
-      table.smallBlind.player.postBlind(initState.smallBlindValue)
+      table.smallBlind.player.postBlind(gameState.smallBlindValue)
 
     if(!table.bigBlind.isEmpty)
-      table.bigBlind.player.postBlind(initState.bigBlindValue)
+      table.bigBlind.player.postBlind(gameState.bigBlindValue)
 
 
     // Shuffling the deck and dealing hole cards
@@ -36,15 +43,17 @@ class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorAct
 
     while (possibleAction && table.dealer.status != Showdown) {
 
+
+
       // Standard betting round elements
       actionManager.startNextBettingRound()
-      runBettingRound(supervisor)
+      runBettingRound()
       table.potManager.collectBets()
 
-      // Sending update info about current game state
-      supervisor ! update
+      // After betting round
+      updateHandStatus()
 
-      if (table.activePlayersNumber <= 1 && table.dealer.status != River)
+      if (table.activePlayersNumber <= 1 && table.dealer.status != River) // todo
         possibleAction = false
 
       if (possibleAction)
@@ -63,37 +72,36 @@ class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorAct
         PlayersAllIn
     }
 
-    val endingHelper: HandEndingHelper = HandEndingHelper.getHelper(table, handEndingType)
+    val endingHelper: HandEndingHelper = HandEndingHelper.getHelper(gameState, handEndingType)
 
     // Final actions needed to be ta
     endingHelper.proceedWithFinalActions()
-    endingHelper.calculateHandResults()
+    val handResults: CompleteHandResults = endingHelper.calculateHandResults()
 
-    supervisor ! finalStatus  //??? could be like that
+    applyHandResults(handResults)
+
+    updateHandStatus()
   }
 
-  private def runBettingRound(supervisor: RoomSupervisorActor) = {
+  private def runBettingRound(): Unit = {
 
     //if current action taker == null that means that the round has ended
     while(actionManager.actionTaker != null){
+
       //getting action from current action taker
       val currentAction: Action = getPlayerAction(actionManager.actionTaker)
 
       //apply that action to the state fo the action manager
       actionManager.applyAction(currentAction)
 
-      //send the supervisor info about current action
-      supervisor ! currentAction
+      logAction(actionManager.actionTaker, currentAction)
     }
   }
 
   private def getPlayerAction(actionTaker: Player): Action = {
 
-    //get player actor object corresponding to the current seat
-    val playerActor: PlayerActor = ???
-
     //get initial player action
-    var playerAction: Action = requestAction(playerActor)
+    var playerAction: Action = requestAction(actionTaker)
 
     //get initial action validation for this action
     var actionLegalness: ActionValidation = actionManager.validateAction(playerAction)
@@ -102,10 +110,10 @@ class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorAct
     while(actionLegalness != Legal){
 
       //sending illegal message info to the player actor
-      playerActor ! actionLegalness
+      logActionValidation(actionTaker, actionLegalness)
 
       //getting the action again
-      playerAction = requestAction(playerActor)
+      playerAction = requestAction(actionTaker)
 
       //get the action validation
       actionLegalness = actionManager.validateAction(playerAction)
@@ -114,6 +122,9 @@ class HandSupervisor(val initState: GameState, val supervisor: RoomSupervisorAct
     playerAction
   }
 
-  /** Prompts the player actor to return Action object */
-  private def requestAction(playerActor: PlayerActor): Action = ???
+  private def applyHandResults(results: CompleteHandResults): Unit = {
+
+    for (singlePlayerResult <- results.results)
+      singlePlayerResult.player.chipStack.addChips(singlePlayerResult.chipsWon)
+  }
 }

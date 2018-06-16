@@ -1,5 +1,6 @@
 package shellPoker.gameEngine
 
+import shellPoker.gameEngine.gameplay.{GameSettings, GameState}
 import shellPoker.gameEngine.table.PokerTable
 
 import scala.util.Random.shuffle

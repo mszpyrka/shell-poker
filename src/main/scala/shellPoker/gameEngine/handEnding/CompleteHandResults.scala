@@ -10,7 +10,7 @@ class CompleteHandResults(val players: List[Player]) {
   val results: List[SinglePlayerHandResults] =
     for (player <- players) yield new SinglePlayerHandResults(player)
 
-  def addChipsToPlayer(player: Player, amount: Int): Unit = {
+  def addChipsToPlayerResults(player: Player, amount: Int): Unit = {
 
     val targetSlot: SinglePlayerHandResults = results.find(_.player ==  player).orNull
     targetSlot.addChips(amount)
