@@ -11,7 +11,7 @@ case object PreFlop extends DealerStatus
 case object Flop extends DealerStatus
 case object Turn extends DealerStatus
 case object River extends DealerStatus
-case object Showdown extends DealerStatus ???
+case object Showdown extends DealerStatus //???
 
 /** Represents cards dealer.
   * Responsible for picking random cards from the deck and dealing hole cards,

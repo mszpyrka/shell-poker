@@ -45,8 +45,8 @@ class Player(val seat: TableSeat, val chipStack: ChipStack, val playerActor: Act
   def holeCards: (Card, Card) = _holeCards
   def setHoleCards(c1: Card, c2: Card): Unit = _holeCards = (c1, c2)
   def resetHoleCards(): Unit = _holeCards = null
-  def showCards(): Unit = playerActor ! ShowCards ??? // to be implemented xD
-  def muckCards(): Unit = playerActor ! MuckCards ??? // this one as well LOL
+  def showCards(): Unit = ??? //playerActor ! ShowCards // to be implemented xD
+  def muckCards(): Unit = ??? //playerActor ! MuckCards  // this one as well LOL
 
 
 
