@@ -1,5 +1,7 @@
 package shellPoker.gameEngine.table
 
+import shellPoker.gameEngine.player.Player
+
 /** Responsible for collecting bets from all players at the table after each finished betting round,
   * as well as managing main pot and potential side pots (also stores information about which pot
   * every player is entitled to take in case of winning the hand).
@@ -8,8 +10,6 @@ package shellPoker.gameEngine.table
   */
 class PotManager(table: PokerTable) {
 
-  def pots: List[Pot] = _pots
-
   /* Array of pots - extended every time new side pot needs to be created. */
   private var _pots: List[Pot] = Nil
 
@@ -17,8 +17,32 @@ class PotManager(table: PokerTable) {
   private var currentPot: Pot = _
 
 
+  def pots: List[Pot] = _pots
+
+
+
+  // ===================================================================================================================
+  // Main API:
+  // ===================================================================================================================
+
+
   /* Collects all players' bets and places them in proper pots. */
   def collectBets(): Unit = {
+
+    // Extends pots list until all players' bets are collected.
+    while(thereAreBetsToCollect) {
+
+      val potBet = inGamePlayerLowestBet
+
+      potsExtend()
+      collectCurrentPotBets(potBet)
+      potsReduce()
+    }
+
+  }
+
+  /* Collects all players' bets and places them in proper pots. */
+  def collectBets2(): Unit = {
 
     if (_pots == Nil)
       potsExtend()
@@ -40,6 +64,11 @@ class PotManager(table: PokerTable) {
   }
 
 
+
+  // ===================================================================================================================
+  // Helper methods:
+  // ===================================================================================================================
+
   /* Checks if there are any bets left to collect. */
   private def thereAreBetsToCollect: Boolean = table.players.exists(_.currentBetSize > 0)
 
@@ -58,10 +87,54 @@ class PotManager(table: PokerTable) {
   }
 
 
-  /* Collects chips from all players that go into current pot. */
+
+  private def potsReduce(): Unit = {
+
+    // Checks if two lists contain the same players
+    def containSamePlayers(playersA: List[Player], playersB: List[Player]): Boolean =
+      playersA.toSet.equals(playersB.toSet)
+
+    // Merges two consecutive pots into one
+    def mergeWithNext(pot: Pot): Unit = {
+
+      val potIndex = pots.indexOf(pot)
+      val nextPot = pots(potIndex + 1)
+      pot.addChips(nextPot.size)
+
+      val leftPart = pots.take(potIndex)
+      val rightPart = pots.drop(potIndex + 2)
+
+      _pots = leftPart ++ List(pot) ++ rightPart
+      currentPot = pots.last
+    }
+
+    // Finds a pot that can be merged with it's neighbour
+    def potToMerge: Pot = {
+
+      for ((potA, potB) <- pots zip pots.drop(1))
+        if (containSamePlayers(potA.entitledPlayers, potB.entitledPlayers))
+          return potA
+
+      null
+    }
+
+    while (potToMerge != null)
+      mergeWithNext(potToMerge)
+  }
+
+
+  /* Collects given amount of chips from all players and puts them into current pot. */
   private def collectCurrentPotBets(currentPotBet: Int): Unit = {
 
-    for (player <- table.players) {
+    val bettingPlayers = table.players.filter(_.currentBetSize > 0)
+
+    if (bettingPlayers.length == 1) {
+
+      bettingPlayers.head.regainBet()
+      return
+    }
+
+    for (player <- bettingPlayers) {
 
       if (player.currentBetSize > currentPotBet) {
 
@@ -72,7 +145,7 @@ class PotManager(table: PokerTable) {
       else {
 
         currentPot.addChips(player.currentBetSize)
-        player.resetCurrentBet()
+        player.clearCurrentBet()
       }
     }
   }
