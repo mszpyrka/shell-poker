@@ -28,7 +28,7 @@ object GameEngineTestHelper {
   // ===================================================================================================================
 
   def preRound1State: GameState = {
-    val initGameState: GameState = GameState.getInitGameState(testGameSettings)
+    val initGameState: GameState = GameState.getEmptyTableState(testGameSettings)
 
     for(i <- 0 until testGameSettings.seatsNumber) initGameState.table.seats(i).createAndAddPlayer("test", testGameSettings.startingStack)
 
