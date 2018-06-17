@@ -53,7 +53,7 @@ private[handEnding] object PotDistributionHelper {
 
 
   // ===================================================================================================================
-  // Methods and fields related to certain players' hands strength:
+  // Methods related to certain players' hands strength:
   // ===================================================================================================================
 
 
