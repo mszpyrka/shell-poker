@@ -22,7 +22,7 @@ class PlayerTest extends FunSuite {
     }
 
     test("resetting current bet") {
-      mockPlayer.resetCurrentBet()
+      mockPlayer.clearCurrentBet()
       assert(mockPlayer.currentBetSize == 0)
     }
 
@@ -83,7 +83,7 @@ class PlayerTest extends FunSuite {
 
     test("posting blind bigger than player's stack should put player all-in") {
 
-      mockPlayer.resetCurrentBet()
+      mockPlayer.clearCurrentBet()
       mockPlayer.postBlind(21)
       assert(mockPlayer.chipStack.chipCount === 0)
       assert(mockPlayer.currentBetSize === 20)
@@ -95,7 +95,7 @@ class PlayerTest extends FunSuite {
     val mockPlayer = new Player(null, null, new ChipStack(30))
     test("posting blind equal to player's stack should put player all-in") {
 
-      mockPlayer.resetCurrentBet()
+      mockPlayer.clearCurrentBet()
       mockPlayer.postBlind(30)
       assert(mockPlayer.chipStack.chipCount === 0)
       assert(mockPlayer.currentBetSize === 30)
