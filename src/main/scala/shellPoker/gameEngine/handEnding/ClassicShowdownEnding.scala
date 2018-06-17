@@ -13,9 +13,10 @@ class ClassicShowdownEnding(val gameState: GameState) extends HandEndingHelper(g
   override def proceedWithFinalActions(): Unit = {
 
     val showdownOrderPlayers = PotDistributionHelper.getShowdownOrder(gameState.table, gameState.roundEndingPlayer)
-    var showingPlayers: List[Player] = Nil
+    var showingPlayers: List[Player] = showdownOrderPlayers.head :: Nil
+    showdownOrderPlayers.head.showCards()
 
-    for (player <- showdownOrderPlayers) {
+    for (player <- showdownOrderPlayers.drop(1)) {
 
       if(shouldShowCards(player, showingPlayers)) {
 
@@ -27,8 +28,6 @@ class ClassicShowdownEnding(val gameState: GameState) extends HandEndingHelper(g
         player.muckCards()
     }
   }
-
-  //override def calculateHandResults(): CompleteHandResults = ???
 
 
   /* Checks if given player has any chance of winning any chips from the pot by showing his cards
