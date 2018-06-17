@@ -35,18 +35,24 @@ abstract class HandSupervisor(initState: GameState) extends SupervisorCommunicat
     logHandStatus(gameState)
 
     var possibleAction: Boolean = true
+    var allPlayersFoldedToBet = false
 
-    while (possibleAction && table.dealer.status != Showdown) {
+    while (possibleAction && !allPlayersFoldedToBet && table.dealer.status != Showdown) {
 
       // Standard betting round elements
       actionManager.startNextBettingRound()
       runBettingRound()
       table.potManager.collectBets()
 
-      if (table.activePlayersNumber <= 1 && table.dealer.status != River) // todo
+      if (table.playersInGameNumber <= 1)
+        allPlayersFoldedToBet = true
+
+      if (table.activePlayersNumber <= 1)
         possibleAction = false
 
-      if (possibleAction)
+      // Proceeds every time there is any further action possibility
+      // or there are some players in game on the river.
+      if (possibleAction || (!allPlayersFoldedToBet && table.dealer.status == River))
         table.dealer.proceedWithAction()
 
       // After betting round
@@ -58,7 +64,7 @@ abstract class HandSupervisor(initState: GameState) extends SupervisorCommunicat
       if (table.dealer.status == Showdown)
         ClassicShowdown
 
-      else if (table.playersInGameNumber <= 1)
+      else if (allPlayersFoldedToBet)
         AllFoldedToBet
 
       else
