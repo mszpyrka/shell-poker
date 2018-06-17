@@ -13,22 +13,22 @@ class LocalTestSupervisor(gameState: GameState) extends HandSupervisor(gameState
     var result: String = seat.seatNumber + ": "
 
     if (seat == gameState.table.dealerButton)
-      result += "D \t"
+      result += "\u24b9 "
 
-    else if (seat == gameState.table.bigBlind)
-      result += "BB\t"
+    /*else if (seat == gameState.table.bigBlind)
+      result += "\u24b7 "
 
     else if (seat == gameState.table.smallBlind)
-      result += "SB\t"
-
+      result += "\u24c8 "
+*/
     else
-      result += "  \t"
+      result += "  "
 
     if (!seat.isEmpty)
       result += "(" + seat.player.chipStack.chipCount + ")\t" + seat.player.name + "\tbet: " + seat.player.currentBetSize
 
-    else
-      result += "(empty)"
+    //else
+    //  result += "(empty)"
 
     if (!seat.isEmpty && seat.player.hasFolded) {
 
