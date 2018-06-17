@@ -46,11 +46,9 @@ object Parser {
     }
   }
 
-  def chipStackToUnicode(chipStack: ChipStack, maxChipCount: Int): String = {
+  def chipStackToUnicode(chipStack: ChipStack, startingChipCount: Int): String = {
 
     val chipUnicodes: List[String] = List("\u26c0", "\u26c1", "\u26c2", "\u26c3")
-
-    var result: String = ""
 
     val getRandomChipUnicode: (() => String) = () => Random.shuffle(chipUnicodes).head
 
@@ -60,19 +58,34 @@ object Parser {
       res
     }
 
-    if(chipStack.chipCount == 0) result += ""
 
-    else if (chipStack.chipCount < 0.1 * maxChipCount) 
+    var result: String = ""
+    val chips: Int = chipStack.chipCount
+
+    if(chips == 0) result += ""
+
+
+    else if (chips > 0 && chips < 0.1 * startingChipCount) 
+      result += generateChipStack(1)
+
+    else if (chips >= 0.1 * startingChipCount && chips < 0.5 * startingChipCount) 
       result += generateChipStack(2)
 
-    else if (chipStack.chipCount >= 0.1 * maxChipCount && chipStack.chipCount < 0.5 * maxChipCount) 
-      result += generateChipStack(4)
+    else if (chips >= 0.5 * startingChipCount && chips <  startingChipCount) 
+      result += generateChipStack(6)
 
-    else if (chipStack.chipCount >= 0.5 * maxChipCount && chipStack.chipCount <  maxChipCount) 
+    else if (chips == startingChipCount)
       result += generateChipStack(8)
 
-    else if (chipStack.chipCount >= maxChipCount)
-      result += generateChipStack(16)
+    else if (chips > startingChipCount && chips <= 1.5 * startingChipCount ) 
+      result += generateChipStack(10)
+
+    else if (chips > 1.5 * startingChipCount) 
+      result += generateChipStack(12)
+
+      
+
+    result += s" ~ ($chips)"
 
     result
   }
