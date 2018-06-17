@@ -25,7 +25,6 @@ class PotManager(table: PokerTable) {
   // Main API:
   // ===================================================================================================================
 
-
   /* Collects all players' bets and places them in proper pots. */
   def collectBets(): Unit = {
 
@@ -65,7 +64,6 @@ class PotManager(table: PokerTable) {
     currentPot = new Pot(table.players.filter(_.currentBetSize > 0))
     _pots = _pots ++ List(currentPot)
   }
-
 
 
   private def potsReduce(): Unit = {
