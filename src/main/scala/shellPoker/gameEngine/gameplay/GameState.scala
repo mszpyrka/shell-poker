@@ -4,7 +4,7 @@ import shellPoker.gameEngine.player.Player
 import shellPoker.gameEngine.table.PokerTable
 
 object GameState {
-  def getInitGameState(gameSettings: GameSettings): GameState = 
+  def getEmptyTableState(gameSettings: GameSettings): GameState = 
     new GameState(
       table = new PokerTable(gameSettings.seatsNumber),
       smallBlindValue = gameSettings.smallBlindValue,
