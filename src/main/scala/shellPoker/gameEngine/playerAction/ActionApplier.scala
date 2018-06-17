@@ -38,18 +38,18 @@ class ActionApplier {
     val actionTaker = gameState.actionTaker
     actionTaker.setBetSize(amount)
 
-    val midState = gameState.getModified(roundEndingPlayer = actionTaker)
-    val nextActionTaker = getNextActionTaker(midState)
-
     val newMinRaise = amount - gameState.lastBetSize
     val newMinBet = amount + newMinRaise
     val newLastBetSize = amount
 
-    midState.getModified(
+    // Some game state values must be applied to ensure that proper next action taker is found.
+    val midState = gameState.getModified(
+      roundEndingPlayer = actionTaker,
       minBet = newMinBet,
       minRaise = newMinRaise,
-      actionTaker = nextActionTaker,
       lastBetSize = newLastBetSize)
+
+    midState.getModified(actionTaker = getNextActionTaker(midState))
   }
 
 
@@ -65,18 +65,19 @@ class ActionApplier {
     val actionTaker = gameState.actionTaker
     actionTaker.setBetSize(gameState.lastBetSize + amount)
 
-    val midState = gameState.getModified(roundEndingPlayer = actionTaker)
-    val nextActionTaker = getNextActionTaker(midState)
-
     val newMinRaise = amount
     val newLastBetSize = gameState.lastBetSize + amount
     val newMinBet = newLastBetSize + amount
 
-    midState.getModified(
+    // Some game state values must be applied to ensure that proper next action taker is found.
+    val midState = gameState.getModified(
+      roundEndingPlayer = actionTaker,
       minBet = newMinBet,
       minRaise = newMinRaise,
-      actionTaker = nextActionTaker,
-      lastBetSize = newLastBetSize)
+      lastBetSize = newLastBetSize
+    )
+
+    midState.getModified(actionTaker = getNextActionTaker(midState))
   }
 
 
@@ -99,17 +100,14 @@ class ActionApplier {
       val newMinRaise = if (raised > gameState.minRaise) raised else gameState.minRaise
       val newMinBet = newLastBetSize + newMinRaise
 
+      // Some game state values must be applied to ensure that proper next action taker is found.
       val midState = gameState.getModified(
         roundEndingPlayer = actionTaker,
-        lastBetSize = newLastBetSize)
-
-      val nextActionTaker = getNextActionTaker(midState)
-
-      midState.getModified(
         lastBetSize = newLastBetSize,
         minBet = newMinBet,
-        minRaise = newMinRaise,
-        actionTaker = nextActionTaker)
+        minRaise = newMinRaise)
+
+      midState.getModified(actionTaker = getNextActionTaker(midState))
     }
 
     else
@@ -133,7 +131,6 @@ class ActionApplier {
     */
   private def applyFold(gameState: GameState): GameState = {
 
-    //val newActionTaker = getNextActionTaker(gameState)
     gameState.actionTaker.setFolded()
 
     if (gameState.actionTaker == gameState.roundEndingPlayer)
