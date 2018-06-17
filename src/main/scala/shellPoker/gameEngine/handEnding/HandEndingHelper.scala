@@ -27,7 +27,7 @@ abstract class HandEndingHelper(gameState: GameState, endingType: HandEndingType
 
   def proceedWithFinalActions(): Unit
 
-  /* Chooses winner (or winners) for every pot on the table. */
+  /* Creates complete list of players at the table with the amount of chips won. */
   def calculateHandResults(): CompleteHandResults = {
 
     val table = gameState.table
