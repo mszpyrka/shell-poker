@@ -12,8 +12,7 @@ object GameEngineTestHelper {
       seatsNumber = 4,
       smallBlindValue = 50,
       bigBlindValue = 100,
-      decisionTime = 30
-  )
+      decisionTime = 30)
 
   //Helper method to set dealer button at given TableSeat
   def setDealerButton(table: PokerTable, seat: TableSeat): Unit = {

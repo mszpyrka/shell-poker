@@ -25,7 +25,7 @@ abstract class RoomSupervisor(gameSettings: GameSettings) {
 
   // ===================================================================================================================
   // Concrete API:
-  // ==================================================================================================================
+  // ===================================================================================================================
 
   /** Gets initial state of the game, adds initialPlayers list. */
   private def getInitialGameState(initialPlayerIds: List[PlayerId]): GameState = {
@@ -38,6 +38,9 @@ abstract class RoomSupervisor(gameSettings: GameSettings) {
 
     //Add initial players to the table
     addPlayers(table, initialPlayerIds)
+
+    //Picks positions 
+    table.positionManager.pickRandomPositions()
 
     //Return ready for game initial state
     emptyTableState
