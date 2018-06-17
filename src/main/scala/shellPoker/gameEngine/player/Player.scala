@@ -74,6 +74,13 @@ class Player(val name: String, val seat: TableSeat, val chipStack: ChipStack) {
   // Methods and fields related to player's chip stack and bet size:
   // ===================================================================================================================
 
+  /* Returns chips from player's bet to his chip stack. */
+  def regainBet(): Unit = {
+
+    chipStack.addChips(currentBetSize)
+    clearCurrentBet()
+  }
+
   /* Returns the chip count in current player's bet. */
   def currentBetSize: Int = _currentBetSize
 
@@ -117,5 +124,5 @@ class Player(val name: String, val seat: TableSeat, val chipStack: ChipStack) {
   }
 
   /* Resets players current bet */
-  def resetCurrentBet(): Unit = _currentBetSize = 0
+  def clearCurrentBet(): Unit = _currentBetSize = 0
 }
