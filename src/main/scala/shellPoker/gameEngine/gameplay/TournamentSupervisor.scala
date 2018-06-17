@@ -3,7 +3,7 @@ import shellPoker.gameEngine.table._
 
 
 
-class TournamentSupervisor(gameSettings: GameSettings) extends RoomSupervisor(gameSettings) {
+class TournamentSupervisor[T < HandSupervisor](gameSettings: GameSettings) extends RoomSupervisor(gameSettings) {
 
     /** Adds player to the pendingPlayers list. */
     override def addPendingPlayer(pendingPlayer: PlayerId): Unit = {
@@ -17,7 +17,7 @@ class TournamentSupervisor(gameSettings: GameSettings) extends RoomSupervisor(ga
             pendingPlayers.count(_.seatNumber == pendingPlayer.seatNumber)
 
         //If there are none, add pendingPlayer to pendingPlayers
-        if(sameSeatCount == 0) pendingPlayer :: pendingPlayers
+        if(sameSeatCount == 0) pendingPlayers = pendingPlayer :: pendingPlayers
 
         //else throw some kind of exception
         else 
@@ -35,17 +35,18 @@ class TournamentSupervisor(gameSettings: GameSettings) extends RoomSupervisor(ga
 
         //Add pending players
         for(pendingPlayer <- pendingPlayers) 
-            previousEndingSeats(pendingPlayer.seatNumber).createAndAddPlayer(pendingPlayer.name, gameSettings.startingStack)
+          previousEndingSeats(pendingPlayer.seatNumber).createAndAddPlayer(pendingPlayer.name, gameSettings.startingStack)
 
         //Update player buffers
         currentPlayers = Nil
         pendingPlayers = Nil
 
         //Make new current players list
-        previousEndingSeats.filter(!_.isEmpty).foreach((tableSeat: TableSeat) => PlayerId(tableSeat.player.name, tableSeat.seatNumber) :: currentPlayers)
+        previousEndingSeats.filter(!_.isEmpty).foreach((tableSeat: TableSeat) => 
+          currentPlayers = PlayerId(tableSeat.player.name, tableSeat.seatNumber) :: currentPlayers)
 
         //Return new updated game state
-        previousEndingGameState.getModified(handNumber = previousEndingGameState.handNumber)
+        previousEndingGameState.getModified(handNumber = previousEndingGameState.handNumber + 1)
     }
 
     /** Gets initial state of the game, including initialPlayers list. */

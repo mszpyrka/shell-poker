@@ -9,28 +9,28 @@ abstract class RoomSupervisor(gameSettings: GameSettings) {
 
     //Buffers needed to maintain 
     var currentPlayers: List[PlayerId] = Nil
-    var pendingPlayers: List[PlayerId] = Nil
+    // var pendingPlayers: List[PlayerId] = Nil
 
 
     // ===================================================================================================================
     // Abstract API:
     // ===================================================================================================================
 
-    /** Adds player to the pendingPlayers list. */
-    def addPendingPlayer(pendingPlayer: PlayerId): Unit
+    // /** Adds player to the pendingPlayers list. */
+    // def addPendingPlayer(pendingPlayer: PlayerId): Unit
 
-    /** Gets updated gameState including pending players, excluding no chip players
-      * and updates currentPlayers and pendingPlayers buffers
-      */
-    def getUpdatedGameState(previousGameState: GameState): GameState
+    // /** Gets updated gameState including pending players, excluding no chip players
+    //   * and updates currentPlayers and pendingPlayers buffers
+    //   */
+    protected def getUpdatedGameState(previousGameState: GameState, pendingPlayers: List[PlayerId]): GameState
 
     /** Gets initial state of the game, including initialPlayers list.
       * and updates currentPlayers and pendingPlayers buffers
      */
-    def getInitialGameState(initialPlayers: List[PlayerId]): GameState
+    protected def getInitialGameState(initialPlayers: List[PlayerId]): GameState
 
     /** Gets new supervisor for this room supervisor. */
-    def getNewSupervisor(gameState: GameState): HandSupervisor
+    protected def getNewSupervisor(gameState: GameState): HandSupervisor
 
 
     // ===================================================================================================================
@@ -48,7 +48,7 @@ abstract class RoomSupervisor(gameSettings: GameSettings) {
 
 
         //Run the game
-        while(true)  {
+        while(true) {
             //Run a single hand, and return ending GameState
             val handEndingState: GameState = handSupervisor.playSingleHand()
 
