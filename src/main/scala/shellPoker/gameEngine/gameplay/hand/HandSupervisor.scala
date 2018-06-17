@@ -10,7 +10,7 @@ import shellPoker.gameEngine.table.{River, Showdown}
   *
   * @param initState Initial state of the hand.
   */
-abstract class HandSupervisor(initState: GameState) extends SupervisorCommunicator {
+class HandSupervisor(initState: GameState, communicator: HandSupervisorCommunicator) {
 
   private val actionManager: ActionManager = new ActionManager(initState)
   def gameState: GameState = actionManager.gameState
@@ -27,18 +27,18 @@ abstract class HandSupervisor(initState: GameState) extends SupervisorCommunicat
     if(!table.bigBlind.isEmpty)
       table.bigBlind.player.postBlind(gameState.bigBlindValue)
 
-
-    // Shuffling the deck and dealing hole cards
-    table.dealer.clearAllCards()
+    // Shuffles the deck and deals hole cards to each player.
+    table.dealer.shuffle()
     table.dealer.proceedWithAction()
-
-
-    logHandStatus(gameState)
 
     var possibleAction: Boolean = true
     var allPlayersFoldedToBet = false
 
+    communicator.logGameStatus(gameState)
+
     while (possibleAction && !allPlayersFoldedToBet && table.dealer.status != Showdown) {
+
+      communicator.logHandStatus(gameState)
 
       // Standard betting round elements
       actionManager.startNextBettingRound()
@@ -55,70 +55,49 @@ abstract class HandSupervisor(initState: GameState) extends SupervisorCommunicat
       // or there are some players in game on the river.
       if (possibleAction || (!allPlayersFoldedToBet && table.dealer.status == River))
         table.dealer.proceedWithAction()
-
-      // After betting round
-      logHandStatus(gameState)
     }
 
-
     val handEndingType = {
-      if (table.dealer.status == Showdown)
-        ClassicShowdown
 
-      else if (allPlayersFoldedToBet)
-        AllFoldedToBet
-
-      else
-        PlayersAllIn
+      if (table.dealer.status == Showdown) ClassicShowdown
+      else if (allPlayersFoldedToBet) AllFoldedToBet
+      else PlayersAllIn
     }
 
     val endingHelper: HandEndingHelper = HandEndingHelper.getHelper(gameState, handEndingType)
 
-    // Final actions needed to be ta
+    // Final actions needed to be taken before the winners are picked.
     endingHelper.proceedWithFinalActions()
     val handResults: CompleteHandResults = endingHelper.calculateHandResults()
 
     applyHandResults(handResults)
 
-    logHandStatus(gameState)
+    communicator.logHandResults(handResults, gameState)
 
     gameState
   }
 
   private def runBettingRound(): Unit = {
 
-    //if current action taker == null that means that the round has ended
+    // if current action taker == null that means that the round has ended
     while(actionManager.actionTaker != null){
 
-      //getting action from current action taker
       val currentAction: Action = getPlayerAction(actionManager.actionTaker)
-
-      logAction(actionManager.actionTaker, currentAction)
-
-      //apply that action to the state fo the action manager
+      communicator.logAction(actionManager.actionTaker, currentAction)
       actionManager.applyAction(currentAction)
     }
   }
 
   private def getPlayerAction(actionTaker: Player): Action = {
 
-    //get initial player action
-    var playerAction: Action = requestAction(actionTaker)
+    var playerAction: Action = communicator.requestAction(actionTaker)
+    var validation: ActionValidation = actionManager.validateAction(playerAction)
 
-    //get initial action validation for this action
-    var actionLegalness: ActionValidation = actionManager.validateAction(playerAction)
+    while(validation != Legal){
 
-    //keep requesting for legal action
-    while(actionLegalness != Legal){
-
-      //sending illegal message info to the player actor
-      logActionValidation(actionTaker, actionLegalness)
-
-      //getting the action again
-      playerAction = requestAction(actionTaker)
-
-      //get the action validation
-      actionLegalness = actionManager.validateAction(playerAction)
+      communicator.logActionValidation(actionTaker, validation)
+      playerAction = communicator.requestAction(actionTaker)
+      validation = actionManager.validateAction(playerAction)
     }
 
     playerAction
