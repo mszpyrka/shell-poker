@@ -1,15 +1,17 @@
 package shellPoker.gameEngine.gameplay.hand
 
+import shellPoker.core.cards.Card
 import shellPoker.gameEngine.InvalidInputException
 import shellPoker.gameEngine.gameplay.GameState
+import shellPoker.gameEngine.handEnding.CompleteHandResults
 import shellPoker.gameEngine.player.Player
 import shellPoker.gameEngine.playerAction.{Action, ActionValidation}
 import shellPoker.gameEngine.table.{Pot, TableSeat}
 import shellPoker.userCommunication.Parser
 
-class LocalTestSupervisor(gameState: GameState) extends HandSupervisor(gameState) {
+class LocalCommunicator extends HandSupervisorCommunicator {
 
-  private def seatFormat(seat: TableSeat): String = {
+  private def seatFormat(seat: TableSeat, gameState: GameState): String = {
 
     var result: String = seat.seatNumber + ": "
 
@@ -26,7 +28,8 @@ class LocalTestSupervisor(gameState: GameState) extends HandSupervisor(gameState
       result += "  "
 
     if (!seat.isEmpty)
-      result += "(" + seat.player.chipStack.chipCount + ")\t" + seat.player.name + "\tbet: " + seat.player.currentBetSize
+      result += "(bet: " + seat.player.currentBetSize + ")\t" + seat.player.name + " " +
+        Parser.chipStackToUnicode(seat.player.chipStack, 10000)
 
     //else
     //  result += "(empty)"
@@ -44,7 +47,7 @@ class LocalTestSupervisor(gameState: GameState) extends HandSupervisor(gameState
     result
   }
 
-  private def potFormat(pots: List[Pot]): String = {
+  private def potFormat(pots: List[Pot], gameState: GameState): String = {
 
     var result: String = "Pot: "
     for (i <- pots.indices)
@@ -56,10 +59,15 @@ class LocalTestSupervisor(gameState: GameState) extends HandSupervisor(gameState
 
   override def logHandStatus(gameState: GameState): Unit = {
 
+    println("========================================================================")
     println("status:")
-    println("table: " + gameState.table.communityCards)
-    println(potFormat(gameState.table.potManager.pots))
-    gameState.table.seats.foreach((seat: TableSeat) => println(seatFormat(seat)))
+    print("table: ")
+    gameState.table.communityCards.foreach((card: Card) => print(card.toString + " "))
+    println("")
+    println(potFormat(gameState.table.potManager.pots, gameState))
+    gameState.table.seats.foreach((seat: TableSeat) => println(seatFormat(seat, gameState)))
+    println("========================================================================")
+    println("")
   }
 
   /** Prompts the player actor to return Action object */
@@ -96,6 +104,19 @@ class LocalTestSupervisor(gameState: GameState) extends HandSupervisor(gameState
 
     print(player.name + ": ")
     println(validation)
+  }
+
+  override def logGameStatus(gameState: GameState): Unit = println("hand: " + gameState.handNumber)
+
+  override def logHandResults(
+    results: CompleteHandResults,
+    gameState: GameState): Unit = {
+
+
+
+    println("")
+    println("somebody got some chips XD")
+    println("")
   }
 
 }
