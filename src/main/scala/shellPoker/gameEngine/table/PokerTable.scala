@@ -80,13 +80,19 @@ class PokerTable(val seatsAmount: Int){
 
 
   /* Finds next player at the table (searches clockwise). */
-  def getNextPlayer(startingPlayer: Player): Player =
-    getNextTakenSeat(startingPlayer.seat).player
+  def getNextPlayer(startingPlayer: Player): Player = {
+
+    val targetSeat = getNextTakenSeat(startingPlayer.seat)
+    if (targetSeat == null) null else targetSeat.player
+  }
 
 
   /* Finds next player that can still take some actions. */
-  def getNextActivePlayer(startingPlayer: Player): Player =
-    getNextActiveSeat(startingPlayer.seat).player
+  def getNextActivePlayer(startingPlayer: Player): Player = {
+
+    val targetSeat = getNextActiveSeat(startingPlayer.seat)
+    if (targetSeat == null) null else targetSeat.player
+  }
 
 
   /* Searches for the first seat following some particular seat at the table. */
