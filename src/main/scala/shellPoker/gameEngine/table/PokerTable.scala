@@ -54,11 +54,15 @@ class PokerTable(val seatsAmount: Int){
 
 
   // ===================================================================================================================
-  // Methods related to cooperation with the dealer:
+  // Methods related to cooperation with the dealer and managing cards at the table:
   // ===================================================================================================================
 
   /** Clears all cards at the table (community and hole cards). */
-  def resetCards(): Unit = dealer.clearAllCards()
+  def resetCards(): Unit = {
+
+    players.foreach(_.resetHoleCards())
+    resetCommunityCards()
+  }
 
   /** Clears all cards from the table. */
   def resetCommunityCards(): Unit = _communityCards = Nil
@@ -77,7 +81,6 @@ class PokerTable(val seatsAmount: Int){
   // ===================================================================================================================
   // Helper methods for easy navigation around the table:
   // ===================================================================================================================
-
 
   /* Finds next player at the table (searches clockwise). */
   def getNextPlayer(startingPlayer: Player): Player = {
