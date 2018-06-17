@@ -11,16 +11,6 @@ import shellPoker.gameEngine.table.{PokerTable, Pot}
 private[handEnding] object PotDistributionHelper {
 
 
-  /* Gets all players from given list that are included in pot's entitled players,
-   * who have the strongest hands (usually there will be only one winner of the pot). */
-  def getPotWinners(players: List[Player], communityCards: List[Card], pot: Pot): List[Player] = {
-
-    val bestHand: PokerHand = getBestHand(players, communityCards)
-
-    players.filter(getPlayerHand(_, communityCards).isEquallyStrongAs(bestHand))
-  }
-
-
   /* Gets hand results for a single pot. */
   def getSinglePotResults(pot: Pot, communityCards: List[Card]): CompleteHandResults = {
 
@@ -59,6 +49,12 @@ private[handEnding] object PotDistributionHelper {
 
     result
   }
+
+
+
+  // ===================================================================================================================
+  // Methods and fields related to certain players' hands strength:
+  // ===================================================================================================================
 
 
   /* Finds the strongest hand at the table. */
