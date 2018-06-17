@@ -125,21 +125,11 @@ class ActionApplier {
   }
 
 
-  /** The only changes must be applied when folding player is the one that
-    * ends current round (this is the case when player is the first action taker
-    * in betting round). In that case roundEndingPlayer must be moved to next player.
-    */
+  /** Folding causes no special changes in the game state other than player's status change. */
   private def applyFold(gameState: GameState): GameState = {
 
     gameState.actionTaker.setFolded()
-
-    if (gameState.actionTaker == gameState.roundEndingPlayer)
-      gameState.getModified(
-        roundEndingPlayer = getNextActionTaker(gameState),
-        actionTaker = getNextActionTaker(gameState))
-
-    else
-      gameState.getModified(actionTaker = getNextActionTaker(gameState))
+    gameState.getModified(actionTaker = getNextActionTaker(gameState))
   }
 
 
@@ -159,16 +149,22 @@ class ActionApplier {
     */
   private def getNextActionTaker(gameState: GameState): Player = {
 
-    val nextActivePlayer = gameState.table.getNextActivePlayer(gameState.actionTaker)
-    if (nextActivePlayer == null)
+    val actionTaker = gameState.actionTaker
+    val nextActionTaker = gameState.table.getNextActivePlayer(actionTaker)
+    val actionFinisher = gameState.roundEndingPlayer
+
+    if (nextActionTaker == null)
       return null
 
-    if(gameState.table.activePlayersNumber <= 1 && nextActivePlayer.currentBetSize >= gameState.lastBetSize)
-      return null
+    val playersRange: List[Player] = gameState.table.getSeatsRange(
+        actionTaker.seat,
+        nextActionTaker.seat
+      ).map(_.player)
 
-    if (nextActivePlayer == gameState.roundEndingPlayer)
-      return null
+    if (nextActionTaker == actionFinisher || playersRange.contains(actionFinisher))
+      null
 
-    nextActivePlayer
+    else
+      nextActionTaker
   }
 }
