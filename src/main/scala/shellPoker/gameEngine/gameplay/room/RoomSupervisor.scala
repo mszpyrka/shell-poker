@@ -59,8 +59,13 @@ abstract class RoomSupervisor(gameSettings: GameSettings) {
     //Add pending players
     addPlayers(table, pendingPlayerIds)
 
+    table.positionManager.movePositions()
+
     //Return new updated game state
-    previousGameState.getModified(handNumber = previousGameState.handNumber + 1)
+    previousGameState.getModified(
+      handNumber = previousGameState.handNumber + 1,
+      currentBettingRound = 0
+      )
   }
 
 

@@ -43,4 +43,6 @@ object Parser {
       case _ => throw InvalidInputException("Invalid input, try again...")
     }
   }
+
+  // def chipStackToUnicode()
 }
