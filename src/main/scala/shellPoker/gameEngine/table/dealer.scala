@@ -29,12 +29,10 @@ class Dealer(table: PokerTable) {
   def status: DealerStatus = _status
 
 
-  /* Restores the deck, clears table's community cards and players' hole cards, sets the status to PreGame. */
-  def clearAllCards(): Unit = {
+  /* Restores the deck, shuffles the cards, sets the status to PreGame. */
+  def shuffle(): Unit = {
 
     deckIterator = Random.shuffle(CardDeck.deck).iterator
-    table.resetCommunityCards()
-    table.players.foreach(_.resetHoleCards())
     _status = PreGame
   }
 
