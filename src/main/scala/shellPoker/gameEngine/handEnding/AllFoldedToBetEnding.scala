@@ -18,19 +18,4 @@ class AllFoldedToBetEnding(val gameState: GameState) extends HandEndingHelper(ga
     val winner = table.playersInHand.head
     winner.muckCards()
   }
-
-  /*
-  /* Gives whole pot to the only player in hand left. */
-  override def calculateHandResults(): CompleteHandResults = {
-
-    val table = gameState.table
-    val pots: List[Pot] = table.potManager.pots
-    val winner: Player = table.playersInHand.head
-    val results = new CompleteHandResults(table.players)
-    for (pot <- pots)
-      results.addChipsToPlayer(winner, pot.size)
-
-    results
-  }
-  */
 }
