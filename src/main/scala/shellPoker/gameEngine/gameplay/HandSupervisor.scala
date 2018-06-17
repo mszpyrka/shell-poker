@@ -15,7 +15,7 @@ abstract class HandSupervisor(initState: GameState) extends SupervisorCommunicat
   def gameState: GameState = actionManager.gameState
 
   /** Plays a single hand, ending when some people win chips */
-  def playSingleHand(): Unit = {
+  def playSingleHand(): GameState = {
 
     val table = gameState.table
 
@@ -74,6 +74,8 @@ abstract class HandSupervisor(initState: GameState) extends SupervisorCommunicat
     applyHandResults(handResults)
 
     logHandStatus(gameState)
+
+    gameState
   }
 
   private def runBettingRound(): Unit = {
