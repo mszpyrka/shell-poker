@@ -44,6 +44,10 @@ class PotManager(table: PokerTable) {
   }
 
 
+  /* Restarts manager's state. */
+  def clear(): Unit = _pots = Nil
+
+
 
   // ===================================================================================================================
   // Helper methods:
