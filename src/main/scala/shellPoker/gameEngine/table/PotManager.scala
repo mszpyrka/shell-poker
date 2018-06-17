@@ -32,34 +32,15 @@ class PotManager(table: PokerTable) {
     // Extends pots list until all players' bets are collected.
     while(thereAreBetsToCollect) {
 
-      val potBet = inGamePlayerLowestBet
+      val potBet = lowestBet
 
       potsExtend()
       collectCurrentPotBets(potBet)
       potsReduce()
     }
 
-  }
-
-  /* Collects all players' bets and places them in proper pots. */
-  def collectBets2(): Unit = {
-
-    if (_pots == Nil)
-      potsExtend()
-
-    if (thereAreBetsToCollect) {
-      val mainPotBet = inGamePlayerLowestBet
-      collectCurrentPotBets(mainPotBet)
-    }
-
-    // Extends pots list until all players' bets are collected.
-    while(thereAreBetsToCollect) {
-
-      val sidePotBet = inGamePlayerLowestBet
-
-      potsExtend()
-      collectCurrentPotBets(sidePotBet)
-    }
+    // Returns uncalled bets to players' stacks (there will be at most one such player at a time).
+    table.players.foreach(_.regainBet())
 
   }
 
@@ -69,14 +50,13 @@ class PotManager(table: PokerTable) {
   // Helper methods:
   // ===================================================================================================================
 
-  /* Checks if there are any bets left to collect. */
-  private def thereAreBetsToCollect: Boolean = table.players.exists(_.currentBetSize > 0)
+  /* Checks if there are any bets left to collect
+   * (when there are at least two players with non-zero bets). */
+  private def thereAreBetsToCollect: Boolean = table.players.count(_.currentBetSize > 0) >= 2
 
 
-  /* Finds the lowest bet made by still active player. */
-  private def inGamePlayerLowestBet: Int =
-    table.players.filter(!_.hasFolded).
-      map(_.currentBetSize).filter(_ > 0).min
+  /* Finds the lowest bet currently at the table. */
+  private def lowestBet: Int = table.players.map(_.currentBetSize).filter(_ > 0).min
 
 
   /* Creates new pot and initializes it with the list of players whose bets will go into it. */
@@ -127,12 +107,6 @@ class PotManager(table: PokerTable) {
   private def collectCurrentPotBets(currentPotBet: Int): Unit = {
 
     val bettingPlayers = table.players.filter(_.currentBetSize > 0)
-
-    if (bettingPlayers.length == 1) {
-
-      bettingPlayers.head.regainBet()
-      return
-    }
 
     for (player <- bettingPlayers) {
 
