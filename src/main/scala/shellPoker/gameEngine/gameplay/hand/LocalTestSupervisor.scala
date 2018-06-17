@@ -1,8 +1,9 @@
-package shellPoker.gameEngine.gameplay
+package shellPoker.gameEngine.gameplay.hand
 
 import shellPoker.gameEngine.InvalidInputException
+import shellPoker.gameEngine.gameplay.GameState
 import shellPoker.gameEngine.player.Player
-import shellPoker.gameEngine.playerAction.{Action, ActionValidation, Legal}
+import shellPoker.gameEngine.playerAction.{Action, ActionValidation}
 import shellPoker.gameEngine.table.{Pot, TableSeat}
 import shellPoker.userCommunication.Parser
 

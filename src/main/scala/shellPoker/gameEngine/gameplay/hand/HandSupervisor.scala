@@ -1,5 +1,6 @@
-package shellPoker.gameEngine.gameplay
+package shellPoker.gameEngine.gameplay.hand
 
+import shellPoker.gameEngine.gameplay.GameState
 import shellPoker.gameEngine.handEnding._
 import shellPoker.gameEngine.player.Player
 import shellPoker.gameEngine.playerAction.{Action, ActionManager, ActionValidation, Legal}

@@ -1,4 +1,6 @@
-package shellPoker.gameEngine.gameplay
+package shellPoker.gameEngine.gameplay.room
+
+import shellPoker.gameEngine.gameplay.hand.HandSupervisor
 import shellPoker.gameEngine.table._
 
 
