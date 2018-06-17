@@ -1,8 +1,9 @@
 package shellPoker.gameEngine.gameplay.room
 
-import shellPoker.gameEngine.gameplay.hand.HandSupervisor
+import shellPoker.gameEngine.gameplay.hand.{HandSupervisor, HandSupervisorCommunicator}
 import shellPoker.gameEngine.table._
 import shellPoker.gameEngine.gameplay._
+import shellPoker.gameEngine.player.{ChipStack, Player}
 
 
 /* Responsible for holding basic player information */
@@ -10,39 +11,55 @@ case class PlayerId(name: String, seatNumber: Int)
 
 
 /* Main game supervisor, responsible for running the game. */
-abstract class RoomSupervisor(gameSettings: GameSettings) {
+abstract class RoomSupervisor(gameSettings: GameSettings, communicator: HandSupervisorCommunicator) {
 
   // ===================================================================================================================
-  // Abstract API:
+  // Class API:
   // ===================================================================================================================
 
-  /** Gets players that joined the game during some hand. */
-  protected def getPendingPlayers(): List[PlayerId]
+  /** Runs main loop of the game. */
+  def run(initialPlayerIds: List[PlayerId]): Unit = {
 
-  /** Gets chosen hand supervisor for this room supervisor. */
-  protected def getHandSupervisor(gameState: GameState): HandSupervisor 
+    val initialGameState: GameState = getInitialGameState(initialPlayerIds)
+    var handSupervisor: HandSupervisor = new HandSupervisor(initialGameState, communicator)
+
+    // Run the game
+    while(true) {
+
+      val handEndingState: GameState = handSupervisor.playSingleHand()
+      val pendingPlayers: List[PlayerId] = getPendingPlayers
+      val updatedGameState = getUpdatedGameState(handEndingState, pendingPlayers)
+
+      handSupervisor = new HandSupervisor(updatedGameState, communicator)
+    }
+
+  }
+
 
 
   // ===================================================================================================================
-  // Concrete API:
+  // Abstract methods:
+  // ===================================================================================================================
+
+  /** Obtains players from external source that joined the game during some hand. */
+  protected def getPendingPlayers: List[PlayerId]
+
+
+
+  // ===================================================================================================================
+  // Private helper methods:
   // ===================================================================================================================
 
   /** Gets initial state of the game, adds initialPlayers list. */
   private def getInitialGameState(initialPlayerIds: List[PlayerId]): GameState = {
 
-    //Get empty table state according to gameSettings
     val emptyTableState: GameState = GameState.getEmptyTableState(gameSettings)
-
-    //Get the poker table from gameState
     val table: PokerTable = emptyTableState.table
-
-    //Add initial players to the table
     addPlayers(table, initialPlayerIds)
 
-    //Picks positions 
     table.positionManager.pickRandomPositions()
+    table.resetCards()
 
-    //Return ready for game initial state
     emptyTableState
   }
 
@@ -50,62 +67,42 @@ abstract class RoomSupervisor(gameSettings: GameSettings) {
   /** Gets updated gameState - adds pending players, removes empty stack players. */
   private def getUpdatedGameState(previousGameState: GameState, pendingPlayerIds: List[PlayerId]): GameState = {
 
-    //Get previous table seats
     val table: PokerTable = previousGameState.table
 
-    //Remove busted players
     removeBustedPlayers(table)
-
-    //Add pending players
     addPlayers(table, pendingPlayerIds)
-
     table.positionManager.movePositions()
+    table.resetCards()
+    table.players.foreach(_.setActive())
+    table.potManager.clear()
 
     //Return new updated game state
     previousGameState.getModified(
       handNumber = previousGameState.handNumber + 1,
-      currentBettingRound = 0
-      )
+      currentBettingRound = 0)
   }
 
 
   /** Removes busted players from the poker table. */
-  private def removeBustedPlayers(table: PokerTable) =
+  private def removeBustedPlayers(table: PokerTable): Unit =
     table.seats.filter(!_.isEmpty).foreach((tableSeat: TableSeat) =>
       if (tableSeat.player.chipStack.chipCount <= 0) 
         tableSeat.removePlayer())
 
 
   /** Adds list of playerIds to the poker table. */
-  private def addPlayers(table: PokerTable, playerIds: List[PlayerId]) = 
-    playerIds.foreach((playerId: PlayerId) =>
-      table.seats(playerId.seatNumber).createAndAddPlayer(playerId.name, gameSettings.startingStack))
+  private def addPlayers(table: PokerTable, playerIds: List[PlayerId]): Unit = {
 
+    def addPlayerById(id: PlayerId): Unit = {
 
-  /** Runs main loop of the game. */
-  def run(initialPlayerIds: List[PlayerId]): Unit = {
+      val newPlayer = new Player(
+        id.name,
+        table.seats(id.seatNumber),
+        new ChipStack(gameSettings.startingStack))
 
-    //Get initial game state
-    val initialGameState: GameState = getInitialGameState(initialPlayerIds)
-
-    //Get initial hand supervisor
-    var handSupervisor: HandSupervisor = getHandSupervisor(initialGameState)
-
-    //Run the game
-    while(true) {
-      //Run a single hand, and return ending GameState
-      val handEndingState: GameState = handSupervisor.playSingleHand()
-
-      //Get pending players from external source
-      val pendingPlayers: List[PlayerId] = getPendingPlayers()
-
-      //Get an updated game state, adding pending players and removing no chip players
-      val updatedGameState = getUpdatedGameState(handEndingState, pendingPlayers)
-
-      //Create new hand supervisor
-      handSupervisor = getHandSupervisor(updatedGameState)
+      table.seats(id.seatNumber).addPlayer(newPlayer)
     }
 
+    playerIds.foreach((id: PlayerId) => addPlayerById(id))
   }
-
 }
