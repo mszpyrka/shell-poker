@@ -18,22 +18,4 @@ class PlayersAllInEnding(val gameState: GameState) extends HandEndingHelper(game
     while(table.dealer.status != Showdown)
       table.dealer.proceedWithAction()
   }
-
-  /*
-  /* Chooses winner (or winners) for every pot on the table. */
-  override def calculateHandResults(): CompleteHandResults = {
-
-    val table = gameState.table
-    val results = new CompleteHandResults(table.players)
-
-    for (pot <- table.potManager.pots) {
-
-      val partialResults: CompleteHandResults = PotDistributionHelper.getSinglePotResults(pot, table.communityCards)
-      for (singleResult <- partialResults.results)
-        results.addChipsToPlayer(singleResult.player, singleResult.chipsWon)
-    }
-
-    results
-  }
-  */
 }
