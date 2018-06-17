@@ -11,35 +11,27 @@ class Player(val name: String, val seat: TableSeat, val chipStack: ChipStack) {
 
   private var _holeCards: (Card, Card) = _
   private var _currentBetSize: Int = 0
-  private var status: Status = IsActive
+  private var gameStatus: GameStatus = IsActive
+  private var cardsStatus: CardsStatus = None
 
-
-  // ===================================================================================================================
-  // Abstract API:
-  // ===================================================================================================================
-
-  def showCards(): Unit = println(name + " shows " + holeCards)
-  def muckCards(): Unit = println(name + " mucks")
-
-  ???
 
 
   // ===================================================================================================================
-  // Methods and fields related to player's status in currently played hand:
+  // Methods and fields related to player's gameStatus in currently played hand:
   // ===================================================================================================================
 
-  /* Private helper class for keeping track of current player's status. */
-  private sealed class Status
-  private case object IsActive extends Status
-  private case object HasFolded extends Status
-  private case object IsAllIn extends Status
+  /* Private helper class for keeping track of current player's gameStatus. */
+  private sealed class GameStatus
+  private case object IsActive extends GameStatus
+  private case object HasFolded extends GameStatus
+  private case object IsAllIn extends GameStatus
 
-  /* Sets player's game status. */
-  private def setStatus(status: Status): Unit = this.status = status
+  /* Sets player's game gameStatus. */
+  private def setStatus(status: GameStatus): Unit = this.gameStatus = status
 
-  def isActive: Boolean = this.status == IsActive
-  def hasFolded: Boolean = this.status == HasFolded
-  def isAllIn: Boolean = this.status == IsAllIn
+  def isActive: Boolean = this.gameStatus == IsActive
+  def hasFolded: Boolean = this.gameStatus == HasFolded
+  def isAllIn: Boolean = this.gameStatus == IsAllIn
 
   def setActive(): Unit = setStatus(IsActive)
   def setAllIn(): Unit = setStatus(IsAllIn)
@@ -51,9 +43,30 @@ class Player(val name: String, val seat: TableSeat, val chipStack: ChipStack) {
   // Methods and fields related to player's cards:
   // ===================================================================================================================
 
+  private sealed class CardsStatus
+  private case object None extends CardsStatus
+  private case object Hidden extends CardsStatus
+  private case object Showed extends CardsStatus
+  private case object Mucked extends CardsStatus
+
   def holeCards: (Card, Card) = _holeCards
-  def setHoleCards(c1: Card, c2: Card): Unit = _holeCards = (c1, c2)
-  def resetHoleCards(): Unit = _holeCards = null
+
+  def setHoleCards(c1: Card, c2: Card): Unit = {
+
+    this.cardsStatus = Hidden
+    _holeCards = (c1, c2)
+  }
+  def resetHoleCards(): Unit = {
+
+    this.cardsStatus = None
+    _holeCards = null
+  }
+
+  def showCards(): Unit = this.cardsStatus = Showed
+  def muckCards(): Unit = this.cardsStatus = Mucked
+
+  def showedCards: Boolean = this.cardsStatus == Showed
+  def muckedCards: Boolean = this.cardsStatus == Mucked
 
 
 
