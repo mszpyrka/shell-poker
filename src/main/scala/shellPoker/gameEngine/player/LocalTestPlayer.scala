@@ -8,6 +8,13 @@ class LocalTestPlayer(
     override val chipStack: ChipStack)
   extends Player(name, seat, chipStack) {
 
-  override def showCards(): Unit = println(name + " shows " + holeCards)
-  override def muckCards(): Unit = println(name + " mucks")
+  override def showCards(): Unit = {
+    super.showCards()
+    println(name + " shows " + holeCards)
+  }
+
+  override def muckCards(): Unit = {
+    super.muckCards()
+    println(name + " mucks")
+  }
 }
