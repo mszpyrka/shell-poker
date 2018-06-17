@@ -38,16 +38,17 @@ class ActionApplier {
     val actionTaker = gameState.actionTaker
     actionTaker.setBetSize(amount)
 
+    val midState = gameState.getModified(roundEndingPlayer = actionTaker)
+    val nextActionTaker = getNextActionTaker(midState)
+
     val newMinRaise = amount - gameState.lastBetSize
     val newMinBet = amount + newMinRaise
     val newLastBetSize = amount
-    val newRoundEndingPlayer = actionTaker
 
-    gameState.getModified(
+    midState.getModified(
       minBet = newMinBet,
       minRaise = newMinRaise,
-      roundEndingPlayer = newRoundEndingPlayer,
-      actionTaker = nextActionTaker(gameState),
+      actionTaker = nextActionTaker,
       lastBetSize = newLastBetSize)
   }
 
@@ -64,17 +65,17 @@ class ActionApplier {
     val actionTaker = gameState.actionTaker
     actionTaker.setBetSize(gameState.lastBetSize + amount)
 
+    val midState = gameState.getModified(roundEndingPlayer = actionTaker)
+    val nextActionTaker = getNextActionTaker(midState)
+
     val newMinRaise = amount
     val newLastBetSize = gameState.lastBetSize + amount
     val newMinBet = newLastBetSize + amount
-    val newRoundEndingPlayer = actionTaker
 
-
-    gameState.getModified(
+    midState.getModified(
       minBet = newMinBet,
       minRaise = newMinRaise,
-      roundEndingPlayer = newRoundEndingPlayer,
-      actionTaker = nextActionTaker(gameState),
+      actionTaker = nextActionTaker,
       lastBetSize = newLastBetSize)
   }
 
@@ -97,18 +98,22 @@ class ActionApplier {
       val newLastBetSize = amount
       val newMinRaise = if (raised > gameState.minRaise) raised else gameState.minRaise
       val newMinBet = newLastBetSize + newMinRaise
-      val newRoundEndingPlayer = actionTaker
 
-      gameState.getModified(
+      val midState = gameState.getModified(
+        roundEndingPlayer = actionTaker,
+        lastBetSize = newLastBetSize)
+
+      val nextActionTaker = getNextActionTaker(midState)
+
+      midState.getModified(
         lastBetSize = newLastBetSize,
         minBet = newMinBet,
         minRaise = newMinRaise,
-        roundEndingPlayer = newRoundEndingPlayer,
-        actionTaker = nextActionTaker(gameState))
+        actionTaker = nextActionTaker)
     }
 
     else
-      gameState.getModified(actionTaker = nextActionTaker(gameState))
+      gameState.getModified(actionTaker = getNextActionTaker(gameState))
   }
 
 
@@ -118,7 +123,7 @@ class ActionApplier {
   private def applyCall(gameState: GameState): GameState = {
 
     gameState.actionTaker.setBetSize(gameState.lastBetSize)
-    gameState.getModified(actionTaker = nextActionTaker(gameState))
+    gameState.getModified(actionTaker = getNextActionTaker(gameState))
   }
 
 
@@ -128,22 +133,22 @@ class ActionApplier {
     */
   private def applyFold(gameState: GameState): GameState = {
 
-    val newActionTaker = nextActionTaker(gameState)
+    //val newActionTaker = getNextActionTaker(gameState)
     gameState.actionTaker.setFolded()
 
     if (gameState.actionTaker == gameState.roundEndingPlayer)
       gameState.getModified(
-        roundEndingPlayer = newActionTaker,
-        actionTaker = newActionTaker)
+        roundEndingPlayer = getNextActionTaker(gameState),
+        actionTaker = getNextActionTaker(gameState))
 
     else
-      gameState.getModified(actionTaker = newActionTaker)
+      gameState.getModified(actionTaker = getNextActionTaker(gameState))
   }
 
 
   /** Checking causes no special changes in the game state. */
   private def applyCheck(gameState: GameState): GameState =
-    gameState.getModified(actionTaker = nextActionTaker(gameState))
+    gameState.getModified(actionTaker = getNextActionTaker(gameState))
 
 
 
@@ -155,13 +160,13 @@ class ActionApplier {
   /** Finds next action taker. If it is equal to roundEndingSeat
     * then it returns null and the round is at its ending.
     */
-  private def nextActionTaker(gameState: GameState): Player = {
+  private def getNextActionTaker(gameState: GameState): Player = {
 
     val nextActivePlayer = gameState.table.getNextActivePlayer(gameState.actionTaker)
     if (nextActivePlayer == null)
       return null
 
-    if(gameState.table.playersInGameNumber <= 1 && nextActivePlayer.currentBetSize >= gameState.lastBetSize)
+    if(gameState.table.activePlayersNumber <= 1 && nextActivePlayer.currentBetSize >= gameState.lastBetSize)
       return null
 
     if (nextActivePlayer == gameState.roundEndingPlayer)
