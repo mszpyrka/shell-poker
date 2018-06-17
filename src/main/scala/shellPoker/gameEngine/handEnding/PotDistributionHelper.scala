@@ -54,7 +54,7 @@ private[handEnding] object PotDistributionHelper {
     while(nextToShow != lastAggressivePlayer) {
 
       result ++= nextToShow :: Nil
-      nextToShow = table.getNextInGameSeat(lastAggressivePlayer.seat).player
+      nextToShow = table.getNextInGameSeat(nextToShow.seat).player
     }
 
     result
