@@ -146,4 +146,25 @@ object GameEngineTestHelper {
   //   tmpGameState
   // }
 
+
+
+  //======================================================================IGNORE=======================================================================
+  // override def addPendingPlayer(pendingPlayer: PlayerId): Unit = {
+  //       //If there is no such seat throw some kind of exception
+  //       if(pendingPlayer.seatNumber >= gameSettings.seatsNumber)
+  //           ???
+
+  //       //Counting players that are sitting/have reserved same seat as pendingPlayer
+  //       val sameSeatCount: Int =
+  //           currentPlayers.count(_.seatNumber == pendingPlayer.seatNumber) +
+  //           pendingPlayers.count(_.seatNumber == pendingPlayer.seatNumber)
+
+  //       //If there are none, add pendingPlayer to pendingPlayers
+  //       if(sameSeatCount == 0) pendingPlayers = pendingPlayer :: pendingPlayers
+
+  //       //else throw some kind of exception
+  //       else
+  //           ???
+  //   }
+
 }
