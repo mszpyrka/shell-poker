@@ -158,10 +158,11 @@ class ActionApplier {
   private def nextActionTaker(gameState: GameState): Player = {
 
     val nextActivePlayer = gameState.table.getNextActivePlayer(gameState.actionTaker)
+    if (nextActivePlayer == null)
+      return null
 
     if(gameState.table.playersInGameNumber <= 1 && nextActivePlayer.currentBetSize >= gameState.lastBetSize)
       return null
-
 
     if (nextActivePlayer == gameState.roundEndingPlayer)
       return null
