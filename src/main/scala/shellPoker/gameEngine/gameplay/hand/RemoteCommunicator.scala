@@ -1,114 +1,26 @@
 package shellPoker.gameEngine.gameplay.hand
-
 import akka.actor.ActorRef
-import shellPoker.actors.ActorCommunicationHelper
-import shellPoker.actors.client.ClientRouterActor.ActionResponse
-import shellPoker.actors.client.InvalidInputException
-import shellPoker.core.cards.Card
 import shellPoker.gameEngine.gameplay.GameState
 import shellPoker.gameEngine.handEnding.CompleteHandResults
-import shellPoker.gameEngine.player.Player
-import shellPoker.gameEngine.playerAction.{Action, ActionValidation}
-import shellPoker.gameEngine.table.{Pot, TableSeat}
-import shellPoker.userCommunication.Parser
+import shellPoker.gameEngine.player.PlayerId
+import shellPoker.gameEngine.playerAction.Action
 
-class RemoteCommunicator(val actorsMap: List[(Int, ActorRef)]) extends HandSupervisorCommunicator {
+class RemoteCommunicator(val registeredPlayers: Map[PlayerId, ActorRef]) extends Communicator {
 
-  private def seatFormat(seat: TableSeat, gameState: GameState): String = {
 
-    var result: String = seat.seatNumber + ": "
+  override def requestAction(playerId: PlayerId): Action = {
+    val playerActorRef: ActorRef = registeredPlayers(playerId)
 
-    if (seat == gameState.table.dealerButton)
-      result += "\u24b9 "
-
-    /*else if (seat == gameState.table.bigBlind)
-      result += "\u24b7 "
-
-    else if (seat == gameState.table.smallBlind)
-      result += "\u24c8 "
-*/
-    else
-      result += "  "
-
-    if (!seat.isEmpty)
-      result += "(bet: " + seat.player.currentBetSize + ")\t" + seat.player.name + " " +
-        Parser.chipStackToUnicode(seat.player.chipStack, 10000)
-
-    //else
-    //  result += "(empty)"
-
-    if (!seat.isEmpty && seat.player.hasFolded) {
-
-      var tmpResult = ""
-
-      for (c: Char <- result)
-        tmpResult += "\u0336" + c.toString
-
-      return tmpResult
-    }
-
-    result
+    
   }
 
-  private def potFormat(pots: List[Pot], gameState: GameState): String = {
+  override def logAction(playerId: PlayerId, action: Action): Unit = ???
 
-    var result: String = "Pot: "
-    for (i <- pots.indices)
-      result += "(" + i + " ~ " + pots(i).size + ") "
+  override def logGameStatus(gameState: GameState): Unit = ???
 
-    result
-  }
+  override def logHandStatus(gameState: GameState): Unit = ???
 
+  override def logShowdownStatus(gameState: GameState): Unit = ???
 
-  override def logHandStatus(gameState: GameState): Unit = {
-
-    println("========================================================================")
-    println("status:")
-    print("table: ")
-    gameState.table.communityCards.foreach((card: Card) => print(card.toString + " "))
-    println("")
-    println(potFormat(gameState.table.potManager.pots, gameState))
-    gameState.table.seats.foreach((seat: TableSeat) => println(seatFormat(seat, gameState)))
-    println("========================================================================")
-    println("")
-  }
-
-  /** Prompts the player actor to return Action object */
-  override def requestAction(player: Player): Action = {
-
-    print(player.name + "'s turn...")
-    println(player.holeCards)
-
-    val seatNo = player.seat.seatNumber
-    val slot = actorsMap.find { case (no, ref) => no == seatNo }.orNull
-    val (_, actorRef: ActorRef) = slot
-
-    val action: Action = ActorCommunicationHelper.askRefWithTimeout[ActionResponse, Action](actorRef, 30)
-
-
-  override def logAction(player: Player, action: Action): Unit = {
-
-    print(player.name + ": ")
-    println(action)
-  }
-
-  def logActionValidation(player: Player, validation: ActionValidation): Unit = {
-
-    print(player.name + ": ")
-    println(validation)
-  }
-
-  override def logGameStatus(gameState: GameState): Unit = println("hand: " + gameState.handNumber)
-
-  override def logHandResults(
-    results: CompleteHandResults,
-    gameState: GameState): Unit = {
-
-
-
-    println("")
-    println("somebody got some chips XD")
-    println("")
-  }
-
+  override def logEndingStatus(results: CompleteHandResults): Unit = ???
 }

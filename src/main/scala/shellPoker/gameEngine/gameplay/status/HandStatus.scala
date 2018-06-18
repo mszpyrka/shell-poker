@@ -1,10 +1,11 @@
 package shellPoker.gameEngine.gameplay.status
 
-import shellPoker.gameplay._
+import shellPoker.gameEngine.gameplay.GameState
+
 
 object HandStatus {
-  def apply(gameState: GameState, seatNumber: Int) = {
-    ?????????
+  def apply(gameState: GameState) = {
+    ???
   }
 }
 

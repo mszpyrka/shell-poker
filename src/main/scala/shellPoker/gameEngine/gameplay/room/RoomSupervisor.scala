@@ -1,13 +1,13 @@
 package shellPoker.gameEngine.gameplay.room
 
-import shellPoker.gameEngine.gameplay.hand.{HandSupervisor, HandSupervisorCommunicator}
+import shellPoker.gameEngine.gameplay.hand.{HandSupervisor, Communicator}
 import shellPoker.gameEngine.table._
 import shellPoker.gameEngine.gameplay._
 import shellPoker.gameEngine.player.{ChipStack, Player, PlayerId}
 
 
 /* Main game supervisor, responsible for running the game. */
-abstract class RoomSupervisor(gameSettings: GameSettings, communicator: HandSupervisorCommunicator) {
+abstract class RoomSupervisor(gameSettings: GameSettings, communicator: Communicator) {
 
   // ===================================================================================================================
   // Class API:

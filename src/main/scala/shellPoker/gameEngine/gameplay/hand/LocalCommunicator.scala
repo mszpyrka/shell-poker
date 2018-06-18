@@ -9,7 +9,7 @@ import shellPoker.gameEngine.playerAction.{Action, ActionValidation}
 import shellPoker.gameEngine.table.{Pot, TableSeat}
 import shellPoker.userCommunication.Parser
 
-class LocalCommunicator extends HandSupervisorCommunicator {
+class LocalCommunicator extends Communicator {
 
   private def seatFormat(seat: TableSeat, gameState: GameState): String = {
 

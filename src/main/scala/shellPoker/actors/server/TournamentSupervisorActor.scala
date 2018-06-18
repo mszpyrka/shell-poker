@@ -9,7 +9,7 @@ import shellPoker.gameEngine.gameplay.room.RoomSupervisor
 /* Responsible for running local test tournament style game. */
 class TournamentSupervisorActor(
     gameSettings: GameSettings,
-    communicator: HandSupervisorCommunicator
+    communicator: Communicator
   ) extends Actor {
 
   private var registeredPlayers

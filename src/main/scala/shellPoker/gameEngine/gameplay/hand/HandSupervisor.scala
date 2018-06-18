@@ -10,7 +10,7 @@ import shellPoker.gameEngine.table.{River, Showdown}
   *
   * @param initState Initial state of the hand.
   */
-class HandSupervisor(initState: GameState, communicator: HandSupervisorCommunicator) {
+class HandSupervisor(initState: GameState, communicator: Communicator) {
 
   private val actionManager: ActionManager = new ActionManager(initState)
   def gameState: GameState = actionManager.gameState
