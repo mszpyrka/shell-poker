@@ -1,5 +1,8 @@
 package shellPoker.gameEngine.gameplay.hand
 
+import akka.actor.ActorRef
+import shellPoker.actors.ActorCommunicationHelper
+import shellPoker.actors.client.ClientRouterActor.ActionResponse
 import shellPoker.actors.client.InvalidInputException
 import shellPoker.core.cards.Card
 import shellPoker.gameEngine.gameplay.GameState
@@ -9,7 +12,7 @@ import shellPoker.gameEngine.playerAction.{Action, ActionValidation}
 import shellPoker.gameEngine.table.{Pot, TableSeat}
 import shellPoker.userCommunication.Parser
 
-class LocalCommunicator extends HandSupervisorCommunicator {
+class RemoteCommunicator(val actorsMap: List[(Int, ActorRef)]) extends HandSupervisorCommunicator {
 
   private def seatFormat(seat: TableSeat, gameState: GameState): String = {
 
@@ -75,24 +78,13 @@ class LocalCommunicator extends HandSupervisorCommunicator {
 
     print(player.name + "'s turn...")
     println(player.holeCards)
-    var invalidInput = true
-    var action: Action = null
 
-    while(invalidInput) {
+    val seatNo = player.seat.seatNumber
+    val slot = actorsMap.find { case (no, ref) => no == seatNo }.orNull
+    val (_, actorRef: ActorRef) = slot
 
-      invalidInput = false
+    val action: Action = ActorCommunicationHelper.askRefWithTimeout[ActionResponse, Action](actorRef, 30)
 
-      try {
-
-        val command: String = scala.io.StdIn.readLine()
-        action = Parser.stringToAction(command)
-      } catch {
-        case e: InvalidInputException => invalidInput = true
-      }
-    }
-
-    action
-  }
 
   override def logAction(player: Player, action: Action): Unit = {
 

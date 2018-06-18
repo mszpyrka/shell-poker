@@ -1,9 +1,11 @@
 package shellPoker.userCommunication
 
+import shellPoker.actors.client.InvalidInputException
 import shellPoker.gameEngine._
 import shellPoker.core.cards._
 import shellPoker.gameEngine.playerAction._
 import shellPoker.gameEngine.player._
+
 import scala.util.Random
 
 object Parser {
