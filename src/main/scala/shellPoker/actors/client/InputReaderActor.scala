@@ -1,15 +1,12 @@
 package shellPoker.actors.client
 
 import akka.actor.{Actor, Props}
-import shellPoker.actors.client.InputReaderActor.Run
 import shellPoker.gameEngine.playerAction._
 
 
 object InputReaderActor {
 
   def props: Props = Props(new InputReaderActor)
-
-  case object Run
 }
 
 
@@ -20,8 +17,6 @@ class InputReaderActor extends Actor {
 
   override def receive: Receive = {
 
-    case Run => run()
-    case message => println(message)
   }
 
 
