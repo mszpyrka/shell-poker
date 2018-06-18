@@ -1,12 +1,17 @@
 package shellPoker.actors.client
 
-import akka.actor.{Actor, Props}
+import akka.actor.{Actor, ActorRef, Props}
+import shellPoker.actors.{ActionResponse, Register, RoomStatusRequest}
+import shellPoker.actors.client.InputReaderActor.Run
+import shellPoker.gameEngine.player.PlayerId
 import shellPoker.gameEngine.playerAction._
 
 
 object InputReaderActor {
 
   def props: Props = Props(new InputReaderActor)
+
+  final case object Run
 }
 
 
@@ -15,8 +20,11 @@ object InputReaderActor {
  */
 class InputReaderActor extends Actor {
 
+  def parent: ActorRef = context.parent
+
   override def receive: Receive = {
 
+    case Run => run()
   }
 
 
@@ -30,8 +38,7 @@ class InputReaderActor extends Actor {
 
         // Reads user's command, creates proper action and sends message to parent.
         val command: String = scala.io.StdIn.readLine()
-        val action: Action = parseAction(command)
-        context.parent ! action
+        parseCommand(command)
 
       } catch {
 
@@ -43,7 +50,7 @@ class InputReaderActor extends Actor {
 
 
   /* Parses raw string to Action instance. */
-  private def parseAction(userInput: String): Action = {
+  private def parseCommand(userInput: String): Unit = {
 
     val splittedInput = userInput.toLowerCase().split(" ").filterNot(_ == "").toList
 
@@ -51,32 +58,44 @@ class InputReaderActor extends Actor {
       throw EmptyLineException
 
     splittedInput.head match {
+
+
       case "crash" => throw new Exception("elo mordo")
 
-      case "fold" => Fold
+      case "fold" => parent ! ActionResponse(Fold)
 
-      case "check" => Check
+      case "check" => parent ! ActionResponse(Check)
 
-      case "call" => Call
+      case "call" => parent ! ActionResponse(Call)
 
-      case "all-in" => AllIn
-      case "allin" => AllIn
+      case "all-in" => parent ! ActionResponse(AllIn)
+      case "allin" => parent ! ActionResponse(AllIn)
       case "all" => {
         if (splittedInput.size < 2) throw InvalidInputException("Invalid input, try again...")
-        else if (splittedInput(1) == "in") AllIn
+        else if (splittedInput(1) == "in") parent ! ActionResponse(AllIn)
         else throw InvalidInputException("Invalid input, try again...")
       }
 
       case "bet" => {
         if (splittedInput.size < 2) throw InvalidInputException("Invalid input, try again...")
-        else if (splittedInput(1).matches("^[0-9]*$")) Bet(splittedInput(1).toInt)
+        else if (splittedInput(1).matches("^[0-9]*$")) parent ! ActionResponse(Bet(splittedInput(1).toInt))
         else throw InvalidInputException("You can only bet an integer number of chips...")
       }
 
       case "raise" => {
         if (splittedInput.size < 2) throw InvalidInputException("Invalid input, try again...")
-        else if (splittedInput(1).matches("^[0-9]*$")) Raise(splittedInput(1).toInt)
+        else if (splittedInput(1).matches("^[0-9]*$")) parent ! ActionResponse(Raise(splittedInput(1).toInt))
         else throw InvalidInputException("You can only raise an integer number of chips...")
+      }
+
+      case "register" => {
+        if (splittedInput.size != 3) throw InvalidInputException("Invalid input, try again...")
+        else {
+
+          val name = splittedInput(1)
+          val seatNo = splittedInput(2).toInt
+          parent ! Register(PlayerId(name, seatNo))
+        }
       }
 
       case _ => throw InvalidInputException("Invalid input, try again...")

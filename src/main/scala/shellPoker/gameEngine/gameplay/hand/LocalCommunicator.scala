@@ -9,8 +9,8 @@ import shellPoker.gameEngine.playerAction.{Action, ActionValidation}
 import shellPoker.gameEngine.table.{Pot, TableSeat}
 import shellPoker.userCommunication.Parser
 
-class LocalCommunicator extends Communicator {
-
+abstract class LocalCommunicator extends Communicator {
+/*
   private def seatFormat(seat: TableSeat, gameState: GameState): String = {
 
     var result: String = seat.seatNumber + ": "
@@ -118,5 +118,5 @@ class LocalCommunicator extends Communicator {
     println("somebody got some chips XD")
     println("")
   }
-
+*/
 }

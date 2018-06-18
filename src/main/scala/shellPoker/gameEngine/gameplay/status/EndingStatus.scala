@@ -8,7 +8,7 @@ object EndingStatus{
     var finalString: String = ""
 
     results.results.filter(_.chipsWon > 0).foreach( (singlePlayerResult: SinglePlayerHandResults) =>
-      finalString += singlePlayerResult.player.name + "wins" + singlePlayerResult.chipsWon + "!!\n"
+      finalString += singlePlayerResult.player.name + " wins " + singlePlayerResult.chipsWon + "!!\n"
     )
 
     finalString
@@ -19,4 +19,4 @@ object EndingStatus{
 
 
 
-case class EndingStatus private (result: String)
+case class EndingStatus private(result: String)

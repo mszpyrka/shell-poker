@@ -19,4 +19,6 @@ trait Communicator {
   def logShowdownStatus(gameState: GameState): Unit
 
   def logEndingStatus(results: CompleteHandResults): Unit
+
+  def logValidation(playerId: PlayerId, validation: ActionValidation)
 }

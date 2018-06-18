@@ -14,7 +14,7 @@ class Player(val name: String, val seat: TableSeat, val chipStack: ChipStack) {
   private var gameStatus: GameStatus = IsActive
   private var cardsStatus: CardsStatus = None
 
-
+  def id: PlayerId = PlayerId(name, seat.seatNumber)
 
   // ===================================================================================================================
   // Methods and fields related to player's gameStatus in currently played hand:

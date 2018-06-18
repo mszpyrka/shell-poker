@@ -2,12 +2,13 @@ package shellPoker.gameEngine.gameplay.status
 
 import shellPoker.core.cards.Card
 import shellPoker.gameEngine.gameplay.GameState
+import shellPoker.gameEngine.player.PlayerId
 import shellPoker.gameEngine.table.{Pot, TableSeat}
 import shellPoker.userCommunication.Parser
 
 
 object HandStatus {
-  def apply(gameState: GameState) = {
+  def apply(playerId: PlayerId, gameState: GameState) = {
     var result = ""
     result += "====================================================================\n"
     result += "communityCards: "
@@ -18,6 +19,7 @@ object HandStatus {
     gameState.table.seats.foreach((seat: TableSeat) => result += seatFormat(seat, gameState) + "\n")
     result += "====================================================================\n"
 
+    result += "your cards: " + gameState.table.players.find(_.id == playerId).orNull.holeCards + "\n"
     new HandStatus(result)
   }
 
@@ -57,4 +59,4 @@ object HandStatus {
   }
 }
 
-case class HandStatus private (result: String)
+case class HandStatus private(result: String)

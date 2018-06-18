@@ -11,8 +11,12 @@ object ActorsConfig {
     val configStr: String =
       s"""akka {
          |  actor {
+         |
+         |    akka.actor.allow-java-serialization = off
+         |    akka.actor.warn-about-java-serializer-usage = off
+         |
+         |
          |    provider = remote
-         |    allow-java-serialization=off
          |    debug {
          |      receive = on
          |    }

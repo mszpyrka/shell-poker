@@ -72,7 +72,7 @@ class HandSupervisor(initState: GameState, communicator: Communicator) {
 
     applyHandResults(handResults)
 
-    communicator.logHandResults(handResults, gameState)
+    communicator.logEndingStatus(handResults)
 
     gameState
   }
@@ -83,20 +83,22 @@ class HandSupervisor(initState: GameState, communicator: Communicator) {
     while(actionManager.actionTaker != null){
 
       val currentAction: Action = getPlayerAction(actionManager.actionTaker)
-      communicator.logAction(actionManager.actionTaker, currentAction)
+      communicator.logAction(actionManager.actionTaker.id, currentAction)
       actionManager.applyAction(currentAction)
+
+      communicator.logHandStatus(gameState)
     }
   }
 
   private def getPlayerAction(actionTaker: Player): Action = {
 
-    var playerAction: Action = communicator.requestAction(actionTaker)
+    var playerAction: Action = communicator.requestAction(actionTaker.id)
     var validation: ActionValidation = actionManager.validateAction(playerAction)
 
     while(validation != Legal){
 
-      communicator.logActionValidation(actionTaker, validation)
-      playerAction = communicator.requestAction(actionTaker)
+      communicator.logValidation(actionTaker.id, validation)
+      playerAction = communicator.requestAction(actionTaker.id)
       validation = actionManager.validateAction(playerAction)
     }
 

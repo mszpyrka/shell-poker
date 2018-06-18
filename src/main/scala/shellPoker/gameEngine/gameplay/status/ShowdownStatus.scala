@@ -8,4 +8,4 @@ object  ShowdownStatus {
   }
 }
 
-class ShowdownStatus private (result: String)
+case class ShowdownStatus private (result: String)

@@ -14,4 +14,4 @@ object GameStatus {
   }
 }
 
-class GameStatus private (result: String)
+case class GameStatus private (result: String)

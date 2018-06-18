@@ -36,7 +36,7 @@ final case object StartGame
 // Client -> Server
 final case class Register(playerId: PlayerId)
 final case object RoomStatusRequest
-final case class RoomStatus(???)
+final case class RoomStatus(xD: String)
 
 
 // Server -> Client

@@ -6,9 +6,9 @@ import shellPoker.gameEngine.gameplay.GameState
 import shellPoker.gameEngine.gameplay.status.{EndingStatus, GameStatus, HandStatus, ShowdownStatus}
 import shellPoker.gameEngine.handEnding.CompleteHandResults
 import shellPoker.gameEngine.player.PlayerId
-import shellPoker.gameEngine.playerAction.Action
+import shellPoker.gameEngine.playerAction.{Action, ActionValidation}
 
-class RemoteCommunicator(registeredPlayers: Map[PlayerId, ActorRef], actionTimeout: Int) extends Communicator {
+class RemoteCommunicator(registeredPlayers: scala.collection.mutable.Map[PlayerId, ActorRef], actionTimeout: Int) extends Communicator {
 
 
   override def requestAction(playerId: PlayerId): Action = {
@@ -28,6 +28,11 @@ class RemoteCommunicator(registeredPlayers: Map[PlayerId, ActorRef], actionTimeo
 
   }
 
+  override def logValidation(playerId: PlayerId, validation: ActionValidation): Unit = {
+    registeredPlayers(playerId) ! ValidationMessage(validation)
+
+  }
+
   override def logGameStatus(gameState: GameState): Unit = {
     val gameStatus: GameStatus = GameStatus(gameState)
 
@@ -35,9 +40,12 @@ class RemoteCommunicator(registeredPlayers: Map[PlayerId, ActorRef], actionTimeo
   }
 
   override def logHandStatus(gameState: GameState): Unit = {
-    val handStatus: HandStatus = HandStatus(gameState)
 
-    sendToAllPlayers(HandStatusMessage(handStatus))
+    for ((playerId, actor) <- registeredPlayers) {
+
+      val handStatus: HandStatus = HandStatus(playerId, gameState)
+      actor ! HandStatusMessage(handStatus)
+    }
   }
 
   override def logShowdownStatus(gameState: GameState): Unit = {
