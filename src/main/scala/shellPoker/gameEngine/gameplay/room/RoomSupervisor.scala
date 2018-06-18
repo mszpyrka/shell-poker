@@ -26,6 +26,8 @@ abstract class RoomSupervisor(gameSettings: GameSettings, communicator: Communic
       val pendingPlayers: List[PlayerId] = getPendingPlayers
       val updatedGameState = getUpdatedGameState(handEndingState, pendingPlayers)
 
+      updateCommunicator()
+
       handSupervisor = new HandSupervisor(updatedGameState, communicator)
     }
 
@@ -40,7 +42,8 @@ abstract class RoomSupervisor(gameSettings: GameSettings, communicator: Communic
   /** Obtains players from external source that joined the game during some hand. */
   protected def getPendingPlayers: List[PlayerId]
 
-
+  /** Updates communicator. */
+  protected  def updateCommunicator(): Unit
 
   // ===================================================================================================================
   // Private helper methods:
