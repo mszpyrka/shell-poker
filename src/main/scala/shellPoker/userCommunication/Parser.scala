@@ -58,12 +58,10 @@ object Parser {
       res
     }
 
-
     var result: String = ""
     val chips: Int = chipStack.chipCount
 
     if(chips == 0) result += ""
-
 
     else if (chips > 0 && chips < 0.1 * startingChipCount) 
       result += generateChipStack(1)
@@ -83,8 +81,8 @@ object Parser {
     else if (chips > 1.5 * startingChipCount) 
       result += generateChipStack(12)
 
-      
 
+    
     result += s" ~ ($chips)"
 
     result

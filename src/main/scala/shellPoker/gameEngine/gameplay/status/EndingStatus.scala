@@ -1,5 +1,9 @@
 package shellPoker.gameEngine.gameplay.status
 
-class EndingStatus {
+object EndingStatus
+
+
+
+case class EndingStatus() {
 
 }
