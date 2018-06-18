@@ -3,11 +3,7 @@ package shellPoker.gameEngine.gameplay.room
 import shellPoker.gameEngine.gameplay.hand.{HandSupervisor, HandSupervisorCommunicator}
 import shellPoker.gameEngine.table._
 import shellPoker.gameEngine.gameplay._
-import shellPoker.gameEngine.player.{ChipStack, Player}
-
-
-/* Responsible for holding basic player information */
-case class PlayerId(name: String, seatNumber: Int)
+import shellPoker.gameEngine.player.{ChipStack, Player, PlayerId}
 
 
 /* Main game supervisor, responsible for running the game. */
