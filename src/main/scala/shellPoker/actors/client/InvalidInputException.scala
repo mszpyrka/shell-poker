@@ -1,4 +1,4 @@
-package shellPoker.gameEngine
+package shellPoker.actors.client
 
 /** Thrown when there is an invalid input from user.
   */
