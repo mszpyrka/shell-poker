@@ -8,7 +8,7 @@ import shellPoker.gameEngine.table.{PokerTable, Pot}
 /** Defines some helper methods for determining the winners of the hand
   * and the amount of chips that they should be given.
   */
-private[handEnding] object PotDistributionHelper {
+object PotDistributionHelper {
 
 
   /* Gets hand results for a single pot. */
@@ -17,7 +17,7 @@ private[handEnding] object PotDistributionHelper {
     if (pot.entitledPlayers.length == 1) {
 
       val winner: Player = pot.entitledPlayers.head
-      val results: CompleteHandResults = new CompleteHandResults(List(winner))
+      val results: CompleteHandResults = new CompleteHandResults(List(winner), communityCards)
       results.addChipsToPlayerResults(winner, pot.size)
       return results
     }
@@ -27,7 +27,7 @@ private[handEnding] object PotDistributionHelper {
       (player: Player) => getPlayerHand(player, communityCards).isEquallyStrongAs(bestHand))
 
     val win = pot.size / winners.length
-    val results: CompleteHandResults = new CompleteHandResults(pot.entitledPlayers)
+    val results: CompleteHandResults = new CompleteHandResults(pot.entitledPlayers, communityCards)
     for (winner <- winners)
       results.addChipsToPlayerResults(winner, win)
 
@@ -39,12 +39,14 @@ private[handEnding] object PotDistributionHelper {
   def getShowdownOrder(table: PokerTable, lastAggressivePlayer: Player): List[Player] = {
 
     var result = lastAggressivePlayer :: Nil
-    var nextToShow = table.getNextInGameSeat(lastAggressivePlayer.seat).player
+    val nextSeat = table.getNextInGameSeat(lastAggressivePlayer.seat)
+    var nextToShow = if (nextSeat == null) null else nextSeat.player
 
-    while(nextToShow != lastAggressivePlayer) {
+    while(nextToShow != lastAggressivePlayer && nextToShow != null) {
 
       result ++= nextToShow :: Nil
-      nextToShow = table.getNextInGameSeat(nextToShow.seat).player
+      val tmpSeat = table.getNextInGameSeat(nextToShow.seat)
+      nextToShow = if (tmpSeat == null) null else tmpSeat.player
     }
 
     result

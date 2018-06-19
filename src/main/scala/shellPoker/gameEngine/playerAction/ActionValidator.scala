@@ -35,7 +35,8 @@ class ActionValidator {
   private def canCheck(gameState: GameState): ActionValidation = {
 
     if((gameState.lastBetSize == 0) ||
-      (gameState.actionTaker.seat == gameState.table.positionManager.bigBlind &&
+      (gameState.currentBettingRound == 1 &&
+        gameState.actionTaker.seat == gameState.table.positionManager.bigBlind &&
         gameState.lastBetSize == gameState.bigBlindValue))
       return Legal
 

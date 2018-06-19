@@ -7,7 +7,7 @@ object GameStatus {
     var result: String = ""
 
     result += "********************************************************************\n"
-    result += s"              Hand number: ${gameState.handNumber}                *\n"
+    result += s"Hand number: ${gameState.handNumber}\n"
     result += "********************************************************************\n"
 
     new GameStatus(result)

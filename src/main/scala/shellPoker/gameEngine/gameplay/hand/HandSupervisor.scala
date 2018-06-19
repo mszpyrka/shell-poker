@@ -68,6 +68,11 @@ class HandSupervisor(initState: GameState, communicator: Communicator) {
 
     // Final actions needed to be taken before the winners are picked.
     endingHelper.proceedWithFinalActions()
+
+    communicator.logShowdownStatus(gameState)
+
+    communicator.logHandStatus(gameState)
+
     val handResults: CompleteHandResults = endingHelper.calculateHandResults()
 
     applyHandResults(handResults)

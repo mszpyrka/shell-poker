@@ -31,7 +31,7 @@ abstract class HandEndingHelper(gameState: GameState, endingType: HandEndingType
   def calculateHandResults(): CompleteHandResults = {
 
     val table = gameState.table
-    val results = new CompleteHandResults(table.players)
+    val results = new CompleteHandResults(table.players, table.communityCards)
 
     for (pot <- table.potManager.pots) {
 
