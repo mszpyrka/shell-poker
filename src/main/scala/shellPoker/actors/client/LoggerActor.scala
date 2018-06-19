@@ -32,11 +32,11 @@ class LoggerActor(val formatter: ActorRef) extends Actor {
   // ===================================================================================================================
 
   private def printActionRequest(): Unit =
-    print("your turn: ")
+    print("\u001b[42m" + "your turn: " + "\u001b[0m")
 
-  private def printValidation(validation: ValidationMessage): Unit = println(validation.validation)
+  private def printValidation(validation: ValidationMessage): Unit = println("\u001b[41m" + validation.validation + "\u001b[0m")
 
-  private def printActionLog(log: ActionLog): Unit = println(log.playerId.name + ": " + log.action)
+  private def printActionLog(log: ActionLog): Unit = println("\u001b[43m" + log.playerId.name + ": " + log.action + "\u001b[0m")
 
   private def printHandStatus(status: HandStatusMessage): Unit = println(status.handStatus.result)
 

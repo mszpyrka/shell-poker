@@ -10,10 +10,14 @@ object ActorsConfig {
 
     val configStr: String =
       s"""akka {
+         |
+         |  stdout-loglevel = "OFF"
+         |  loglevel = "OFF"
+         |
          |  actor {
          |
-         |    akka.actor.allow-java-serialization = off
-         |    akka.actor.warn-about-java-serializer-usage = off
+         |    akka.actor.allow-java-serialization = "OFF"
+         |    akka.actor.warn-about-java-serializer-usage = "OFF"
          |
          |
          |    provider = remote

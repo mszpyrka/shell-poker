@@ -26,18 +26,21 @@ object Testing extends App {
   print("mode: ")
   val mode: String = {try StdIn.readLine()}
 
-  print("ip: ")
-  val ip: String = {try StdIn.readLine()}
+  print("your ip: ")
+  val thisIp: String = {try StdIn.readLine()}
 
   if (mode == "server") {
 
-    val myConfig = ActorsConfig.getSystemConfig(ip, 50000)
+    val myConfig = ActorsConfig.getSystemConfig(thisIp, 50000)
     val system = ActorSystem("poksik", config = myConfig)
     val room = system.actorOf(TournamentSupervisorActor.props(gameSettings), name = "room")
+
+    println("server is ready")
 
     while(true) {
 
       try {
+        print("> ")
         val command = StdIn.readLine()
         if(command == "start")
           room ! StartGame
@@ -48,10 +51,13 @@ object Testing extends App {
   // Client
   else {
 
-    val config = ActorsConfig.getSystemConfig(ip, 0)
+    val config = ActorsConfig.getSystemConfig(thisIp, 0)
     val system = ActorSystem("client", config)
 
-    val serverAddress: ActorAddress = ActorAddress("poksik", "/user/room", ip, 50000)
+    print("server ip: ")
+    val serverIp: String = { try StdIn.readLine() }
+
+    val serverAddress: ActorAddress = ActorAddress("poksik", "/user/room", serverIp, 50000)
     val player = system.actorOf(UserActor.props(serverAddress), "player")
 
     player ! Start
