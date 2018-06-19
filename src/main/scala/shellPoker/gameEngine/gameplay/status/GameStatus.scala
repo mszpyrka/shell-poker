@@ -6,9 +6,9 @@ object GameStatus {
   def apply(gameState: GameState) = {
     var result: String = ""
 
-    result += "========================NEW HAND============================\n"
-    result += s"Hand number: ${gameState.handNumber}\n"
-    result += "============================================================\n"
+    result += "********************************************************************\n"
+    result += s"              Hand number: ${gameState.handNumber}                *\n"
+    result += "********************************************************************\n"
 
     new GameStatus(result)
   }

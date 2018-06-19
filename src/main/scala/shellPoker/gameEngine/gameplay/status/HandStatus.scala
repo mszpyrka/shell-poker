@@ -42,8 +42,12 @@ object HandStatus {
       result += "  "
 
     if (!seat.isEmpty)
-      result += "(bet: " + seat.player.currentBetSize + ")\t" + seat.player.name + " " +
-        Parser.chipStackToUnicode(seat.player.chipStack, 10000)
+      if(seat.player.id == gameState.actionTaker.id)
+        result += "(bet: " + seat.player.currentBetSize + ")\t" + s"${Console.RED}" + seat.player.name + + s"${Console.RESET}" + "\t" +
+          Parser.chipStackToUnicode(seat.player.chipStack, 10000)
+      else
+        result += "(bet: " + seat.player.currentBetSize + ")\t" + seat.player.name + "\t" +
+          Parser.chipStackToUnicode(seat.player.chipStack, 10000)
 
     if (!seat.isEmpty && seat.player.hasFolded) {
 
